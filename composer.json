@@ -1,0 +1,32 @@
+{
+    "name": "resim/quipp"
+  , "type": "library"
+  , "description": "ResIM website framework/cms"
+  , "keywords": ["cms"]
+  , "homepage": "http://res.im"
+  , "authors": [
+        {
+            "name": "Chris Boden"
+          , "email": "chris@res.im"
+        }
+    ]
+  , "repositories": {
+        "securimage": {
+            "package": {
+                "name": "dapphp/securimage"
+              , "version": "3.0"
+              , "source": {
+                    "url": "git://github.com/dapphp/securimage.git"
+                  , "type": "git"
+                  , "reference": "db08392247194f059eb1fba8c13de7536ae32a01"
+                }
+            }
+        }
+    }
+  , "require": {
+        "php": ">=5.3.0"
+      , "symfony/http-foundation": "2.0.*"
+      , "monolog/monolog": "1.0.*"
+      , "dapphp/securimage": "3.0.*"
+    }
+}
