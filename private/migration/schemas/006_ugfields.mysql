@@ -1,0 +1,48 @@
+ALTER TABLE `sysUGFields` ADD COLUMN `slug` VARCHAR(32) NOT NULL AFTER `itemID`;
+
+UPDATE `sysUGFields` SET `slug` = 'first_name'        WHERE `fieldLabel` = 'First Name';
+UPDATE `sysUGFields` SET `slug` = 'last_name'         WHERE `fieldLabel` = 'Last Name';
+UPDATE `sysUGFields` SET `slug` = 'email'             WHERE `fieldLabel` = 'E-Mail';
+UPDATE `sysUGFields` SET `slug` = 'intro_msg'         WHERE `fieldLabel` = 'Introduction Message';
+UPDATE `sysUGFields` SET `slug` = 'phone'             WHERE `fieldLabel` = 'Phone Number';
+UPDATE `sysUGFields` SET `slug` = 'phone_cell'        WHERE `fieldLabel` = 'Cell Phone Number';
+UPDATE `sysUGFields` SET `slug` = 'company'           WHERE `fieldLabel` = 'Company';
+UPDATE `sysUGFields` SET `slug` = 'city'              WHERE `fieldLabel` = 'City';
+UPDATE `sysUGFields` SET `slug` = 'postal'            WHERE `fieldLabel` = 'Postal Code';
+UPDATE `sysUGFields` SET `slug` = 'province'          WHERE `fieldLabel` = 'Province';
+UPDATE `sysUGFields` SET `slug` = 'notifications'     WHERE `fieldLabel` = 'Send Notification Emails';
+UPDATE `sysUGFields` SET `slug` = 'mailing_address_1' WHERE `fieldLabel` = 'Mailing Address 1';
+UPDATE `sysUGFields` SET `slug` = 'mailing_address_2' WHERE `fieldLabel` = 'Mailing Address 2';
+UPDATE `sysUGFields` SET `slug` = 'mailing_city'      WHERE `fieldLabel` = 'Mailing City';
+UPDATE `sysUGFields` SET `slug` = 'mailing_province'  WHERE `fieldLabel` = 'Mailing Province';
+UPDATE `sysUGFields` SET `slug` = 'mailing_postal'    WHERE `fieldLabel` = 'Mailing Postal Code';
+UPDATE `sysUGFields` SET `slug` = 'mailing_country'   WHERE `fieldLabel` = 'Mailing Country';
+UPDATE `sysUGFields` SET `slug` = 'billing_address_1' WHERE `fieldLabel` = 'Billing Address 1';
+UPDATE `sysUGFields` SET `slug` = 'billing_address_2' WHERE `fieldLabel` = 'Billing Address 2';
+UPDATE `sysUGFields` SET `slug` = 'billing_city'      WHERE `fieldLabel` = 'Billing City';
+UPDATE `sysUGFields` SET `slug` = 'billing_province'  WHERE `fieldLabel` = 'Billing Province';
+UPDATE `sysUGFields` SET `slug` = 'billing_postal'    WHERE `fieldLabel` = 'Billing Postal Code';
+UPDATE `sysUGFields` SET `slug` = 'billing_country'   WHERE `fieldLabel` = 'Billing Country';
+UPDATE `sysUGFields` SET `slug` = 'gender'            WHERE `fieldLabel` = 'Gender';
+
+INSERT INTO `sysUGFields` (`slug`, `fieldLabel`, `validationCode`) VALUES 
+    ('security_pin', 'Security PIN', 'RQvalNUMB')
+  , ('referral',     'Referral',     'OPvalALPH')
+  , ('source',       'How did you hear about us?', 'OPvalALPH')
+  , ('timezone',     'Timezone',     'RQvalALPH')
+  , ('birthdate',    'Birthdate',    'RQvalDATE')
+;
+
+ALTER TABLE `sysUGFields` ADD UNIQUE INDEX `slug` (`slug`);
+
+SET @gid:=(SELECT `itemID` FROM `sysUGroups` WHERE `nameSystem` = 'ownersbox-users');
+
+INSERT INTO `sysUGFLinks` (`groupID`, `fieldID`) VALUES
+    (@gid, (SELECT `itemID` FROM `sysUGFields` WHERE `slug` = 'security_pin'))
+  , (@gid, (SELECT `itemID` FROM `sysUGFields` WHERE `slug` = 'referral'))
+  , (@gid, (SELECT `itemID` FROM `sysUGFields` WHERE `slug` = 'source'))
+  , (@gid, (SELECT `itemID` FROM `sysUGFields` WHERE `slug` = 'timezone'))
+  , (@gid, (SELECT `itemID` FROM `sysUGFields` WHERE `slug` = 'birthdate'))
+;
+
+UPDATE `sysUGFields` SET `validationCode` = 'OPvalALPH' WHERE `slug` IN ('mailing_address_2', 'billing_address_2');

@@ -1,0 +1,43 @@
+INSERT INTO `sysUGFields`
+    (`fieldLabel`, `validationCode`)
+VALUES
+    ('Mailing Address 1',   'RQvalALPH')
+  , ('Mailing Address 2',   'RQvalALPH')
+  , ('Mailing City',        'RQvalALPH')
+  , ('Mailing Province',    'RQvalALPH')
+  , ('Mailing Postal Code', 'RQvalPOST')
+  , ('Mailing Country',     'RQvalALPH')
+  , ('Billing Address 1',   'RQvalALPH')
+  , ('Billing Address 2',   'RQvalALPH')
+  , ('Billing City',        'RQvalALPH')
+  , ('Billing Province',    'RQvalALPH')
+  , ('Billing Postal Code', 'RQvalPOST')
+  , ('Billing Country',     'RQvalALPH')
+
+  , ('Gender',            'RQvalALPH')
+;
+
+DELIMITER ;;
+
+CREATE PROCEDURE tmpOrder()
+BEGIN
+    DECLARE ord, cnt INTEGER;
+
+    SET ord = (SELECT `myOrder` FROM `sysUGFields` WHERE `myOrder` > 0 ORDER BY `myOrder` DESC LIMIT 1);
+    SET cnt = (SELECT COUNT(*) FROM `sysUGFields` WHERE `myOrder` = 0);
+
+    WHILE cnt > 0 DO
+        SET ord = ord + 1;
+        SET cnt = cnt - 1;
+
+        UPDATE `sysUGFields` SET `myOrder` = ord WHERE `myOrder` = 0 ORDER BY `itemID` ASC LIMIT 1;
+    END WHILE;
+END;;
+
+DELIMITER ;
+
+CALL tmpOrder();
+
+DROP PROCEDURE tmpOrder;
+
+ALTER TABLE `sysUGFValues` DROP COLUMNS `mHashKey`;

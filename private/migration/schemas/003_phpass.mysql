@@ -1,0 +1,5 @@
+ALTER TABLE `sysUsers` DROP COLUMN `myKey`;
+
+ALTER TABLE `sysUsers` CHANGE COLUMN `userIDPassword` `userIDPassword` CHAR(34) NOT NULL;
+
+UPDATE `sysUsers` SET `userIDPassword` = '$P$BjBlSvFOMrRiEEOxGPlY.gJZa8yEkv0' WHERE itemID = 1;

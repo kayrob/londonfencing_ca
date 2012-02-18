@@ -1,0 +1,9 @@
+ALTER TABLE `sysUGroups` ADD UNIQUE INDEX `nameSystem` (`nameSystem`);
+
+ALTER TABLE `sysUGFValues` DROP INDEX `userID`;
+
+ALTER TABLE `sysUGFValues` DROP COLUMN `myHashKey`;
+
+ALTER TABLE `sysUGFValues` ADD UNIQUE INDEX `user_field` (`userID`, `fieldID`);
+
+ALTER TABLE `sysUGFValues` ENGINE = InnoDB;

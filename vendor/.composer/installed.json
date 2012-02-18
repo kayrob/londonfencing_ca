@@ -1,0 +1,82 @@
+[
+    {
+        "name": "monolog\/monolog",
+        "version": "1.0.2",
+        "version_normalized": "1.0.2.0",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/Seldaek\/monolog.git",
+            "reference": "1.0.2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https:\/\/github.com\/Seldaek\/monolog\/zipball\/1.0.2",
+            "reference": "1.0.2",
+            "shasum": "837067f3d6f183f5c035c3da460f5c5272645b84"
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "type": "library",
+        "names": [
+            "monolog\/monolog"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "autoload": {
+            "psr-0": {
+                "Monolog": "src\/"
+            }
+        }
+    },
+    {
+        "name": "symfony\/http-foundation",
+        "version": "v2.0.10",
+        "version_normalized": "2.0.10.0",
+        "target-dir": "Symfony\/Component\/HttpFoundation",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/symfony\/HttpFoundation.git",
+            "reference": "v2.0.10"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http:\/\/github.com\/symfony\/HttpFoundation\/zipball\/v2.0.10",
+            "reference": "v2.0.10",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "type": "library",
+        "names": [
+            "symfony\/http-foundation"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\HttpFoundation": ""
+            }
+        }
+    },
+    {
+        "name": "dapphp\/securimage",
+        "version": "3.0",
+        "version_normalized": "3.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "git:\/\/github.com\/dapphp\/securimage.git",
+            "reference": "db08392247194f059eb1fba8c13de7536ae32a01"
+        },
+        "type": "library",
+        "names": [
+            "dapphp\/securimage"
+        ],
+        "installation-source": "source"
+    }
+]

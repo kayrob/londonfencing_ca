@@ -1,0 +1,78 @@
+<?php
+    $check = __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
+    $local = (is_file($check) ? require $check : array());
+
+    return $local + array(
+        'db' => array(
+            'host'  => 'localhost'
+          , 'user'  => 'user'
+          , 'pass'  => 'password'
+          , 'name'  => '132-001_RoyalYork'
+          , 'class' => 'DB_MySQLi'
+        )
+
+      , 'site_psr' => 'RoyalYork'
+      , 'theme'    => 'RoyalYork'
+
+      , 'modules' => array(
+        )
+
+      , 'debug' => true
+
+      , '_symfony2' => array(
+            'session-storage' => 'NativeSessionStorage'
+        )
+
+        // Temporaryish
+      , 'defaultLanguageID' => 1
+
+      , 'logs' => array(
+            'console'    => array('FirePHPHandler' => array())
+          , 'deprecated' => array('StreamHandler' => array(dirname(__DIR__) . '/log/deprecated.log', 100))
+//          , 'problem'    => array('FingersCrossedHandler' => array())
+        )
+
+      , 'yell_log' => '/var/log/quipp.log'
+
+      , 'php_debug' => array(
+            'render_type'          => 'HTML'
+          , 'render_mode'          => 'Div'
+          , 'restrict_access'      => false
+          , 'allow_url_access'     => false
+          , 'enable_watch'         => false
+          , 'replace_errorhandler' => true
+          , 'HTML_DIV_images_path' => '/vendors/php_debug/images'
+          , 'HTML_DIV_css_path'    => '/vendors/php_debug/css'
+          , 'HTML_DIV_js_path'     => '/vendors/php_debug/js'
+        )
+
+      , 'google' => array(
+            'ga_email'      => 'resimanalytics@gmail.com'
+          , 'ga_password'   => '32webuser32'
+          , 'ga_profile_id' => '17069938' //mikealmond.com
+        )
+
+      , 'meta' => array(
+            'title'        => 'Title goes here'
+          , 'title_append' => ' &bull; tagline goes here'
+        )
+
+      , 'security' => array(
+            'pass_hash_iterations'   => 8
+          , 'pass_hash_portable'     => true
+          , 'captcha_src'            => '/img/captcha.php'
+          , 'captcha_after_failures' => 1    // todo
+          , 'lock_after_failures'    => 5    // todo
+          , 'lock_duration'          => 300  // todo
+          , 'nonce'                  => md5(uniqid(mt_rand(), true))
+        )
+
+      , 'mailer' => array(
+            'class'      => '\\PHPMailer\\PHPMailer'
+          , 'from_email' => 'no-reply@royalyorkortho.com'
+          , 'from_name'  => 'royalyorkortho.com'
+          , 'send_using' => 'sendmail'
+        )
+
+      , 'mc' => array()
+    );

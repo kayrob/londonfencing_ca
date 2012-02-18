@@ -1,0 +1,549 @@
+/* Banner
+--------------------------------------------------------------------------------------------*/
+
+#banner {
+	clear:both;
+	width:100%;
+	height:443px;
+	margin-top:-41px;
+	position:relative;
+	overflow:hidden;
+	z-index:1;
+}
+
+#bannerContent {
+	margin:0px auto;
+	width:960px;
+	position:relative;
+	height:443px;
+	z-index:2;
+}
+
+.standard #banner { height: 300px; }
+.standard #bannerContent { height: 300px; }
+
+#banner h3 {
+	font-family:OpenSansB;
+	font-weight:normal;
+	position:absolute;
+	bottom:90px;
+	left:0px;
+	text-transform:uppercase;
+	letter-spacing:-1px;
+}
+
+#banner.municipal h3 { background-color:#32c6f4; }
+#banner.discover h3 { background-color:#009246; }
+#banner.economic h3 { background-color:#f9da67; }
+
+#banner h3 a { 
+	color:#FFF; 
+	text-decoration:none; 
+	background:url(/img/layout/bannerArrow.png) no-repeat right;
+	display:block;
+	padding:9px 60px 9px 12px;
+}
+
+#banner p {
+	margin:0px;
+	position:absolute;
+	bottom:59px;
+	padding:;
+	background-color:#252525;
+	font-size:14px;
+	font-style:italic;
+	color:#d3d3d3;
+	padding:12px;
+}
+
+#banner img {
+	width:100%;
+	min-height:443px;
+	position:absolute;
+	left:0px;
+	top:0px;
+	z-index:1;
+}
+
+.standard #banner img { min-height: 300px; top: -50px; }
+
+/* Sub Nav
+--------------------------------------------------------------------------------------------*/
+
+#subNav {
+	float:left;
+	width:100%;
+}
+
+#subNav h5 {
+	font-family:OpenSansB;
+	font-weight:normal;
+	text-transform:uppercase;
+	letter-spacing:-1px;
+	color:#FFF;
+	padding:25px 20px;
+	background-color:#000;
+	border-bottom:1px solid #343434;
+	margin:0px;
+	font-size:16px;
+}
+
+#subNav ul {
+	float:left;
+	width:100%;
+	margin:15px 0px 0px 0px;
+	padding:0px;
+	list-style:none;
+	font-size:14px;
+}
+
+#subNav ul li {
+	text-align:left;
+	background-color:#2c2c2c;
+}
+
+#subNav ul li.striped { background-color:#414141; }
+/*
+#subNav ul li.municipal { border-right:4px solid #32c6f4; }
+#subNav ul li.discover { border-right:4px solid #009246; }
+#subNav ul li.economic { border-right:4px solid #f9da67; }
+
+#subNav ul li:hover.municipal { border-right:5px solid #32c6f4; }
+#subNav ul li:hover.discover { border-right:5px solid #009246; }
+#subNav ul li:hover.economic { border-right:5px solid #f9da67; }
+*/
+
+#subNav ul li a { color:#FFF; text-decoration:none; display:block; padding:12px 20px; }
+#subNav ul li a:hover { color:#c4c4c4; text-decoration:none; }
+
+#search {
+	float:left;
+	clear:both;
+	margin:25px 15px 0px;
+	position:relative;
+}
+
+#search input[type="text"] { width:223px; }
+
+#search .searchIcon { 
+	position:absolute; 
+	top:11px;
+	right:12px;
+}
+
+/* News and Events Widget
+--------------------------------------------------------------------------------------------*/
+
+#newsEventsWidget {
+	float:left;
+	width:100%;
+	clear:both;
+}
+
+#newsWidget {
+	float:left;
+	background-color:#FFF;
+	border:1px solid #cecccc;
+	width:322px;
+	font-size:12px;
+}
+
+.headingWrap { margin:0px 15px; }
+
+#newsWidget h5 {
+	margin:15px 0px 20px;
+	background:#FFF; 
+	width:110px;
+	font-family:OpenSansB;
+	text-transform:uppercase;
+}
+
+#newsWidget h6 {
+	margin:10px 15px 5px;
+}
+
+#newsWidget strong.date {
+	margin:0px 15px;
+	color:#858585;
+}
+
+#newsWidget p { 
+	line-height:22px;
+	margin:10px 15px;
+}
+
+.viewAll {
+	text-align:right;
+	padding:10px 15px;
+	color:#FFF;
+	margin-top:20px;
+	font-weight:bold;
+}
+
+.viewAll a { color:#FFF; text-decoration:none; }
+
+#newsWidget.municipal .headingWrap { background:url(/img/layout/blueHeaderLine.png) repeat-x 0px 7px; }
+#newsWidget.municipal h6 { color:#32c6f4; }
+#newsWidget.municipal .viewAll { background-color:#32c6f4; }
+
+#newsWidget.discover .headingWrap { background:url(/img/layout/greenHeaderLine.png) repeat-x 0px 7px; }
+#newsWidget.discover h6 { color:#009246; }
+#newsWidget.discover .viewAll { background-color:#009246; }
+
+#newsWidget.economic .headingWrap { background:url(/img/layout/yellowHeaderLine.png) repeat-x 0px 7px; }
+#newsWidget.economic h6 { color:#f9da67; }
+#newsWidget.economic .viewAll { background-color:#f9da67; }
+
+
+#eventsWidget {
+	float:right;
+	background-color:#FFF;
+	border:1px solid #cecccc;
+	width:322px;
+	font-size:12px;
+}
+
+.headingWrap { margin:0px 15px; }
+
+#eventsWidget h5 {
+	margin:15px 0px 20px;
+	background:#FFF; 
+	width:155px;
+	font-family:OpenSansB;
+	text-transform:uppercase;
+}
+
+#eventsWidget h6 {
+	margin:10px 15px 5px;
+}
+
+#eventsWidget p { 
+	line-height:22px;
+	margin:10px 15px;
+}
+
+#eventsDate {
+	float:left;
+	width:60px;
+	margin:0px 15px;
+}
+
+#eventsDate h5, #eventsDate h6 {
+	float:left;
+	font-family:OpenSansB;
+	font-size:14px;
+	text-transform:uppercase;
+	color:#c7c7c7;
+	margin:0px;
+}
+
+#eventsWidget.municipal #eventsDate h6, #eventsWidget.discover #eventsDate h6, #eventsWidget.economic #eventsDate h6 { float:right; color:#c7c7c7; }
+
+#eventsDate h2 {
+	float:left;
+	font-size:51px;
+	color:#252525;
+	font-family:Bebas;
+	margin:11px 0px 18px;
+}
+
+#eventsWidget.municipal .headingWrap { background:url(/img/layout/blueHeaderLine.png) repeat-x 0px 7px; }
+#eventsWidget.municipal h6 { color:#32c6f4; }
+#eventsWidget.municipal .viewAll { background-color:#32c6f4; }
+
+#eventsWidget.discover .headingWrap { background:url(/img/layout/greenHeaderLine.png) repeat-x 0px 7px; }
+#eventsWidget.discover h6 { color:#009246; }
+#eventsWidget.discover .viewAll { background-color:#009246; }
+
+#eventsWidget.economic .headingWrap { background:url(/img/layout/yellowHeaderLine.png) repeat-x 0px 7px; }
+#eventsWidget.economic h6 { color:#f9da67; }
+#eventsWidget.economic .viewAll { background-color:#f9da67; }
+
+/* Gallery Home Widget
+--------------------------------------------------------------------------------------------*/
+
+#galleryHomeWidget {
+	float:left;
+	clear:both;
+	background-color:#FFF;
+	border:1px solid #cecccc;
+	width:666px;
+	margin:35px 0px;
+}
+
+#galleryHomeWidget h5 {
+	margin:15px 0px 20px;
+	background:#FFF; 
+	width:135px;
+	font-family:OpenSansB;
+	text-transform:uppercase;
+}
+
+#galleryHomeWidget .headingWrap { background:url(/img/layout/greyHeaderLine.png) repeat-x 0px 7px; }
+
+#galleryHomeWidget ul {
+	list-style:none;
+	margin:0px 0px 10px 0px;
+	padding:0px;
+}
+
+#galleryHomeWidget ul li {
+	display:inline-block;
+	position:relative;
+	margin-left:11px;
+}
+
+#galleryHomeWidget ul li:first-child { margin-left:15px; }
+
+.photoOverlay {  
+	background:url(/img/transparency/60pb.png) repeat;
+	position:absolute;
+	top:0px;
+	left:0px;
+	height:138px;
+	width:138px;
+	text-align:center;
+	color:#FFF;
+	border:5px solid #000;
+	display:none;
+}
+
+.photoOverlay h6 {
+	font-family:OpenSansB;
+	text-transform:uppercase;
+	margin:45px 0px 3px;
+}
+
+.photoOverlay p {
+	margin:0px;
+	font-size:11px;
+} 
+
+.photoOverlay a {
+	position:absolute;
+	bottom:-10px;
+	left:20px;
+	background-color:#252525;
+	border:1px solid #1e1e1e;
+	color:#787878;
+	font-size:11px;
+	font-style:italic;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	padding:7px 15px;
+	display:block;
+	text-decoration:none;
+	-moz-box-shadow:0px 0px 10px rgba(0,0,0,0.6);
+	-webkit-box-shadow:0px 0px 10px rgba(0,0,0,0.6);
+	box-shadow:0px 0px 10px rgba(0,0,0,0.6);
+	-moz-transition:all 0.4s linear;
+	-webkit-transition:all 0.4s linear;
+	-ms-transition:all 0.4s linear;
+	transition:all 0.4s linear;
+}
+
+.photoOverlay a:hover { background-color:#4b4b4b; color:#CCC; }
+
+/**
+Calendar Styles - some to change per project
+*/
+/* Stuff to change per project
+--------------------------------------------------------------------------- */
+
+#calendarWrap { background-color:transparent; width:885px; margin:0px !important; padding:20px 0px !important;  }
+#calendarWrap .fc-header { background: #DFE3EA; border:1px solid #999; width:885px; left:0px !important; line-height:13px; } /* Header background color */
+#calendarWrap .fc-header .fc-state-default, #calendarWrap .fc-header .ui-state-default { border-color:#333; }
+
+#calendarWrap .fc-header .fc-state-default span, .spICS a, #customMonthYear {
+	background:url(/img/calendar/calendarBtnBack.png) repeat-x top #E7E8EC; 
+	color:#333; 
+	-moz-box-shadow:inset 2px 0px 0px rgba(255,255,255,0.4);
+	-webkit-box-shadow:inset 1px 1px 0px rgba(255,255,255,0.4);
+	box-shadow:inset 2px 0px 0px rgba(255,255,255,0.4);
+	text-shadow:1px 1px 0px rgba(255,255,255,0.4);
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px; 
+	border-top:1px solid #ccc; 
+} /* Button Style */
+
+.spICS a { border:1px solid #D1D1D1; }
+
+#calendarWrap .calendarsListItem input { margin:3px 0px 0px 0px; } 
+
+#calendarWrap .fc-header .fc-state-default span:hover, .spICS a:hover { background:#E7E8EC; }
+#calendarWrap .fc-header .fc-state-default, #calendarWrap .fc-header .fc-state-default a { border-color:#B3B4B7; }
+#calendarWrap .fc-header .fc-state-active span { background:#E7E8EC; }
+#calendarWrap .fc-header .fc-state-disabled span { background:#E7E8EC; }
+#calendarWrap .fc-header .fc-state-disabled, #calendarWrap .fc-header .fc-state-disabled a { border-color:#B3B4B7; }
+
+#calendarWrap #leftCol { background-color:#F2F3F7; width:120px; line-height:13px; } /* Left Col Background Color and Width */
+#calendarWrap #leftCol p { color:#758192; }
+
+#calendarWrap #centreCol { width:685px; } /* Centre Col Width */
+
+#calendarWrap .calendarsListItem { border-bottom:1px dotted #C6CBD3; } 
+#calendarWrap .fc-content .fc-state-highlight {	background-color:#DFE3EA; } /* Hightlight Color */
+
+.ui-dialog { border:2px solid #B3B4B7 !important; }
+.ui-widget-header {
+	background:url(/img/calendar/calendarBtnBack.png) repeat-x top #E7E8EC !important; 
+	color:#333 !important; 
+	-moz-box-shadow:inset 2px 0px 0px rgba(255,255,255,0.4);
+	-webkit-box-shadow:inset 1px 1px 0px rgba(255,255,255,0.4);
+	box-shadow:inset 2px 0px 0px rgba(255,255,255,0.4);
+	text-shadow:1px 1px 0px rgba(255,255,255,0.4);
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+}
+
+/*#eventsWidget { width:690px; }*/
+
+/* Main Strcuture Styles - don't really need to touch this
+--------------------------------------------------------------------------- */
+
+#calendarWrap {
+	float:left;
+	position:relative;
+	margin:20px;
+	padding:20px;
+}
+
+#calendarWrap .fc-header {
+	position:absolute;
+	top:20px;
+	left:20px;
+	padding:10px;
+}
+
+#calendarWrap .fc-header tr td { padding:10px 10px 8px 10px; }
+#calendarWrap .fc-header tr td table tr td { padding:0px; }
+
+#calendarWrap .fc-header .fc-state-default, #calendarWrap .fc-header .ui-state-default { margin-bottom:0px; }
+
+#calendarWrap .fc-header .fc-state-default span {
+	font-size:11px;	
+	border:none;
+	padding:5px 7px;
+}
+
+#calendarWrap .fc-header-space { padding-left:5px; }  
+
+#calendarWrap #leftCol {
+	float:left;
+	border-right:1px solid #999;
+	border-left:1px solid #999;
+	border-bottom:1px solid #999;
+	bottom:20px;
+	top:0px;
+	position:absolute;
+	padding:20px;
+	font-size:11px;
+	margin-top:60px;
+}
+
+#calendarWrap #leftCol p {
+	text-transform:uppercase;
+	font-size:10px;
+	font-weight:bold;
+	margin-top:15px;
+}
+
+#calendarWrap #leftCol form {
+	margin:5px 0px 15px;
+	float:left;
+}
+
+#calendarWrap .calendarsListItem {
+	padding:4px 0px 3px;
+	float:left;
+	width:100%;
+}
+
+#calendarWrap .calendarsListItem input { float:left; } 
+#calendarWrap .calendarsListItem .calendarName { float:left; margin:2px 0px 0px 5px; } 
+
+#calendarWrap #centreCol {
+	padding:20px;
+	background-color:#FFF;
+	float:right;
+	margin-top:45px;
+	border-right:1px solid #999;
+	border-bottom:1px solid #999;
+}
+
+#calendarWrap .fc-header-title {
+	font-size:22px;
+	margin-bottom:10px;
+	text-align:center;
+}
+
+#calendarWrap .fc-content .fc-state-default {
+	border-color:#D5D5D5;
+}
+
+.fc-content .fc-corner-left a { margin-left:0px !important; }
+.fc-content .fc-corner-left.recur_allDay_15 a { margin-left:-1px !important; }
+
+#calendarWrap .fc .fc-grid th { color:#333; font-weight:normal; font-size:11px; padding:5px 0px; }
+#calendarWrap .fc .fc-first th { color:#333; font-weight:normal; font-size:11px; padding:5px 0px; }
+
+#tblEventDetails tr td, #dlgQuickView dl dd, #dlgQuickView dl dt { padding:5px; font-size:11px; color:#777; text-align:left; }
+#tblEventDetails tr td strong { color:#333; }
+
+#pAddEvent a {
+	float:left;
+	margin:5px;
+	padding:5px 5px 5px 20px;
+	background:url(/img/calendar/calendar-month.png) no-repeat left;
+	font-size:11px;
+}
+
+.spICS a {
+	float:right;
+	padding:1px 5px;
+	margin-top:0px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px; 
+	text-decoration:none;
+	font-size:10px;
+}
+
+/* List Widget Styles
+--------------------------------------------------------------------------- */
+
+#listViewWidget { width:200px; padding:20px; font-size:11px; clear:both }
+
+/*this is displayed within fullCalendar app and is not a separate widget
+#eventsWidget { overflow:auto; font-size:12px; line-height:20px; }
+#eventsWidget dl { padding-right:20px; }
+#eventsWidget #pAddEvent a { float:none; }*/
+
+#listViewWidget dl dt, #eventsWidget dl dt { margin:10px 0px 5px; font-size:12px; }
+#eventsWidget dl dt { margin:10px 0px 1px; }
+
+#listViewWidget dl dd, #eventsWidget dl dd { border-bottom:1px solid #D5D5D5; padding-bottom:10px; }
+
+
+/* Calendar Widget Styles
+--------------------------------------------------------------------------- */
+
+table#calendarWidgetTable {
+	background-color:#FFF;
+}
+
+table#calendarWidgetTable tr td { border:1px solid #D5D5D5; padding:5px; }
+
+table#calendarWidgetTable tr.calHeader1 th { font-weight:bold; border:none; font-size:14px; }
+
+table#calendarWidgetTable tr th {
+	color: #333;
+	font-size: 11px;
+	font-weight: normal;
+	padding: 5px;
+	border:1px solid #D5D5D5;
+}
+
