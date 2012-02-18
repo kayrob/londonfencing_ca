@@ -5,14 +5,14 @@
     return $local + array(
         'db' => array(
             'host'  => 'localhost'
-          , 'user'  => 'user'
-          , 'pass'  => 'password'
-          , 'name'  => '132-001_RoyalYork'
+          , 'user'  => 'hpwebuser'
+          , 'pass'  => '76hpwebuser76'
+          , 'name'  => 'londonfencing_ca'
           , 'class' => 'DB_MySQLi'
         )
 
-      , 'site_psr' => 'RoyalYork'
-      , 'theme'    => 'RoyalYork'
+      , 'site_psr' => 'LondonFencing'
+      , 'theme'    => 'LondonFencing'
 
       , 'modules' => array(
         )
@@ -69,8 +69,8 @@
 
       , 'mailer' => array(
             'class'      => '\\PHPMailer\\PHPMailer'
-          , 'from_email' => 'no-reply@royalyorkortho.com'
-          , 'from_name'  => 'royalyorkortho.com'
+          , 'from_email' => 'no-reply@londonfencing_ca'
+          , 'from_name'  => 'londonfencing.ca'
           , 'send_using' => 'sendmail'
         )
 

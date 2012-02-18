@@ -841,7 +841,7 @@ function tinyMCE($id, $theme)
     $return .=  'file_browser_callback : "tinyBrowser",';
 
     $return .=  '// Example content CSS (should be your site CSS)
-                content_css : "/themes/RoyalYork/default.css",
+                content_css : "/themes/LondonFencing/default.css",
 
                 // Drop lists for link/image/media/template dialogs
                 template_external_list_url : "lists/template_list.js",

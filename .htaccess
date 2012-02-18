@@ -295,7 +295,8 @@ FileETag None
  
 #  RewriteRule ^logout$ /auth.php?mode=logout [NC,L]
 #  RewriteRule ^login$ /auth.php?mode=login [QSA,NC,L]
-  RewriteRule ^feed/news.xml$ /rss/newsFeed.php [NC,L]
+  RewriteRule ^blog/(.*)$ /index.php?p=blog&slug=$1 [QSA,NC,L]
+  RewriteRule ^feed/blog$ /src/LondonFencing/posts/assets/rss/blog.php [NC,L]
   
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
