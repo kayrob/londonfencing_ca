@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <module name="twitter">
+        <ns>\Apps\Twitter</ns>
+        <label>Twitter Account Manager</label>
+    </module>
+</modules>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <module name="photo-gallery">
+        <ns>\Apps\PhotoGallery</ns>
+        <label>Photo Gallery</label>
+    </module>
+</modules>

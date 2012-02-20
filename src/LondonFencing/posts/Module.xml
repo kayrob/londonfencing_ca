@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <module name="blog">
+        <ns>\Apps\Blog</ns>
+        <label>Blog Manager</label>
+    </module>
+</modules>
