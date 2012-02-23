@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <module name="contact">
+        <ns>\Apps\Contact</ns>
+        <label>Forms: Contact Us</label>
+        <widget enabled="1">Widgets/views/contactForm.php</widget>
+    </module>
+</modules>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <module name="register-beginner">
+        <ns>\Apps\Register\Beginner</ns>
+        <label>Registration: Beginner</label>
+        <widget enabled="1">Widgets/views/beginnerRegistration.php</widget>
+        <admin enabled="1">Apps/views/beginner-registration.php</admin>
+    </module>
+    <module name="register-intermediate">
+        <ns>\Apps\Register\Intermediate</ns>
+        <label>Registration: Intermediate</label>
+        <widget enabled="1">Widgets/views/intermediateRegistration.php</widget>
+        <admin enabled="1">Apps/views/intermediate-registration.php</admin>
+    </module>
+</modules>

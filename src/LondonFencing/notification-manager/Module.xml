@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <module name="notification-manager">
+        <ns>\Apps\Notification\Manager</ns>
+        <label>Notification Manager</label>
+        <admin enabled="1">Apps/views/notify.php</admin>
+    </module>
+</modules>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <module name="tournaments">
+        <ns>\Apps\Tournaments</ns>
+        <label>Tournaments: Feed</label>
+        <widget enabled="1">Widgets/views/tournamentsFeed.php</widget>
+    </module>
+</modules>
