@@ -1,0 +1,201 @@
+/**
+Calendar Styles - some to change per project
+*/
+/* Stuff to change per project
+--------------------------------------------------------------------------- */
+
+#calendarWrap { background-color:transparent; width:885px; margin:0px !important; padding:20px 0px !important;  }
+#calendarWrap .fc-header { background: #DFE3EA; border:1px solid #999; width:885px; left:0px !important; line-height:13px; } /* Header background color */
+#calendarWrap .fc-header .fc-state-default, #calendarWrap .fc-header .ui-state-default { border-color:#333; }
+
+#calendarWrap .fc-header .fc-state-default span, .spICS a, #customMonthYear {
+	background:url(/images/calendar/calendarBtnBack.png) repeat-x top #E7E8EC; 
+	color:#333; 
+	-moz-box-shadow:inset 2px 0px 0px rgba(255,255,255,0.4);
+	-webkit-box-shadow:inset 1px 1px 0px rgba(255,255,255,0.4);
+	box-shadow:inset 2px 0px 0px rgba(255,255,255,0.4);
+	text-shadow:1px 1px 0px rgba(255,255,255,0.4);
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px; 
+	border-top:1px solid #ccc; 
+} /* Button Style */
+
+.spICS a { border:1px solid #D1D1D1; }
+
+#calendarWrap .calendarsListItem input { margin:3px 0px 0px 0px; } 
+
+#calendarWrap .fc-header .fc-state-default span:hover, .spICS a:hover { background:#E7E8EC; }
+#calendarWrap .fc-header .fc-state-default, #calendarWrap .fc-header .fc-state-default a { border-color:#B3B4B7; }
+#calendarWrap .fc-header .fc-state-active span { background:#E7E8EC; }
+#calendarWrap .fc-header .fc-state-disabled span { background:#E7E8EC; }
+#calendarWrap .fc-header .fc-state-disabled, #calendarWrap .fc-header .fc-state-disabled a { border-color:#B3B4B7; }
+
+#calendarWrap #leftCol { background-color:#F2F3F7; width:120px; line-height:13px; } /* Left Col Background Color and Width */
+#calendarWrap #leftCol p { color:#758192; }
+
+#calendarWrap #centreCol { width:685px; } /* Centre Col Width */
+
+#calendarWrap .calendarsListItem { border-bottom:1px dotted #C6CBD3; } 
+#calendarWrap .fc-content .fc-state-highlight {	background-color:#DFE3EA; } /* Hightlight Color */
+
+.ui-dialog { border:2px solid #B3B4B7 !important; }
+.ui-widget-header {
+	background:url(/images/calendar/calendarBtnBack.png) repeat-x top #E7E8EC !important; 
+	color:#333 !important; 
+	-moz-box-shadow:inset 2px 0px 0px rgba(255,255,255,0.4);
+	-webkit-box-shadow:inset 1px 1px 0px rgba(255,255,255,0.4);
+	box-shadow:inset 2px 0px 0px rgba(255,255,255,0.4);
+	text-shadow:1px 1px 0px rgba(255,255,255,0.4);
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+}
+
+#eventsWidget { width:690px; }
+
+/* Main Strcuture Styles - don't really need to touch this
+--------------------------------------------------------------------------- */
+
+#calendarWrap {
+	float:left;
+	position:relative;
+	margin:20px;
+	padding:20px;
+}
+
+#calendarWrap .fc-header {
+	position:absolute;
+	top:20px;
+	left:20px;
+	padding:10px;
+}
+
+#calendarWrap .fc-header tr td { padding:10px 10px 8px 10px; }
+#calendarWrap .fc-header tr td table tr td { padding:0px; }
+
+#calendarWrap .fc-header .fc-state-default, #calendarWrap .fc-header .ui-state-default { margin-bottom:0px; }
+
+#calendarWrap .fc-header .fc-state-default span {
+	font-size:11px;	
+	border:none;
+	padding:5px 7px;
+}
+
+#calendarWrap .fc-header-space { padding-left:5px; }  
+
+#calendarWrap #leftCol {
+	float:left;
+	border-right:1px solid #999;
+	border-left:1px solid #999;
+	border-bottom:1px solid #999;
+	bottom:20px;
+	top:0px;
+	position:absolute;
+	padding:20px;
+	font-size:11px;
+	margin-top:60px;
+}
+
+#calendarWrap #leftCol p {
+	text-transform:uppercase;
+	font-size:10px;
+	font-weight:bold;
+	margin-top:15px;
+}
+
+#calendarWrap #leftCol form {
+	margin:5px 0px 15px;
+	float:left;
+}
+
+#calendarWrap .calendarsListItem {
+	padding:4px 0px 3px;
+	float:left;
+	width:100%;
+}
+
+#calendarWrap .calendarsListItem input { float:left; } 
+#calendarWrap .calendarsListItem .calendarName { float:left; margin:2px 0px 0px 5px; } 
+
+#calendarWrap #centreCol {
+	padding:20px;
+	background-color:#FFF;
+	float:right;
+	margin-top:45px;
+	border-right:1px solid #999;
+	border-bottom:1px solid #999;
+}
+
+#calendarWrap .fc-header-title {
+	font-size:22px;
+	margin-bottom:10px;
+	text-align:center;
+}
+
+#calendarWrap .fc-content .fc-state-default {
+	border-color:#D5D5D5;
+}
+
+.fc-content .fc-corner-left a { margin-left:0px !important; }
+.fc-content .fc-corner-left.recur_allDay_15 a { margin-left:-1px !important; }
+
+#calendarWrap .fc .fc-grid th { color:#333; font-weight:normal; font-size:11px; padding:5px 0px; }
+#calendarWrap .fc .fc-first th { color:#333; font-weight:normal; font-size:11px; padding:5px 0px; }
+
+#tblEventDetails tr td, #dlgQuickView dl dd, #dlgQuickView dl dt { padding:5px; font-size:11px; color:#777; text-align:left; }
+#tblEventDetails tr td strong { color:#333; }
+
+#pAddEvent a {
+	float:left;
+	margin:5px;
+	padding:5px 5px 5px 20px;
+	background:url(/images/calendar/calendar-month.png) no-repeat left;
+	font-size:11px;
+}
+
+.spICS a {
+	float:right;
+	padding:1px 5px;
+	margin-top:0px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px; 
+	text-decoration:none;
+	font-size:10px;
+}
+
+/* List Widget Styles
+--------------------------------------------------------------------------- */
+
+#listViewWidget { width:200px; padding:20px; font-size:11px; clear:both }
+
+/*this is displayed within fullCalendar app and is not a separate widget*/
+#eventsWidget { overflow:auto; height:550px; display:none; font-size:12px; line-height:20px; }
+#eventsWidget dl { padding-right:20px; }
+#eventsWidget #pAddEvent a { float:none; }
+
+#listViewWidget dl dt, #eventsWidget dl dt { margin:10px 0px 5px; font-size:12px; }
+#eventsWidget dl dt { margin:10px 0px 1px; }
+
+#listViewWidget dl dd, #eventsWidget dl dd { border-bottom:1px solid #D5D5D5; padding-bottom:10px; }
+
+
+/* Calendar Widget Styles
+--------------------------------------------------------------------------- */
+
+table#calendarWidgetTable {
+	background-color:#FFF;
+}
+
+table#calendarWidgetTable tr td { border:1px solid #D5D5D5; padding:5px; }
+
+table#calendarWidgetTable tr.calHeader1 th { font-weight:bold; border:none; font-size:14px; }
+
+table#calendarWidgetTable tr th {
+	color: #333;
+	font-size: 11px;
+	font-weight: normal;
+	padding: 5px;
+	border:1px solid #D5D5D5;
+}

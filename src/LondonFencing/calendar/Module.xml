@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <module name="events">
+        <ns>\Apps\Admin\Calendar</ns>
+        <label>Calendar</label>
+        <widget enabled="0">Widgets/views/calendar.php</widget>
+        <admin enabled="1">Apps/views/index.php</admin>
+    </module>
+    <module name="advanced-practices">
+        <ns>\Apps\Calendar</ns>
+        <label>Events: Advanced Practices</label>
+        <widget enabled="1">Widgets/views/practiceWidget.php</widget>
+    </module>
+</modules>

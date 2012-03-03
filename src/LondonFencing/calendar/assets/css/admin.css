@@ -1,0 +1,156 @@
+ /* Events Calendar - append and restyle
+--------------------------------------------------------------- */
+
+#webCalEventSchedule { background-color:#F3F0DF; padding:10px; border:1px solid #CCC79D; }
+
+#webCalEventSchedule .webCalEventStart {
+	float:left;
+	width:200px;
+}
+
+#webCalEventSchedule .webCalEventEnd {
+	float:right;
+	width:200px;
+}
+
+#webCalEventSchedule .webCalEventTimeHeader {
+	font-weight:bold;
+	font-size:13px;
+}
+
+#divCalGoToButtons {
+	float:right;
+	font-size:12px;
+	font-weight:normal;
+}
+
+#hurryUpAndWait {
+	width:500px;
+	background-color:#FFFFFF;
+	padding:10px;
+	border:2px solid #97A3AD;
+}
+
+#divCalendarEvent {
+/*	width:500px;			*/
+	width: 660px;
+	background-color:#FFFFFF;
+	padding:10px;
+	border:2px solid #97A3AD;
+}
+
+#webCalMasterTable {
+	width:100%;
+	border:1px solid #8C8D74;
+}
+
+#webCalMasterTable tr td {
+	background:#FFFFFF url(/images/specific/calendarDayBack.jpg) repeat-x scroll 0 0;
+	border:1px solid #E6E6E6;
+	color:#535742;
+	padding:3px;
+	width:13%;
+}
+
+#webCalMasterTable tr th {
+	background-color:#0E462D;
+	border:1px solid #003300;
+	color:#FFFFFF;
+	padding:5px;
+}
+
+#divCalendarList {
+	padding: 0px 10px;
+}
+
+#divCalendarList ul {
+	padding:0px;
+	margin:0px 0px 0px 5px;
+}
+
+#divCalendarList li {
+	margin:5px 0px;
+}
+
+.oCalenderCheckWrap {
+	display:block;
+	float:left;
+}
+
+.oCalenderSideWidget {
+	padding:0px 0px 0px 0px;
+	margin-right:10px;
+/*	background-color:#E7E3C3;	*/
+}	
+
+.oCalenderSideWidget h2 { /**
+	margin:0px 0px 10px 0px;
+	background-color:#CCC79D;
+	padding:5px;
+	border-bottom:2px solid #858063;
+	color:#000000;
+**/
+padding:0px;
+margin:0px;
+color:#FFFFFF;
+}
+
+.oCalenderSideWidget div div #webCalEventTitle {
+	padding:5px 0px;
+	background-color:#FFFFFF;
+	color:#000000;
+}
+
+#webCalEventDescription {
+	border-top: 1px dotted #858063;
+	padding:10px 0px 0px 0px;
+}
+
+.oCalenderMainCalendar {
+	padding:0px;
+	background-color:#E7E3C3;
+}
+
+.oCalenderMainCalendar h2 {/**
+	margin:0px 0px 10px 0px;
+	background-color:#CCC79D;
+	padding:5px;
+	border-bottom:2px solid #858063;
+	color:#000000;
+**/}
+
+#divCalNavBtns {
+	padding:5px 5px 0px 5px;
+	margin:0px 0px 15px 0px;
+	background:#E8E3C3;
+	border: 1px solid #663300;
+}
+
+#divCalPrevNextButtons {
+	float:right;
+	clear:both;
+	width:55%;
+	text-align:right;
+	margin-bottom:5px;
+}
+
+#setCalTypeButtons {
+	float:left;
+	width:45%;
+}
+
+.plainBoxCalBodyMainCap {
+	padding:0px 10px;
+}
+
+.plainBoxCalFooterCap {
+	height:8px;
+}
+
+#calPopupClose img {
+	vertical-align:bottom;
+}
+
+
+/* End of Events Calendar
+--------------------------------------------------------------- */
