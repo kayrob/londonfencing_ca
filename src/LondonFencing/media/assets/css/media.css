@@ -1,0 +1,107 @@
+div.tagsinput { border:1px solid #CCC; background: #FFF; padding:5px; margin:0px 0px 0px 5px; width:165px !important; height:50px !important; overflow-y: auto;}
+div.tagsinput span.tag { border: 1px solid #73A1D0; -moz-border-radius:2px; -webkit-border-radius:2px; display: block; float: left; padding: 2px; text-decoration:none; background: #6E93B0; color: #FFFFFF; margin-right: 5px; margin-bottom:5px;font-family: helvetica;  font-size:10px;}
+div.tagsinput span.tag a { font-weight: bold; color: #FFFFFF; text-decoration:none; font-size: 10px;  } 
+div.tagsinput input { width:60px; margin:0px; font-family: helvetica; font-size: 10px; border:1px solid transparent; padding:0px; background: transparent; color: #000; outline:0px;  margin-right:5px; margin-bottom:5px; }
+div.tagsinput div { display:block; float: left; } 
+.tags_clear { clear: both; width: 100%; height: 0px; }
+
+div.tagsinput { display:inline-block;}
+div.tagsinput span.tag{ background: #cbdeeb; color : #234E70; border-color: #6E93B0}
+div.tagsinput span.tag a{color : #234E70}
+#tag_cloud {
+    clear:   both;
+    display: block;
+}
+#tag_cloud li {
+    list-style: none;
+    display:    inline;
+}
+
+#tag_cloud li.active a { color: #73A1D0; }
+
+.tag_weight-0   { font-size: 1em; }
+.tag_weight-5   { font-size: 1.05em; }
+.tag_weight-10  { font-size: 1.1em; }
+.tag_weight-15  { font-size: 1.15em; }
+.tag_weight-20  { font-size: 1.2em; }
+.tag_weight-25  { font-size: 1.25em; }
+.tag_weight-30  { font-size: 1.3em; }
+.tag_weight-35  { font-size: 1.35em; }
+.tag_weight-40  { font-size: 1.4em; }
+.tag_weight-45  { font-size: 1.45em; }
+.tag_weight-50  { font-size: 1.5em; }
+.tag_weight-55  { font-size: 1.55em; }
+.tag_weight-60  { font-size: 1.6em; }
+.tag_weight-65  { font-size: 1.65em; }
+.tag_weight-70  { font-size: 1.7em; }
+.tag_weight-75  { font-size: 1.75em; }
+.tag_weight-80  { font-size: 1.8em; }
+.tag_weight-85  { font-size: 1.85em; }
+.tag_weight-90  { font-size: 1.9em; }
+.tag_weight-95  { font-size: 1.95em; }
+.tag_weight-100 { font-size: 2em; }
+/* Photo Gallery */
+
+.contactSheetItem { 
+    background: url("/admin/img/transparency/5pb.png") repeat scroll 0 0 transparent;
+    border: 1px solid #CFCFCF;
+    float: left;
+    margin-bottom: 12px;
+    margin-right: 12px;
+    padding: 20px;
+    width: auto;
+}
+
+.photoBox {
+	margin-top: 0px;
+}
+div.mediaContactSheetFile {
+	
+	display:block;
+	width: 290px;
+	height:130px;
+	background: white;
+	border:1px solid #CCCCCC;
+	padding:5px;
+	margin:5px;
+	float:left;
+	text-align:center;
+	
+
+
+}
+
+div.mediaContactSheetFile img {
+	border:1px solid #CCCCCC;
+	padding:2px;
+}
+
+div.mediaContactSheetFile  textarea.mediaTitle {
+	width:170px;
+	height:30px;
+	font-size:10px;
+	margin:0px 0px 0px 4px;
+
+}
+ 
+ 
+div.mediaContactSheetFile  input.btnStyle {
+	font-size:10px;
+	/*
+padding:5px;
+	
+*/
+	margin-left:5px;
+	margin-top: 5px;
+	width:85px;
+	padding:0px;
+	height:20px;
+	line-height: 0px;
+}
+
+div.mediaContactSheetFile input.mediaTags {
+	width:114px;
+	height:37px;
+	font-size:10px;
+
+}
