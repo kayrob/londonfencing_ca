@@ -1,35 +1,51 @@
-<section id="tournaments">
-        <div class="blankMainHeader">
-	<h2>Upcoming Tournaments</h2>
-        </div>
 <?php
-$rss = @simplexml_load_file("http://www.airsetpublic.com/syndicate/public/16972/year.xml");
+require_once(dirname(dirname(__DIR__)))."/tournaments.php";
+use LondonFencing\tournmaents as Tmnts;
 
-if (is_object($rss)){
+if ($this instanceof Page && isset($db)){
+
+
+$tournObj = new Tmnts\tournaments($db);
+$tournaments = $tournObj->getUpcomingTournaments();
+$tourns = multi_array_subval_sort($tournaments,'tdate');
+?>
+
+<section class="callout">
+    <h2>Tournaments</h2>
+<?php
+if (!empty($tourns)){
 
         $p = 0;
-        $feed = $rss->channel;
-        foreach ($feed->item as $tourn){
-            $tDate = strtotime((string)$tourn->pubDate);
-            
-            preg_match("%(http:\/\/[a-zA-z\.\?\-0-9_=\/]*)(<br \/>)*(.*)%",(string)$tourn->description,$dMatch);
-            
-            $description = (isset($dMatch[1]))?trim(str_replace($dMatch[1],"",(string)$tourn->description)):(string)$tourn->description;
-            
-            $description = ltrim(ltrim($description,"<br />"),"<br>");
-            echo '<div><h4>'.date('M',$tDate).'</h4><h5>'.date('j',$tDate).'</h5>ICS';
-            echo '<h6>'.(string)$tourn->title.'</h6>';
-            echo '<p>'. $description.'</p>';
-            
-            if (isset($dMatch[1])){
-                echo '<div class="blankMainHeaderTwit"><h6><a href="'.$dMatch[1].'" target="_blank">More Info</a></h6>';
-            }
-           
-            $p++;
-            if ($p == 10){
-                break;
+        foreach ($tourns as $tourn){
+            if ($tourn['tdate'] >= date('U')){
+                //if eID link to cal ICS, else static ICS with specific data
+                $icsHREF = ($tourn["eID"] !== false) ? "/admin/assets/rss/icalEvents.php?event=".$tourn["eID"]:"/src/LondonFencing/StaticPage/ics.php?event=".$tourn["title"]."&start=".$tourn['tdate']."&end=".$tourn['tend'];
+                $description = ltrim($tourn['description'],"<br />");
+                $date = date('M d, Y g:i a',$tourn['tdate']);
+                $date .= (date('Y-m-d', $tourn['tdate']) == date('Y-m-d', $tourn['tend']))? ' to '.date('g:i a',$tourn['tend']): ' - '.date('M d, Y g:i a', $tourn['tend']);
+                
+                $location = (preg_match('%[Ll]ocation\:(\s)?(.*)%', $description, $matches)) ? $matches[2] :'' ;
+                $h4Class = ($p > 0) ?' class="bordered"' : '';
+                echo '<h4'.$h4Class.'>'.preg_replace('%\(.*\)%' , '', $tourn["title"]).'</h4>';
+                echo '<p>';
+                echo '<a href="'.$icsHREF.'"><img src="/themes/LondonFencing/img/plusCalendar.png" alt="add to calendar" title="Add to Calendar" width="49px; height="49px" /></a>';
+                if  (isset($tourn['link']) && $tourn['link'] !== false){
+                    echo '<a href="'.$tourn['link'].'" target="_blank"><img src="/themes/LondonFencing/img/extLink.png" alt="more info" width="49px; height="49px" title="More Info" /></a>';
+                }
+                echo'<span class="lowlight">Date:</span>&nbsp;&nbsp;&nbsp;&nbsp;'.$date.'<br />';
+                if ($location != ''){
+                    echo '<span class="lowlight">Where:</span>&nbsp;&nbsp;'.$location.'<br />';
+                }
+                echo '</p>';
+                $p++;
+                if ($p == 2){
+                    break;
+                }
             }
         }
 }
 ?>
+    <p class="moreTournaments"><a href="/tournaments" class="readMore">more tournaments</a>
 </section>
+<?php
+}

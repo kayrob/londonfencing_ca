@@ -14,21 +14,28 @@ if (!empty($_POST) && isset($_POST["sub-contact-us"]) && validate_form($_POST)) 
 	$body .= "Phone: ".$_POST['RQvalPHONPhone_Number'];
 	if (isset($_POST['OPvalNUMBExtension']) && $_POST['OPvalNUMBExtension'] != ''){
 	   $body .= ' ext. ' . make_numeric($_POST['OPvalNUMBExtension']);
-    }
-    $body .= "\n\n-------\nSent from ".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+                  }
+                  $body .= "\n\n-------\nSent from ".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
 		
 	$from = ($_POST['RQvalMAILEmail_Address'] != "") ? $_POST['RQvalMAILEmail_Address'] : "no-reply@londonfencing.ca";
 	$email = $db->return_specific_item(false, 'sysStorageTable', 'value', '--', "application='contact-us'");
 	
-	mail($email, 'London Fencing Club contact from: ' . trim($_POST['RQvalALPHName']), $body, 'From: '. $from);
-	
-	$sent = 1;
-	
+                  $mail = new PHPMailer\PHPMailer();
+                  $mail->IsHTML(false);
+                  $mail->SetFrom($from);
+                  $mail->AddAddress($email);
+                  $mail->Subject = 'London Fencing Club contact from: ' . trim($_POST['RQvalALPHName']);
+                  $mail->Body = $body;
+	if ($mail->Send()){
+                        $sent = 1;
+                  }
+	else{
+                        $message = $mail->ErrorInfo;
+                  }
 }
 $post = array(
    "RQvalALPHName"          => "",
    "RQvalPHONPhone_Number"  => "",
-   "OPvalNUMBExtension"     => "",
    "RQvalMAILEmail_Address" => "",
    "RQvalALPHMessage"       => "",
 );
@@ -50,8 +57,7 @@ if($sent == 1){
 
 	<div>
 	   <label for="RQvalPHONPhone_Number" class="req">Phone Number</label>
-        <input type="text" name="RQvalPHONPhone_Number" id="RQvalPHONPhone_Number" value = "<?php echo $post["RQvalPHONPhone_Number"];?>"/> ext. 
-			    <input type="text" name="OPvalNUMBExtension" id="OPvalNUMBExtension" style="width:40px;" value = "<?php echo $post["OPvalNUMBExtension"];?>"/>
+        <input type="text" name="RQvalPHONPhone_Number" id="RQvalPHONPhone_Number" value = "<?php echo $post["RQvalPHONPhone_Number"];?>"/>
     </div>
 
 	<div>
@@ -65,7 +71,7 @@ if($sent == 1){
     </div>
 
     <div class="submitWrap">
-        <input type="submit" value="Submit" name="sub-contact-us" class="btnStyle blue" />
+        <input type="submit" value="Submit" name="sub-contact-us" class="btnStyle" />
         <input type="hidden" name="nonce" value="<?php echo Quipp()->config('security.nonce');?>" />
     </div>
 </form>

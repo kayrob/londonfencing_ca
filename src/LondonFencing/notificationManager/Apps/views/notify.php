@@ -119,7 +119,7 @@ include $root. "/admin/templates/header.php";
     $titles[3] = "Status";
 
     //print an editor with basic controls
-    echo '<form name="frmUpdateNotify" method = "post" action='.$_SERVER["PHP_SELF"].'>';
+    echo '<form name="frmUpdateNotify" method = "post" action="/admin/apps/notificationManager/notify">';
     echo '<table id="adminTableList" class="adminTableList tablesorter" width="100%" cellpadding="5" cellspacing="0" border="1">';
     echo '<thead><tr><th>'.$titles[0].'</th><th>'.$titles[1].'</th><th>'.$titles[2].'</th><th>'.$titles[3].'</th></tr></thead><tbody>';
     while ($row = $db->fetch_assoc($resQry)){
@@ -151,7 +151,7 @@ include $root. "/admin/templates/footer.php";
 
 }
 else{
-    echo 'no permission';
+    $auth->boot_em_out(1);
 
 }
 ?>

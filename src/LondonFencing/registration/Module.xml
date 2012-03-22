@@ -3,13 +3,22 @@
     <module name="register-beginner">
         <ns>\Apps\Register\Beginner</ns>
         <label>Registration: Beginner</label>
-        <widget enabled="1">Widgets/views/beginnerRegistration.php</widget>
-        <admin enabled="1">Apps/views/beginner-registration.php</admin>
+       <admin enabled="1">registration/Apps/views/beginner-registration.php</admin>
+        <widget enabled="1" adminLink="1" name="Form: Beginner Registration">Widgets/views/beginnerRegistration.php</widget>
+        <icon>registration/assets/img/dashboard_icon.png</icon>
+        <help>Use this tool to add Beginner Session information, view submissions and manage registrations. An email tool enables 
+        administrators to send messages to individuals or the group.</help>
     </module>
     <module name="register-intermediate">
         <ns>\Apps\Register\Intermediate</ns>
         <label>Registration: Intermediate</label>
-        <widget enabled="1">Widgets/views/intermediateRegistration.php</widget>
-        <admin enabled="1">Apps/views/intermediate-registration.php</admin>
+       <admin enabled="1" adminLink="1">registration/Apps/views/intermediate-registration.php</admin>
+        <widget enabled="1" adminLink="1" name="Form: Intermediate Registration">Widgets/views/intermediateRegistration.php</widget>
+        <icon>registration/assets/img/dashboard_icon.png</icon>
+        <help>Use this tool to add Beginner Session information, view submissions and manage registrations. An email tool enables 
+        administrators to send messages to individuals or the group.</help>
+    </module>
+    <module name="register-sidenav">
+        <widget enabled="1" adminLink="0" name="Form: Registration Side Nav">Widgets/views/registrationSideBar.php</widget>
     </module>
 </modules>

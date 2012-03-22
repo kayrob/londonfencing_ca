@@ -39,7 +39,14 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                         print json_encode($r);
                 }
                 break;
-
+       case "newCover":
+                
+                if (isset($_POST['value']) && (int)$_POST['value'] > 0 && isset($_POST['tag']) && (int)$_POST['tag'] > 0){
+                    
+                    echo $m->set_cover_image($_POST['value'],$_POST['tag']);
+                }
+                echo 'false';
+                break;
 
         case "remove_tag":
                 header("Content-Type: application/json; charset=utf-8");

@@ -1,11 +1,13 @@
 <?php
+namespace LondonFencing\calendar\Widgets;
+use LondonFencing\calendar as Cal;
 /**
  * calendarWidgets class displays widgets for public viewing of events
  * Date created: Nov 29 2010 by Karen Laansoo
  *
  * @package apps/calendar
  */
-class calendarWidgets extends Calendar {
+class calendarWidgets extends Cal\calendar {
 	/**
 	* Retrieves all events from events and recurring events table by UNION. Start and End date are pre-set if not provided
 	* winery ID is app specific
@@ -189,9 +191,9 @@ WHERE ce.itemID = re.calendarEventID AND re.eventStartDate >= '%s' AND re.eventE
 						$output .= "DTSTAMP;TZID=".date("e").":".str_replace(" ", "T", preg_replace("/[:-]/", "", trim($row['sysDateCreated'])))."\n";
 						$output .= "DTSTART;$eventStart\n";
 						$output .= "DTEND;$eventEnd\n";
-						$output .= "SUMMARY:".trim($row['eventTitle'])."\n";
-						$output .= "LOCATION:".trim($row['location'])."\n";
-						$output .= "DESCRIPTION:".trim($row['description'])." $description\n";
+						$output .= "SUMMARY: London Fencing Club ".trim($row['eventTitle'])."\n";
+						$output .= "LOCATION:".stripslashes(trim($row['location']))."\n";
+						$output .= "DESCRIPTION:".stripslashes(trim($row['description']))." $description\n";
 						$output .= "PRIORITY:3\n";
 						if ($consecDays > 1) {
 							for ($i = 1; $i < $consecDays; $i++) {

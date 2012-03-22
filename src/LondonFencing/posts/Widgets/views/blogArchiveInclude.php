@@ -1,6 +1,5 @@
 <?php
-if (isset($blog) && $blog INSTANCEOF Blog && isset($slug) && strstr($slug,"archive-") !== false){
-
+if (isset($blog) && $blog INSTANCEOF LondonFencing\Apps\Blog\Blog && isset($slug) && strstr($slug,"archive-") !== false){
     $archive = str_replace("archive-","",$slug);
     $posts = ((bool)strtotime($archive) === false)?$blog->getArchiveByCategory($archive):$blog->getArchiveByDate(strtotime($archive));
     

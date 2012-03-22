@@ -1,9 +1,7 @@
 <?php
-require_once dirname(__DIR__)."/adminRegister.php";
-require_once dirname(dirname(__DIR__))."/Registration.php";
+require_once dirname(dirname(__DIR__))."/registration.php";
 
-use LondonFencing\Apps\Admin\Register as AReg;
-use LondonFencing\Registration as REG;
+use LondonFencing\registration\Apps as AReg;
 
 $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
 require $root . '/inc/init.php';
@@ -18,7 +16,7 @@ if ($auth->has_permission("canEditReg")){
 }
 
 if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
-    $aReg = new AReg\adminRegister(false,$db);
+    $aReg = new AReg\AdminRegister(false,$db);
     $quipp->js['footer'][] = "/src/LondonFencing/registration/assets/js/adminRegistration.js";
     if (!isset($_GET['id'])) { $_GET['id'] = null; }
     $te = new Editor();
@@ -28,6 +26,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
     
     $provs = array("AB","BC","MB","NB","NL","NS","NT","NU","ON","PE","QC","SK","YT");
     $regStatus = array("1" => "Registered", "0" => "Wait Listed");
+    $gender = array("F" => "Female", "M" => "Male");
     
         //editable fields
     $fields[] = array(
@@ -61,7 +60,16 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
         'dbValue'   => false,
         'stripTags'  => true
     );
-    
+    $fields[] = array(
+        'label'   => "Gender",
+        'dbColName'  => "gender",
+        'tooltip'   => "",
+        'writeOnce'  => false,
+        'widgetHTML' => "",
+        'valCode'   => "RQvalALPH",
+        'dbValue'   => false,
+        'stripTags'  => true
+    );
     $fields[] = array(
         'label'   => "Address",
         'dbColName'  => 'address',
@@ -271,7 +279,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
 
 
         case "update":
-
+            print_r($_POST);
 
             //this default update query will work for most single table interactions, you may need to cusomize your own
             $fieldColNames  = '';
@@ -279,43 +287,43 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
 
             foreach ($fields as $dbField) {
                 if ($dbField['dbColName'] != false) {
+                    
                     $requestFieldID = $dbField['valCode'] . str_replace(" ", "_", $dbField['label']);
-                    if (strstr($dbField['dbColName'],'start') === false && strstr($dbField['dbColName'],'end') === false) {
-                        if ($dbField['dbColName'] == 'sysStatus') {
+                        
+                    if ($dbField['dbColName'] == 'sysStatus') {
 
-                            if (isset($_POST[$requestFieldID])) {
-                                    $fieldColValue = "'active',";
-                            } else {
-                                    $fieldColValue = "'inactive',";
-                            }
+                        if (isset($_POST[$requestFieldID])) {
+                                $fieldColValue = "'active',";
+                        } else {
+                                $fieldColValue = "'inactive',";
+                        }
 
+                        $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
+                    }
+                    else if ($dbField['dbColName'] == 'birthDate') {
+                        $fieldColValue = strtotime($_POST[$requestFieldID]).",";
+                        $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
+                    }
+                    else if ($dbField['dbColName'] == 'paymentDate' && trim($_POST[$requestFieldID]) != "") {
+                        $fieldColValue = strtotime(trim($_POST[$requestFieldID])).",";
+                        $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
+                    }
+                    else if ($dbField['dbColName'] == 'isRegistered') {
+                        $fieldColValue = $_POST[$requestFieldID].",";
+                        $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
+                        $fieldColValue2 = "0,";
+                        if (trim($_POST[$requestFieldID]) == "0"){
+                            $fieldColValue2 = $newWL .",";
+                        }
+                        $fieldColNames .= "waitlist = " . $fieldColValue2;
+                    }
+                    else if ($dbField['dbColName'] == 'province'){
+                            $fieldColValue = "'".$_POST[$requestFieldID]."',";
+                            $fieldColNames .= "" . $dbField['dbColName'] ." = ". $fieldColValue;
+                    }
+                    else if (isset($_POST[$requestFieldID])){                            
+                            $fieldColValue = "'" . $db->escape($_POST[$requestFieldID], $dbField['stripTags']) . "',";
                             $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
-                        }
-                        else if ($dbField['dbColName'] == 'birthDate') {
-                            $fieldColValue = strtotime($_POST[$requestFieldID]).",";
-                            $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
-                        }
-                        else if ($dbField['dbColName'] == 'paymentDate' && trim($_POST[$requestFieldID]) != "") {
-                            $fieldColValue = strtotime(trim($_POST[$requestFieldID])).",";
-                            $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
-                        }
-                        else if ($dbField['dbColName'] == 'isRegistered') {
-                            $fieldColValue = $_POST[$requestFieldID].",";
-                            $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
-                            $fieldColValue2 = "0,";
-                            if (trim($_POST[$requestFieldID]) == "0"){
-                                $fieldColValue2 = $newWL .",";
-                            }
-                            $fieldColNames .= "waitlist = " . $fieldColValue2;
-                        }
-                        else if ($dbField['dbColName'] == 'province'){
-                                $fieldColValue = "'".$_POST[$requestFieldID]."',";
-                                $fieldColNames .= "" . $dbField['dbColName'] ." = ". $fieldColValue;
-                        }
-                        else if (isset($_POST[$requestFieldID])){
-                                $fieldColValue = "'" . $db->escape($_POST[$requestFieldID], $dbField['stripTags']) . "',";
-                                $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
-                        }
                     }
 
                 }
@@ -329,8 +337,11 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                 (string) $fieldColNames,
                 (int)$_POST['id']);
             
+            echo $qry;
+            
             $res = $db->query($qry);
-            if ($db->affected_rows($res) == 1){
+
+            if ($db->affected_rows($res) == 1 || $db->error() === false){
                 header('Location:/admin/apps/registration/view-registration?sid='.$_GET['sid'].'&Update=true'); 
             }
             else{
@@ -343,7 +354,10 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
 
             //this delete query will work for most single table interactions, you may need to cusomize your own
 
-            $aReg->delete_registration((int)$_GET['id']);
+            $db->query(sprintf("UPDATE %s SET `sysStatus` = 'inactive', `sysOpen` = '0' WHERE itemID = %d", 
+                (string) $primaryTableName, 
+                (int)$db->escape($_GET['id'], true)
+            ));
             
             header('Location:/admin/apps/registration/view-registration?sid='.$_GET['sid']);
             break;
@@ -452,6 +466,14 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                     }
                     $field['widgetHTML'] .= '</select>';
                 }
+                else if ($field['dbColName'] == "gender"){
+                    $field['dbValue'] = (isset($_POST[$newFieldID]) && $message != '')? $_POST[$newFieldID]: $field['dbValue'];
+                    $field['widgetHTML'] = '<select name="'.$newFieldID.'" id="'.$newFieldID.'">';
+                    foreach($gender as $gAbbr => $sex){
+                        $field['widgetHTML'] .= '<option value="'.$gAbbr.'"'.($field['dbValue'] == $gAbbr ? 'selected="selected"':'').'>'.$sex.($field['dbValue'] == $gAbbr ? '*':'').'</option>';
+                    }
+                    $field['widgetHTML'] .= '</select>';
+                }
                 else if ($field['dbColName'] == 'isRegistered'){
                     $field['widgetHTML'] = '<select name="'.$newFieldID.'" id="'.$newFieldID.'">';
                     foreach($regStatus as $regOpt => $regVal){
@@ -498,7 +520,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
         $formBuffer .= "</td></tr>";
         $formBuffer .= "</table>";
         $formBuffer .= "<div class=\"clearfix\" style=\"margin-top: 10px; height:10px; border-top: 1px dotted #B1B1B1;\">&nbsp;</div>";
-        $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='" . $_SERVER['PHP_SELF'] . "';\" value=\"Cancel\" />
+        $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='" . $_SERVER['PHP_SELF'] . "?sid=".$_GET['sid']."';\" value=\"Cancel\" />
 		<input class='btnStyle green' type=\"submit\" name=\"submitUserForm\" id=\"submitUserForm\" value=\"Save Changes\" />";
         $formBuffer .= "</form>";
         //print the form
@@ -510,7 +532,10 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
         
         $listqry = sprintf("SELECT cr.`itemID`, concat(cr.`lastName`, ', ' ,cr.`firstName`) AS name, cr.`email`, 
                 UNIX_TIMESTAMP(cr.`sysDateCreated`) as dateReg, cr.`isRegistered`, cr.`waitlist`, cr.`paymentDate`, cr.`registrationKey` 
-                FROM $primaryTableName AS cr WHERE cr.`sessionID` = %d AND (cr.`isRegistered` > 0 || cr.`waitlist` > 0) 
+                FROM $primaryTableName AS cr 
+                WHERE cr.`sessionID` = %d 
+                AND (cr.`isRegistered` > 0 || cr.`waitlist` > 0) 
+                AND cr.`sysStatus` = 'active' AND cr.`sysOpen` = '1'
                 ORDER BY cr.`itemID` ASC, cr.`isRegistered` DESC, cr.`waitlist` ASC", 
           (int)$db->escape($_GET['sid'],true)
                 );
@@ -533,7 +558,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                  }
                 
             }
-
+            echo '<form name="frmSendEmail" action="/admin/apps/notificationManager/emailer" method="post" enctype="multipart/form-data">';
             echo '<table id="adminTableList_reg" class="adminTableList tablesorter" width="100%" cellpadding="5" cellspacing="0" border="1">';
             echo '<thead><tr><th>'.$titles[0].'</th><th>'.$titles[1].'</th><th>'.$titles[2].'</th><th>'.$titles[3].'</th><th>'.$titles[4].'</th><th>Status</th>
                 <th>Email<input type="checkbox" id="emailAll" name="emailAll" value="all" /></th><th>&nbsp;</th><th>&nbsp;</th></tr></thead>';
@@ -541,7 +566,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
             foreach($registered as $dt){
                 $paymentDate = (trim($dt["paymentDate"]) != '' && $dt["paymentDate"] > 0)?date('Y-m-d',$dt["paymentDate"]):"Due";
                 echo '<tr><td>'.$dt['name'].'</td><td>'.$dt["registrationKey"].'</td><td>'.$dt["email"].'</td><td>'.date('Y-m-d',$dt["dateReg"]).'</td><td>'.$paymentDate.'</td><td>Registered</td>';
-                echo '<td style="width:70px;"><input type="checkbox" name="selectEmail[]" id="selectEmail_'.trim($dt['itemID']).' value="'.trim($dt['itemID']).'" /></td>';
+                echo '<td style="width:70px;"><input type="checkbox" name="eList[]" id="eList_'.trim($dt['itemID']).'" value="'.trim($dt['itemID']).'" /></td>';
                 echo '<td style="width:40px;"><input class="btnStyle red noPad" id="btnDelete_'.$dt['itemID'].'" type="button" onclick="javascript:confirmDelete(\'?sid='.$_GET['sid'].'&action=delete&amp;id='.$dt['itemID'].'\');" value="Delete"></td>';
                 echo '<td style="width:40px;"><input class="btnStyle blue noPad" id="btnEdit_'.$dt['itemID'].'" type="button" onclick="javascript:window.location=\'?sid='.$_GET['sid'].'&view=edit&amp;id='.$dt['itemID'].'\';" value="Edit"></td></tr>';
             }
@@ -551,7 +576,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                 $w = 0;
                 foreach ($waitlist as $dt){
                     echo '<tr><td>'.$dt['name'].'</td><td>'.$dt["registrationKey"].'</td><td>'.$dt["email"].'</td><td>'.date('Y-m-d',$dt["dateReg"]).'</td><td>N/A</td><td>Waitlist ('.(++$w).')</td>';
-                    echo '<td style="width:50px;"><input type="checkbox" name="selectEmail[]" id="selectEmail_'.trim($dt['itemID']).' value="'.trim($dt['itemID']).'" /></td>';
+                    echo '<td style="width:50px;"><input type="checkbox" name="eList[]" id="eList_'.trim($dt['itemID']).'" value="'.trim($dt['itemID']).'" /></td>';
                     echo '<td style="width:50px;"><input class="btnStyle red noPad" id="btnDelete_'.$dt['itemID'].'" type="button" onclick="javascript:confirmDelete(\'?sid='.$_GET['sid'].'&action=delete&amp;id='.$dt['itemID'].'\');" value="Delete"></td>';
                     echo '<td style="width:50px;"><input class="btnStyle blue noPad" id="btnEdit_'.$dt['itemID'].'" type="button" onclick="javascript:window.location=\'?sid='.$_GET['sid'].'&view=edit&amp;id='.$dt['itemID'].'\';" value="Edit"></td></tr>';
                 }
@@ -560,11 +585,14 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
             <tbody>
             <tr><td colspan="9">
             <input  style="float:right" class="btnStyle green noPad" id="btnPrint" type="button" onclick="javascript:window.open(\'/admin/apps/registration/print-reg-list?sid='.$_GET['sid'].'\');" value="Print">
-            <input  style="float:right" class="btnStyle blue noPad" id="btnSelect" type="button" onclick="javascript:window.location(\'\');" value="Send Email">
+            <input  style="float:right" class="btnStyle blue noPad" id="btnSelect" type="submit" value="Send Email">
+            <input type="hidden" name="nonce" value="'.Quipp()->config('security.nonce').'" />
+            <input type="hidden" name="etype" value="class-reg" />
             </td>
                 </tr>
             </tbody>
             </table>';
+            echo '</form>';
         }
         else{
             echo 'no data present';
@@ -588,5 +616,5 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
 include $root. "/admin/templates/footer.php";
 }
 else{
-    $auth->boot_em_out(1);
+    $auth->boot_em_out();
 }

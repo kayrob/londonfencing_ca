@@ -2,13 +2,11 @@
 <modules>
     <module name="events">
         <ns>\Apps\Admin\Calendar</ns>
-        <label>Calendar</label>
-        <widget enabled="0">Widgets/views/calendar.php</widget>
-        <admin enabled="1">Apps/views/index.php</admin>
-    </module>
-    <module name="advanced-practices">
-        <ns>\Apps\Calendar</ns>
-        <label>Events: Advanced Practices</label>
-        <widget enabled="1">Widgets/views/practiceWidget.php</widget>
+        <label>Events Manager</label>
+        <admin enabled="1">calendar/Apps/views/index.php</admin>
+        <widget enabled="0" adminLink="1" name="Events: Full Calendar">Widgets/views/calendar.php</widget>
+        <widget enabled="1" adminLink="0" name="Events: Home Practice Widget">calendar/Widgets/views/practiceWidget.php</widget>
+        <icon>calendar/assets/img/dashboard_icon.png</icon>
+        <help>Use this tool to add and edit events in multiple calendars. You can also manage events that are created through other applications.</help>
     </module>
 </modules>

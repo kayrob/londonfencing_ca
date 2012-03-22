@@ -1,4 +1,4 @@
-var ajaxRoot = "../../assets/ajax";
+var ajaxRoot = "/admin/assets/calendar/ajax";
 /**
 * Adds or removes an event source from fullCalendar when a calendar is added, disabled, or filtered for view
 * All feeds go to the same sync file with a calendar ID parameter
@@ -85,7 +85,7 @@ var update_fullCal_events_widget = function(){
             calendars.push($(this).val());
         }
     });
-    $.get(ajaxRoot+'calendar.php?isAjax=y&qview=list',{'view[]':calendars,'timestamp':$('#plistTimeStamp').html()},function(data){
+    $.get(ajaxRoot+'/calendar.php?isAjax=y&qview=list',{'view[]':calendars,'timestamp':$('#plistTimeStamp').html()},function(data){
     	data = (!data.match(/false/))?data:"";
         $('#eventsWidget').html(data);
     });
@@ -120,8 +120,8 @@ var page_fullCal_events_widget = function(action){
 var set_calendar_list_events_public = function(){
 	if ($('#leftCol').length == 1){
 		$('#leftCol :input').each(function(){
-			$(this).click(function(){
-               ($(this).attr('checked') == true || $(this).attr('checked') == "checked")?add_remove_event_sources('addEventSource',$(this).val()):add_remove_event_sources('removeEventSource',$(this).val());
+			$(this).change(function(){
+               ($(this).is(':checked') === true)?add_remove_event_sources('addEventSource',$(this).val()):add_remove_event_sources('removeEventSource',$(this).val());
                 	update_fullCal_events_widget();
 			});
 		});
@@ -343,7 +343,7 @@ $(document).ready(function()
 		customButtons();
 		//ajax call to get calendars and set events feeds
 		//only one feed is shown if a specific calendar is selected
-		$.get(ajaxRoot+'/calendar.php',{calendar:'s'},function(data){
+		$.get(ajaxRoot+'/calendar.php',{calendar:'s',isAjax:'y'},function(data){
 			var result = data.replace(/^(\S\s)*|(\S\s)*$/,'');
 			if (result != 'false'){
 				var qstring = window.location.href.split('view=');

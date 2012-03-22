@@ -1,10 +1,10 @@
 <?php
 $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
 require_once(dirname(dirname(dirname(__DIR__)))."/StaticPage/rss.php");
-require_once($root."/src/LondonFencing/posts/newsFeed.php");
+require_once($root."/src/RoyalYork/posts/newsFeed.php");
 
-use LondonFencing\Apps\RSS as RSS;
-use LondonFencing\Apps\news\Feeds as News;
+use RoyalYork\Apps\RSS as RSS;
+use RoyalYork\Apps\news\Feeds as News;
 
 require_once($root."/inc/init.php");
 if (isset($quipp) && $quipp INSTANCEOF Quipp){
@@ -16,8 +16,8 @@ if (isset($quipp) && $quipp INSTANCEOF Quipp){
     
     header('Content-Type: text/xml');
     
-    $title = "London Fencing Club, London ON";
-    $description = "Blogs from London Fencing Club, London, ON";
+    $title = "Royal York Orthodontics";
+    $description = "Blogs from Royal York Orthodontics";
     $rs->create_rss_feed($title,$description,$blogItems);
     
 }

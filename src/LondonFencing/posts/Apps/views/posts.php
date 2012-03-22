@@ -1,6 +1,6 @@
 <?php
-require_once(dirname(__DIR__).'/BlogAdmin.php');
-use CollabFamLaw\Blog\Admin as Blog;
+require_once dirname(dirname(__DIR__))."/posts.php";
+use LondonFencing\posts\Apps as Blog;
 
    
 $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));

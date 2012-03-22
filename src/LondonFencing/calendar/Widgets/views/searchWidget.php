@@ -1,7 +1,9 @@
 <?php
+require_once(dirname(dirname(__DIR__)))."/calendar.php";
+use LondonFencing\calendar\Widgets AS cWid;
 if (!isset($cal)){
-	$cal = new calendarWidgets($db);
-	$cal->url = '/events';
+    $cal = new cWid\calendarWidgets($db);
+    $cal->url = '/events';
 }
 $srchResults = $cal->get_search_results($_POST);
 if ($srchResults == false){

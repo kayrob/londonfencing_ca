@@ -1,8 +1,4 @@
 <?php
-require_once dirname(__DIR__)."/adminRegister.php";
-
-use LondonFencing\Apps\Admin\Register as AReg;
-
 $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
 require $root . '/inc/init.php';
 

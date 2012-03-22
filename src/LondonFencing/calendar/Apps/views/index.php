@@ -1,13 +1,23 @@
 <?php
 $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
 require_once $root ."/inc/init.php";
-require_once dirname(dirname(__DIR__)) ."/Calendar.php";
-require_once dirname(__DIR__)."/adminCalendar.php";
+require_once dirname(dirname(__DIR__)) ."/calendar.php";
 
-$quipp->css[] = "/src/LondonFencing/calendar/vendors/fullcalendar/fullcalendar.css";
+use LondonFencing\calendar\Apps as CAL;
+
+$meta['title'] = 'Events Manager';
+$meta['title_append'] = ' &bull; Quipp CMS';
+
+$hasPermission = false;
+if ($auth->has_permission("canEditEvents")){
+    $hasPermission = true;
+}
+
+if ($hasPermission) {
+$quipp->css[] = "/src/LondonFencing/calendar/assets/vendors/fullcalendar/fullcalendar.css";
 $quipp->css[] = "/src/LondonFencing/calendar/assets/css/admin.css";
-$quipp->js['footer'][] = "/src/LondonFencing/calendar/vendors/fullcalendar/fullcalendar.min.js";
-$quipp->js['footer'][] = "/src/LondonFencing/calendar/vendors/jscolor/jscolor.js";
+$quipp->js['footer'][] = "/src/LondonFencing/calendar/assets/vendors/fullcalendar/fullcalendar.min.js";
+$quipp->js['footer'][] = "/src/LondonFencing/calendar/assets/vendors/jscolor/jscolor.js";
 $quipp->js['footer'][] = "/src/LondonFencing/calendar/assets/js/calendar.js";
 $quipp->js['footer'][] = "/src/LondonFencing/calendar/assets/js/adminCalendar.js";
 include $root. "/admin/templates/header.php";
@@ -15,7 +25,8 @@ include $root. "/admin/templates/header.php";
 $months = array("01"=>"Jan","02"=>"Feb","03"=>"Mar","04"=>"Apr","05"=>"May","06"=>"Jun","07"=>"Jul","08"=>"Aug","09"=>"Sep","10"=>"Oct","11"=>"Nov","12"=>"Dec");
 $year = Date("Y");
 $hours = array("01"=>"1","02"=>"2","03"=>"3","04"=>"4","05"=>"5","06"=>"6","07"=>"7","08"=>"8","09"=>"9","10"=>"10","11"=>"11","00"=>"12");
-$cal = new adminCalendar($db);
+$cal = new CAL\adminCalendar($db);
+
 echo '<style type="text/css">';
 $cal->buildCalendarCSS();
 echo '</style>';
@@ -283,4 +294,8 @@ echo '</style>';
 </div>
 <?php
 include $root."/admin/templates/footer.php";
+}
+else{
+    $auth->boot_em_out(1);
+}
 ?>

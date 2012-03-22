@@ -3,7 +3,7 @@
 * This file requires /includes/js/calendar/calendar.js which contains the full calendar
 * created by Karen Laansoo November 10, 2010
 */
-var ajaxRoot = "../../assets/ajax";
+var ajaxRoot = "/admin/assets/calendar/ajax";
 
 /**
 *jQuery gets css property in RGB. this converts to hex for the edit calendar form
@@ -62,9 +62,9 @@ var set_calendar_list_events = function(){
 				$('#frmEditCalendar').show();
 				$('#dlgEditCalendar').dialog('open');
 			});
-			$(':input',this).click(function(){
+			$(':input',this).change(function(){
 				//filter calendar - start tuesday
-				($(this).attr('checked') == true || $(this).attr('checked') == 'checked')?add_remove_event_sources('addEventSource',$(this).val()):add_remove_event_sources('removeEventSource',$(this).val());				
+				($(this).is(':checked') === true)?add_remove_event_sources('addEventSource',$(this).val()):add_remove_event_sources('removeEventSource',$(this).val());				
 			});
 		});
 	}
@@ -74,7 +74,7 @@ var set_calendar_list_events = function(){
 * Events are re-fetched when a calendar is updated to apply new css styles
 */
 var update_cal_css = function(){
-	$.get(ajaxRoot+'/assets/ajax/adminCalendar.php',({'isAjax':'y','request':'style'}),function(data){
+	$.get(ajaxRoot+'/adminCalendar.php',({'isAjax':'y','request':'style'}),function(data){
 		if (data != 'false'){
 			$('style:eq(0)').empty();
 			$('style:eq(0)').html(data);
@@ -98,7 +98,7 @@ var update_add_edit_select_cal = function(){
 * @see set_calendar_list_events()
 */
 var load_cals_list = function(){
-	$.get(ajaxRoot+'/ajax/apps/calendar/adminCalendar.php',({'isAjax':'y','request':'list'}),function(data){
+	$.get(ajaxRoot+'/adminCalendar.php',({'isAjax':'y','request':'list'}),function(data){
 		$('#calsList').remove();
 		$('#leftColAdmin p:eq(0)').after(data);
 		//add events here for checkboxes and text-data (all should have cursor:pointer)
@@ -183,7 +183,7 @@ var update_calendar = function(form,action){
 	else{
 		params = {'itemID':$(':input[name=calendarID]',form).val()};
 	}
-	$.get(ajaxRoot+'/ajax/apps/calendar/adminCalendar.php?isAjax=y&request=calendar&action='+action,(params),function(data){
+	$.get(ajaxRoot+'/adminCalendar.php?isAjax=y&request=calendar&action='+action,(params),function(data){
 		(action == 'u')?complete_edit_calendar(data,form,true):complete_delete_calendar(data,form);
 	});
 }
@@ -355,7 +355,7 @@ var send_drop_event = function(eventDetails,revertFunc){
 	var form = $('#frmEditEvents');
 	set_edit_form_element_vals(eventDetails,form);
 	var params = form.serialize();
-	$.get(ajaxRoot+'/ajax/apps/calendar/adminCalendar.php?isAjax=y&request=event&action='+$(':input[name=eventSaveType]',form).val(),(params),function(data){
+	$.get(ajaxRoot+'/adminCalendar.php?isAjax=y&request=event&action='+$(':input[name=eventSaveType]',form).val(),(params),function(data){
 		$('#calendar').fullCalendar('refetchEvents');
 	});
 }
@@ -422,7 +422,7 @@ var save_add_edit_events = function(form,dialog){
 	$('#imgEditImgLoad').show();
 	var params = $(form).serialize();
 	var message = ($(':input[name=eventSaveType]',form).val() == 'd')?"Your event was deleted successfully":"Your events were saved successfully";
-	$.get(ajaxRoot+'/ajax/apps/calendar/adminCalendar.php?isAjax=y&request=event&action='+$(':input[name=eventSaveType]',form).val(),(params),function(data){
+	$.get(ajaxRoot+'/adminCalendar.php?isAjax=y&request=event&action='+$(':input[name=eventSaveType]',form).val(),(params),function(data){
 		if (!data.match(/true/)){message = "There was an error saving your events: "+data;}
 		$('#imgEditImgLoad').hide();
 		display_complete_message(message,dialog);
@@ -528,7 +528,7 @@ $(document).ready(function(){
 			var params = {'calendarName':$(':input[name=calendarName]',this).val(),'eventBackgroundColor':$(':input[name=backgroundColorNew]',this).val()};
 			$(this).hide();
 			$('#imgNewCalLoad').show();
-			$.get(ajaxRoot+'../../ajax/apps/calendar/adminCalendar.php?isAjax=y&request=calendar&action=i',(params),function(data){
+			$.get(ajaxRoot+'/adminCalendar.php?isAjax=y&request=calendar&action=i',(params),function(data){
 				complete_add_new_calendar(data,this);
 			});
 			return false;

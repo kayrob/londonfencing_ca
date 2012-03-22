@@ -1,10 +1,12 @@
 <?php
+require_once('../../../../../inc/init.php');
+require_once dirname(dirname(__DIR__)).'/calendar.php';
+
+use LondonFencing\calendar\Apps as CAL;
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || (isset($_GET['isAjax']) && trim($_GET['isAjax']) == 'y') && count($_POST) > 0) {
-	require_once '../../../../inc/init.php';
-                  require_once '../../Calendar.php';
-	require_once '../../Apps/adminCalendar.php';
+	
 	$response = "false";
-	$cal = new adminCalendar($db);
+	$cal = new CAL\adminCalendar($db);
 	//set initial sources feed for fullCalendar
 	if (isset($_GET['request'])) {
 		if (trim($_GET['request']) == 'calendar') {
@@ -12,6 +14,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                                                                         $post = $_GET;
                                                                         unset($post["action"]);
                                                                         unset($post["request"]);
+                                                                        unset($post['nonce']);
+                                                                        unset($post['isAjax']);
+                                                                        unset($post['p']);
 				switch (trim($_GET['action'])) {
 				case('u'):
 					$response = $cal->update_calendar($post);
@@ -30,6 +35,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                                                                                          $post = $_GET;
                                                                                          unset($post["action"]);
                                                                                          unset($post["request"]);
+                                                                                         unset($post['nonce']);
+                                                                                         unset($post['isAjax']);
+                                                                                         unset($post['p']);
 					switch (trim($_GET['action'])) {
 					case('r'):
 						$response = $cal->update_recurring_events($post);

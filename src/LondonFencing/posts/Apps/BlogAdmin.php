@@ -1,27 +1,26 @@
 <?php
-namespace LondonFencing\Blog\Admin;
+namespace LondonFencing\posts\Apps;
 
+use LondonFencing\posts as Posts;
 use Quipp\Core;
 use Quipp\Module\ModuleInterface;
 use Quipp\Module\AppInterface;
 use \Exception as Exception;
 $root = dirname(dirname(dirname(dirname(__DIR__))));
-require_once($root."/vendors/twitteroauth/twitteroauth.php");
+//require_once($root."/vendors/twitteroauth/twitteroauth.php");
 
-class BlogAdmin{
-
-    protected $_db;
+class BlogAdmin extends Posts\posts{
     
     public function __construct($db){
         if (is_object($db)){
-            $this->_db = $db;
+            parent::__construct($db);
         }
         else{
             throw new Exception("You are not connected to a database");
         }
     }
     
-    protected function getDateTweeted($itemID){
+/*    protected function getDateTweeted($itemID){
         $qry = sprintf("SELECT `dateTweeted` FROM `tblNews` WHERE `itemID` = '%d'",
             (int)$itemID
         );
@@ -90,7 +89,7 @@ class BlogAdmin{
             }
         }
         return true;
-    }
+    }*/
     public function getSites($userID){
         if (is_numeric($userID) && (int)$userID > 0){
             $qry = sprintf("SELECT s.`itemID`, s.`title` FROM `sysSites` AS s INNER JOIN `sysUSites` AS us ON s.`itemID` = us.`siteID` WHERE us.`userID` = %d",

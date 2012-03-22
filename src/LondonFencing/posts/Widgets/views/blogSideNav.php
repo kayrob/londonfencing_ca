@@ -1,6 +1,6 @@
 <?php
-require_once dirname(__DIR__) . "/Blog.php";
-use LondonFencing\Apps\Blog as Blog;
+require_once dirname(dirname(__DIR__))."/posts.php";
+use LondonFencing\posts\Widgets as Blog;
 
 if (isset($db) && $this INSTANCEOF Quipp){
 
@@ -19,7 +19,7 @@ if (isset($db) && $this INSTANCEOF Quipp){
     if (isset($recent) && $recent !== false){
 ?>
     <div class="archive-widget" id="blog-archive-recent">
-    <div class="blankMainHeader"><h2>Recent Posts:</h2></div>
+    <div class="blankMainHeader"><h2>Recent Blog Posts:</h2></div>
     <ul>
 <?php
         foreach ($recent as $post){
@@ -33,13 +33,14 @@ if (isset($db) && $this INSTANCEOF Quipp){
         }
 ?>
     </div>
-
+<h2>Categories</h2>
 <?php
     }
     if (isset($archive) && $archive !== false){
         foreach($archive as $category => $posts){
             $p = 0;
 ?>
+		
         <div class="archive-widget" id="blog-archive-<?php echo str_replace(" ","-",$category);?>">
         <h5><?php echo $category;?></h5>
         <ul>

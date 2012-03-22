@@ -1,14 +1,14 @@
 <?php
-namespace LondonFencing\Apps\Admin\Register;
-
+namespace LondonFencing\registration\Apps;
+use LondonFencing\calendar\Apps as aCal;
 use \Exception as Exception;
 
-class adminRegister {
+class AdminRegister {
     public $cal;
     protected $_db;
     
     public function __construct($cal, $db){
-        if (is_object($cal) && $cal instanceof \LondonFencing\Apps\Admin\Calendar\adminCalendar){
+        if (is_object($cal) && $cal instanceof aCal\adminCalendar){
             $this->cal = $cal;
         }
         if (is_object($db)){

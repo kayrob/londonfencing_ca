@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modules>
     <module name="photo-gallery">
-        <ns>\Apps\PhotoGallery</ns>
+        <ns>\Apps\media</ns>
         <label>Photo Gallery</label>
+        <admin enabled="1">media/Apps/views/index.php</admin>
+        <widget enabled="1" adminLink="1" name="Photos: Side Gallery">Widgets/views/singleGallery.php</widget>
+        <icon>media/assets/img/dashboard_icon.png</icon>
+        <help>Use this tool to upload images and group them into galleries. Galleries can be displayed on specific pages when you 
+        add a gallery widget and assign tags to it.&lt;br /&gt;
+        &lt;script type=&quot;text/javascript&quot;&gt;if (navigator.userAgent.match(/MSIE/) == 'MSIE'){ document.write('NOTE: You are using IE and will only be able to upload one image at a time. If you want to take advantage of the multiple file uploader, consider using Google Chrome or Mozilla Firefox');}&lt;/script&gt;</help>
     </module>
 </modules>

@@ -1,7 +1,8 @@
-<?php 	
+<?php
+require_once dirname(dirname(__DIR__))."/posts.php";
+use LondonFencing\posts\Widgets as news;
 if(!isset($news) && $this INSTANCEOF Quipp) {
-        require_once $_SERVER['DOCUMENT_ROOT'] . "/includes/apps/news/News.php";
-        $news = new News($db,$this);
+        $news = new news\News($db);
 }
 ?>
 

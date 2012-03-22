@@ -1,14 +1,12 @@
 <?php
-namespace LondonFencing\Apps\News;
+namespace LondonFencing\posts\Widgets;
+use LondonFencing\posts as Posts;
 
-use \Exception as Exception;
-
-class News
+class News extends Posts\posts
 {
 
     var $userID;
     var $success = true;
-    protected $_db;
 
     public function __construct($db)
     {
@@ -18,7 +16,7 @@ class News
                 $this->userID = (int) $_SESSION['user_id'];
         }
         if (is_object($db)){
-            $this->_db = $db;
+            parent::__construct($db);
         }
         else{
             throw new Exception("You are not connected to a database");

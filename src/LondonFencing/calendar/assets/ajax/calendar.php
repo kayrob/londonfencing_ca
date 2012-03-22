@@ -1,7 +1,11 @@
 <?php
 require_once('../../../../../inc/init.php');
+require_once dirname(dirname(__DIR__)).'/calendar.php';
+
+use LondonFencing\calendar\Widgets as CAL;
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || (isset($_GET['isAjax']) && trim($_GET['isAjax']) == 'y')){
 	$response = "false";
+                  $cal = new CAL\calendarWidgets($db);
 	//set initial sources feed for fullCalendar
 	if (isset($_GET['calendar']) && trim($_GET['calendar']) === 's'){
 		$response = $cal->get_calendars_ajax();
@@ -25,4 +29,3 @@ echo($response);
 else{
 	header("location:/");
 }
-?>

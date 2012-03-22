@@ -37,20 +37,18 @@ var addTagToCloud = function(data){
     for (var t = 0; t < tags.length; t++){
          var liEl = document.createElement('li');
          var aLiEl = document.createElement('a');
-         var aText = document.createTextNode(tags[t][1])+' ';
+         var aText = document.createTextNode(tags[t][1]+' ');
          aLiEl.href = "/admin/apps/media/index?tag="+tags[t][0];
          aLiEl.appendChild(aText);
-         liEl.className = 'tag_weight-0';
          liEl.appendChild(aLiEl);
          document.getElementById('tag_cloud').appendChild(liEl);
         
     }
-    console.log(tags);
 }
 
 var clearInputList = function(){
-    if ($('#upload_tags span').length > 0){
-        $('#upload_tags a:eq(0)').click();
+    if ($('#frmNewTags span').length > 0){
+        $('#frmNewTags a:eq(0)').click();
         clearInputList();
     }
 }
@@ -62,12 +60,16 @@ var initMediaAjax = function() {
             $(el).addClass("initializedForTagging");
 
             $(el).tagsInput({
-                autocomplete_url : ajaxRoot+'/tag_autocomplete.php'
+                autocomplete_url : ajaxRoot+'/tag_autocomplete.php?isAjax=y'
               , onAddTag: function(tag) {
-                    updateTag(this.id, "add_tag", tag);
+                    if ($('.mediaContactSheetFile').is('div')){
+                        updateTag(this.id, "add_tag", tag);
+                    }
                 }
               , onRemoveTag: function(tag) {
-                    updateTag(this.id, "remove_tag", tag);
+                    if ($('.mediaContactSheetFile').is('div')){
+                        updateTag(this.id, "remove_tag", tag);
+                    }
                 }
             });
         }
@@ -81,6 +83,33 @@ var initMediaAjax = function() {
     });
 
     $('#currently').text($('#contactSheet div.mediaContactSheetFile').length);
+}
+var changeTagCover = function(imgID,selObj){
+    if (selObj.id.match(/^setCover/) == "setCover"){
+            $('#isCoverImg_'+imgID).click();
+        }
+}
+var setTagCover = function(imgID,tagID,selObj){
+    if (parseInt(imgID,10) > 0 && parseInt(tagID, 10) > 0){
+            $.post(ajaxRoot+"/mediaUtility.php?isAjax=y", {
+            "operation": 'newCover'
+            , "value":     imgID
+            , "tag"    :    tagID
+        }, function (data) {
+            if (data == 0) {
+                feedback('Cover could not be set', "Problem Saving Change", 2);
+                $('.currentThumb')? $('.currentThumb').click() : $('#isCoverImg_'+imgID).attr('checked',false);
+            } 
+            else{
+                feedback('Cover image was successfully updated', "Change Saved", 1);
+                if ($('.currentThumb')){
+                    var curImgID = $('.currentThumb').attr('id');
+                    $('#'+curImgID).removeClass('currentThumb');
+                }
+                $('#isCoverImg_'+imgID).addClass('currentThumb');
+            }
+        });
+    }
 }
 
 $(document).ready( function() {
@@ -102,7 +131,6 @@ $(document).ready( function() {
     });
     
     $('#submitTags').click(function(){
-        console.log($('#upload_tags_input').val());
         $.post(ajaxRoot+"/mediaUtility.php?isAjax=y", {
             "operation": 'newTag'
             , "value":     $('#upload_tags_input').val()
@@ -118,5 +146,7 @@ $(document).ready( function() {
         });
     });
     
-    document.getElementById('RQvalFILEUpload').onchange = function(){confirmFiles(this.files);}
+    if (document.getElementById('RQvalFILEUpload')){
+        document.getElementById('RQvalFILEUpload').onchange = function(){confirmFiles(this.files);}
+    }
 });

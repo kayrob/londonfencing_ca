@@ -12,6 +12,16 @@ class adminMedia {
         $this->_db = $db;
     }
 
+    public function set_new_content_properties($newRegionID, $properties){
+        if (trim($properties) != "" && (int)$newRegionID > 0){
+            $this->_db->query(sprintf("INSERT INTO `sysContentDataLink` (`propertyData`, `pageTemplateRegionContentID`, `sysDateCreated`, `sysOpen`) 
+                VALUES ('%s', %d, NOW(), '1')",
+                    $properties,
+                    (int)$newRegionID
+                    ));
+        }
+        
+    }
     public function getTagLookup() {
         if (count($this->_tag_lookup) > 0) {
             return $this->_tag_lookup;
@@ -26,7 +36,7 @@ class adminMedia {
     }
     public function get_last_tags_by_page($page){
         $pageName = $this->_db->return_specific_item((int)$page,'sysPage','systemName');
-        $qry = sprintf("SELECT dl.`propertyData` FROM `sysContentDataLink` dl INNER JOIN
+        $qry = sprintf("SELECT dl.`propertyData`, dl.`pageTemplateRegionContentID`  FROM `sysContentDataLink` dl INNER JOIN
 		`sysPageTemplateRegionContent` rc ON dl.`pageTemplateRegionContentID` = rc.`itemID` INNER JOIN
 		`sysPageContent` pc ON rc.`contentID` = pc.`itemID` INNER JOIN
 		`sysPage` p ON rc.`pageID` = p.`itemID`
@@ -76,7 +86,7 @@ class adminMedia {
             LEFT JOIN tblMediaTags     AS t ON l.tagID  = t.itemID
                       {$clause}
              GROUP BY m.itemID
-             ORDER BY m.itemID DESC 
+             ORDER BY l.`isCover` DESC, m.itemID DESC 
                 LIMIT {$page}, {$limit}
              ; SELECT FOUND_ROWS()
         ";
@@ -256,7 +266,7 @@ class adminMedia {
     function remove_media($itemID) {
         $this->_db->query(sprintf("DELETE FROM `tblMedia` WHERE `itemID` = %d", $itemID));
         $this->remove_all_tags_from_media($itemID);
-        $this->remove_orphan_tags();
+        //$this->remove_orphan_tags();
     }
 
     function old_remove_media($itemID) {
@@ -293,8 +303,6 @@ class adminMedia {
             $this->_db->escape($itemID)
             );
             
-            yell($qry);
-            
             return $this->_db->query($qry);
                     
     }
@@ -320,6 +328,50 @@ class adminMedia {
             return false;
         }
     
+    }
+    
+    public function delete_tag($tagID){
+        if ((int)$tagID > 0){
+            $this->_db->query(sprintf("DELETE FROM `tblMediaTagLinks` WHERE `tagID` = %d", (int)$this->_db->escape($tagID)));
+            if ($this->_db->error() === false){
+                $this->_db->query(sprintf("DELETE FROM `tblMediaTags` WHERE `itemID` = %d", (int)$this->_db->escape($tagID)));
+                return $this->_db->affected_rows();
+            }
+            
+        }
+        return 0;        
+    }
+    
+    public function get_media_by_id($mediaID){
+        if ((int)$mediaID > 0){
+            $res = $this->_db->query(sprintf("SELECT `title`, `fileItem` FROM `tblMedia` WHERE `itemID` = %d", 
+                    (int)$this->_db->escape($mediaID)
+            ));
+            if ($this->_db->valid($res)){
+                return $this->_db->fetch_assoc($res);
+            }
+        }
+        return array();
+    }
+    
+    public function delete_media_item($mediaID){
+        if ((int)$mediaID > 0){
+            $this->remove_all_tags_from_media($mediaID);
+            if ($this->_db->error() === false){
+                $mInfo = $this->get_media_by_id($mediaID);
+                $this->_db->query(sprintf("DELETE FROM `tblMedia` WHERE `itemID` = %d", (int)$mediaID));
+                if ($this->_db->affected_rows() == 1){
+                    $root = dirname(dirname(dirname(dirname(__DIR__))));
+                    if (isset($mInfo['fileItem']) && file_exists($root."/uploads/media/med/".$mInfo['fileItem'])){
+                        unlink($root.'/uploads/media/med/'.$mInfo['fileItem']);
+                        unlink($root.'/uploads/media/large/'.$mInfo['fileItem']);
+                         unlink($root.'/uploads/media/'.$mInfo['fileItem']);
+                    }
+                    return 1;
+                }
+            }
+        }
+        return 0;
     }
 
     function add_tag_to_media($itemID, $tag) {
@@ -351,6 +403,38 @@ class adminMedia {
         } else {
             return false;
         }
+    }
+    
+    public function get_cover_image($tagID){
+        $res = $this->_db->query(sprintf("SELECT `mediaID` FROM `tblMediaTagLinks` WHERE `tagID` = %d AND `isCover` = 1",
+                (int)$tagID)
+        );
+        if ($this->_db->valid($res)){
+            $row = $this->_db->fetch_assoc($res);
+            return trim($row['mediaID']);
+        }
+        return 0;
+    }
+    public function remove_cover_image($tagID){
+        if ((int)$tagID > 0){
+            $res = $this->_db->query(sprintf("UPDATE `tblMediaTagLinks` set `isCover` = 0 WHERE `tagID` = %d", 
+                    (int)$this->_db->escape($tagID,true)
+            ));
+            return $this->_db->error(); //because if all are set to 0 and no updates, rows_affected will return 0
+        }
+        return 0;
+    }
+    public function set_cover_image($mediaID, $tagID){
+        if ((int)$mediaID > 0 && (int)$tagID > 0){
+            if ($this->remove_cover_image($tagID) === false){
+                $res = $this->_db->query(sprintf("UPDATE `tblMediaTagLinks` set `isCover` = 1 WHERE `tagID` = %d AND `mediaID` = %d", 
+                        (int)$this->_db->escape($tagID,true),
+                        (int)$this->_db->escape($mediaID,true)
+                ));
+                return $this->_db->affected_rows();
+            }
+        }
+        return 0;
     }
 
     public function create_default_media_record($fileItem, Array $tags = Array()) {
@@ -405,18 +489,17 @@ class adminMedia {
         return $this->getContactSheetMarkup($files);
     }
 
-    public function getContactSheetMarkup(MED\MediaList $list) {
+    public function getContactSheetMarkup(MED\MediaList $list, Array $tagID = Array()) {
         $buff = '';
 
         foreach($list as $entry) {
             // Development: Needs to be changed at a later date
             // Try canonical, fail over to full dev URL
             $src = "/uploads/media/med/{$entry['fileItem']}";
-            /*if (!is_file(RES_DOC_ROOT . $src)) {
-                $src = $_SERVER['SERVER_NAME'] . $src;
-            }*/
+            
+            $thumbID = (isset($tagID[0])) ? $this->get_cover_image($tagID[0]) : 0;
 
-            $buff .= $this->getContactItemView($entry['itemID'], $entry['title'], $src, explode(',', $entry['tags']));
+            $buff .= $this->getContactItemView($entry['itemID'], $entry['title'], $src, explode(',', $entry['tags']), $tagID, $thumbID);
         }
         
         return $buff;
@@ -428,7 +511,7 @@ class adminMedia {
      * @param string Source to the image
      * @param array Array of tags set to item
      */
-    public function getContactItemView($id, $title, $src, Array $tags = Array()) {
+    public function getContactItemView($id, $title, $src, Array $tags = Array(), Array $tagID = Array(), $thumbID = 0) {
         ob_start();
         include __DIR__  . '/views/view-contact_item.php';
         $parsed_contents = ob_get_contents();

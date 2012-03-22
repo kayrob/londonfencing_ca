@@ -1,6 +1,7 @@
 <?php
-require_once dirname(__DIR__)."/NotificationManager.php";
-use LondonFencing\src\notification\manager\Apps\Notification\Manager as NOTE;
+require_once dirname(dirname(__DIR__))."/notificationManager.php";
+use LondonFencing\notificationManager as NOTE;
+
 $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
 require $root . '/inc/init.php';
 if (isset($_POST['eList']) && is_array($_POST['eList'])){
@@ -86,7 +87,7 @@ if (isset($_POST['eList']) && is_array($_POST['eList'])){
         
         if (isset($_POST['sendEmail']) && isset($_POST['etype']) && validate_form($_POST)) {
             
-            $ntfy = new NOTE\NotificationManager($db);
+            $ntfy = new NOTE\notificationManager($db);
             switch ($_POST['etype']){
                     case 'class-reg':
                         $sent = $ntfy->emailClassParticipants($_POST['RQvalALPHSubject'], $_POST['RQvalALPHMessage'], $addresses, $_POST['RQvalALPHSend_Type'], $_POST['RQvalALPHFormat']);
@@ -119,7 +120,7 @@ if (isset($_POST['eList']) && is_array($_POST['eList'])){
             if (isset($sent) && $sent === false){
                 echo print_r($ntfy->errs, true);
             }
-            $formBuffer = "<form enctype=\"multipart/form-data\" name=\"tableEditorForm\" id=\"tableEditorForm\" method=\"post\" action=\"/admin/apps/notification-manager/emailer\">
+            $formBuffer = "<form enctype=\"multipart/form-data\" name=\"tableEditorForm\" id=\"tableEditorForm\" method=\"post\" action=\"/admin/apps/notificationManager/emailer\">
                 <table>";
 
             //print the base fields

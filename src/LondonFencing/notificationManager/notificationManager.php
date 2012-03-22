@@ -1,10 +1,10 @@
 <?php
-namespace LondonFencing\src\notification\manager\Apps\Notification\Manager;
+namespace LondonFencing\notificationManager;
 
 use \Exception as Exception;
 use \PHPMailer;
 
-class NotificationManager{
+class notificationManager{
     protected $_db;
     public $mailer;
     public $errs = array();
@@ -86,7 +86,7 @@ class NotificationManager{
                 $content = preg_replace('%http://([^\s]+)%','<a href="http://$1">http://$1</a>',$content);
                 
                 if (strtolower($format) == "html"){
-                    $body = file_get_contents(dirname(dirname(__DIR__))."/StaticPage/emailTemplate.html");
+                    $body = file_get_contents(dirname(__DIR__)."/StaticPage/emailTemplate.html");
                     $body = str_replace('<h5>%TITLE%</h5>','',$body);
                     $body = str_replace('%SERVERNAME%',$_SERVER['SERVER_NAME'],$body);
                     $body = str_replace('%BODY%',$content,$body);
@@ -114,7 +114,7 @@ class NotificationManager{
                 }
             }
         }
-        if (empty($this->_errs)){
+        if (empty($this->errs)){
             $this->mailer->addAddress("robertsonkaren@rogers.com");
             $this->mailer->Subject = "Email Sent:".$subject;
             $this->mailer->Body = '<p>You sent an email to the following recipients: <br /><br />'.implode('<br />',$addr).'<br /><br /></p>';

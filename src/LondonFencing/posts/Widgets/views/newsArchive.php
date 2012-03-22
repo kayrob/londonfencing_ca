@@ -1,9 +1,9 @@
 <div class="blankMainHeader"><h2>Recent News Posts:</h2></div>
 <?php
-$root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
-require_once($root."/src/LondonFencing/posts/Widgets/News.php");
+require_once dirname(dirname(__DIR__))."/posts.php";
 
-use LondonFencing\Apps\News as news;
+use LondonFencing\posts\Widgets as news;
+
 if (!isset($news)) {
     
     $news = new news\News($db);

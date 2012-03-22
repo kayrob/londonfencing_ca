@@ -3,6 +3,16 @@
     <module name="tournaments">
         <ns>\Apps\Tournaments</ns>
         <label>Tournaments: Feed</label>
-        <widget enabled="1">Widgets/views/tournamentsFeed.php</widget>
+        <widget enabled="1" adminLink="0" name="Tournaments: Feed">Widgets/views/tournamentsFeed.php</widget>
+    </module>
+    <module name="tournaments-full">
+        <ns>\Apps\Tournaments</ns>
+        <label>Tournaments: Full Page View</label>
+        <widget enabled="1" adminLink="0" name="Tournaments: Full List View">Widgets/views/fullList.php</widget>
+    </module>
+    <module name="tournaments-nav">
+        <ns>\Apps\Tournaments</ns>
+        <label>Tournaments: Side Nav</label>
+        <widget enabled="1" adminLink="0" name="Tournaments: Side Nav">Widgets/views/tournamentsSideNav.php</widget>
     </module>
 </modules>

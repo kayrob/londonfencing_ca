@@ -1,14 +1,15 @@
 <?php
-namespace  LondonFencing\src\Tournmaents;
-require_once dirname(__DIR__)."/calendar/Calendar.php";
+namespace  LondonFencing\tournmaents;
+require_once dirname(__DIR__)."/calendar/calendar.php";
 
-use LondonFencing\src\calendar\Calendar as Cal;
+use LondonFencing\calendar as Cal;
 use \Exception as Exception;
 
-class Tournaments  extends Cal\Calendar{
+class tournaments  extends Cal\calendar{
         
         protected function getOntarioTournaments(){
-            $rss = @simplexml_load_file("http://www.airsetpublic.com/syndicate/public/16972/year.xml");
+            $tourney = array();
+            $rss = @simplexml_load_file(__DIR__.'/assets/ofaTournaments.xml');
             if (is_object($rss)){
                 
                     $feed = $rss->channel;
@@ -30,10 +31,7 @@ class Tournaments  extends Cal\Calendar{
                         );
                     }
             }
-            if (isset($tourney)){
-                return $tourney;
-            }
-            return array();
+            return $tourney;;
         }
         protected function getCalendarTournaments(){
             $calendars = $this->get_calendar_details();
@@ -54,7 +52,7 @@ class Tournaments  extends Cal\Calendar{
                         
                         $description .= 'Start: '.date('F j, Y g:i a',strtotime($eData->start)).'<br />End: '.date('F j, Y g:i a',strtotime($eData->end));
                         if ($eData->location != ""){
-                            $description .= '<br />'.$eData->location;
+                            $description .= '<br />Location: '.$eData->location;
                         }
                         $tourney[] = array(
                             "tdate"             =>  strtotime($eData->start),

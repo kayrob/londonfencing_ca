@@ -1,6 +1,6 @@
 <?php
 
-namespace LondonFencing\Apps\news\Feeds;
+namespace CollabFamLaw\Apps\news\Feeds;
 
 use \Exception as Exception;
 

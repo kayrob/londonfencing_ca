@@ -1,11 +1,13 @@
 <?php
-namespace LondonFencing\Apps\Calendar;
+namespace LondonFencing\calendar;
+require_once __DIR__ .'/Widgets/calendarWidgets.php';
+require_once __DIR__ .'/Apps/adminCalendar.php';
 /**
 * Calendar class retrieves data for public viewing of events and passes it back to jQuery Full Calendar
 * Date created: Nov 10 2010 by Karen Laansoo
 * @package apps/calendar
 */
-class Calendar{
+class calendar{
 	protected $db;
 	public $url;
 	/**
@@ -17,7 +19,7 @@ class Calendar{
 	*/
 	protected function get_calendars_common($id = false){
 		if (is_object($this->db)){
-			return $this->db->result_please($id,'tblCalendars',false,false,false,false);
+                                            return $this->db->result_please($id,'tblCalendars',false,false,false,false);
 		}
 		return false;
 	}
@@ -113,7 +115,7 @@ DLGTBL;
 					color: ".trim($row['eventBackgroundColor']).";
 					border: 0px;
 					background-color: transparent;
-					background-image: url(/images/calendar/recurringEventIcon.png);
+					background-image: url(/src/LondonFencing/calendar/assets/img/recurringEventIcon.png);
 					background-repeat: no-repeat;
 					background-position: right;				
 				}
@@ -123,7 +125,7 @@ DLGTBL;
 					color: #ffffff;
 					border-color: ".trim($row['eventBackgroundColor']).";
 					background-color: ".trim($row['eventBackgroundColor']).";
-					background-image: url(/images/calendar/recurringEventIconAllDay.png);
+					background-image: url(/src/LondonFencing/calendar/assets/img/recurringEventIconAllDay.png);
 					background-repeat: no-repeat;
 					background-position: right;
 				}
@@ -155,8 +157,9 @@ DLGTBL;
 	* @return array
 	*/
                 protected function set_event_data($res,$calID,$recurring = false){
+                                    $events = array();
 		if ($res !== false){
-			$events = array();
+			
 			while ($row = $row = $this->db->fetch_assoc($res)){
 				$eventsArray['id'] = trim($row['itemID']);
 				$eventsArray['title'] = trim($row['eventTitle']);
@@ -257,14 +260,14 @@ DLGTBL;
 	}
 	/**
 	* Return the calendar name and background colour for each active calendar
-	* @access protected
+	* @access public
 	* @see get_calendars_common()
 	* @return void|array
 	*/
-	protected function get_calendar_details(){
+	public function get_calendar_details(){
 		$res = $this->get_calendars_common();
 		if ($res !== false){
-			while ($row = mysql_fetch_assoc($res)){
+			while ($row = $this->db->fetch_assoc($res)){
 				$calendar[trim($row['itemID'])]['name'] = trim($row['calendarName']);
 				$calendar[trim($row['itemID'])]['colour'] = trim($row['eventBackgroundColor']);
 			}

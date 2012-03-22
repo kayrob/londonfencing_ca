@@ -1,6 +1,5 @@
 <?php
-
-if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof LondonFencing\Registration\Registration){
+if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof LondonFencing\registration\registration){
     
     $sessionSaved = $reg->getSavedRegistration($sessionNfo["itemID"], $message);
     if ($sessionSaved !== false){
@@ -8,23 +7,27 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
         if (trim($sessionSaved['address2']) != ""){
             $address = trim($sessionSaved['address2'])." -  ".$address;
         }
+        
+        $emailTemplate = file_get_contents(dirname(dirname(dirname(__DIR__))).'/StaticPage/emailTemplate.html');
+        
         $phone = str_format("(###) ###-####", str_replace("-","",$sessionSaved["phoneNumber"]));
         $ePhone = str_format("(###) ###-####", str_replace("-","",$sessionSaved["emergencyPhone"]));
-        $body = "<h5>Registration to London Fencing Club</h5>";
-        $body .= '<p><label>Session</label>&nbsp;'.$sessionNfo['sessionName'].'<br />';
-        $body .= '<label>Level</label>&nbsp;'.ucwords($sessionSaved['level']).'</p><p>';
-        $body .= '<label>First Name</label>&nbsp;'.$sessionSaved['firstName'].' /><br />';
-        $body .= '<label>Last Name</label>&nbsp;'.$sessionSaved['lastName'].' /><br />';
-        $body .= '<label>Date of Birth</label>&nbsp;'.date('Y-m-d',$sessionSaved['birthDate']).' /><br />';
-        $body .= '<label>Address</label>&nbsp;'.$address.'<br />';
-        $body .= '<label>Phone Number</label>&nbsp;'.$phone.'<br />';
-        $body .= '<label>Email Address</label>&nbsp;'.$sessionSaved["email"].'<br />';
-        $body .= '<label>Parent/Guardian</label>&nbsp;'.(trim($sessionSaved["parentName"]) != "" ?$sessionSaved["parentName"]:"N/A").'<br />';
-        $body .= '<label>Emergency Contact</label>&nbsp;'.$sessionSaved["emergencyContact"].'<br />';
-        $body .= '<label>Emergency Phone</label>&nbsp;'.$ePhone.'<br />';
-        $body .= '<label>Registration Status</label>&nbsp;'.((int)$sessionSaved['isRegistered'] == 1?'Registered':'Wait List').'<br />';
-        $body .= '<label>Confirmation Number</label>&nbsp;'.$sessionSaved['registrationKey'].'<br />';
-        $body .= '<label>Date Registered</label>&nbsp;'.$sessionSaved['sysDateCreated'].'</p>';
+        $title = "Registration to London Fencing Club";
+        $body = '<p><label>Session: </label>&nbsp;'.$sessionNfo['sessionName'].'<br />';
+        $body .= '<label>Level: </label>&nbsp;'.ucwords($sessionSaved['level']).'</p><p>';
+        $body .= '<label>First Name: </label>&nbsp;'.$sessionSaved['firstName'].'<br />';
+        $body .= '<label>Last Name: </label>&nbsp;'.$sessionSaved['lastName'].' <br />';
+        $body .= '<label>Date of Birth: </label>&nbsp;'.date('Y-m-d',$sessionSaved['birthDate']).'<br />';
+        $body .= '<label>Gender: </label>&nbsp;'.$sessionSaved['gender'].' <br />';
+        $body .= '<label>Address: </label>&nbsp;'.$address.'<br />';
+        $body .= '<label>Phone Number: </label>&nbsp;'.$phone.'<br />';
+        $body .= '<label>Email Address: </label>&nbsp;'.$sessionSaved["email"].'<br />';
+        $body .= '<label>Parent/Guardian: </label>&nbsp;'.(trim($sessionSaved["parentName"]) != "" ?$sessionSaved["parentName"]:"N/A").'<br />';
+        $body .= '<label>Emergency Contact: </label>&nbsp;'.$sessionSaved["emergencyContact"].'<br />';
+        $body .= '<label>Emergency Phone: </label>&nbsp;'.$ePhone.'<br />';
+        $body .= '<label>Registration Status: </label>&nbsp;'.((int)$sessionSaved['isRegistered'] == 1?'Registered':'Wait List').'<br />';
+        $body .= '<label>Confirmation Number: </label>&nbsp;'.$sessionSaved['registrationKey'].'<br />';
+        $body .= '<label>Date Registered: </label>&nbsp;'.$sessionSaved['sysDateCreated'].'</p>';
         if ((int)$sessionSaved['isRegistered'] == 1){
         $body .= '<p>Print out your form to sign by clicking the link or copying it and pasting it into your browser: 
             <a href="http://'.$_SERVER["SERVER_NAME"].'/print-reg/'.$sessionNfo['itemID'].'/'.$sessionSaved['registrationKey'].'">http://'.$_SERVER["SERVER_NAME"].'/print-reg/'.$sessionNfo['itemID'].'/'.$sessionSaved['registrationKey'].'</a>';
@@ -37,9 +40,9 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
     </ol>';
         }
         else{
-            $body .= '<p>Thank you for your interest in the London Fencing Club. If a space becomes available, you will be notified by email<br />
-                If not, we hope you try to register for the next session.</p>';
+            $body .= '<p>Thank you for your interest in the London Fencing Club. If a space becomes available, you will be notified by email. If not, we hope you try to register for the next session.</p>';
         }
+        $emailBody = str_replace('%SERVERNAME%',$_SERVER['SERVER_NAME'],str_replace('%BODY%',$body,str_replace('%TITLE%',$title,$emailTemplate)));
         $subject = "London Fencing ".ucwords($sessionSaved['level'])." Session Registration";
         $from = "no-reply@londonfencing.ca";
         $admEmail = $db->return_specific_item(false, 'sysStorageTable', 'value', '--', "application='".$sessionSaved['level']."-registration'");
@@ -53,7 +56,7 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
         $mail->AddAddress($sessionSaved['email']);
         $mail->AddBCC($admEmail);
         $mail->Subject = $subject;
-        $mail->Body = $body;
+        $mail->Body = $emailBody;
         if ($mail->send()){
             if ((int)$sessionSaved['isRegistered'] == 1){
                 print alert_box("Thank you!<br />Please follow the steps below in order to complete your registration", 1);

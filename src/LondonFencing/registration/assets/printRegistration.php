@@ -1,7 +1,9 @@
 <?php
 require_once('../../../../inc/init.php');
-require_once dirname(__DIR__).'/Registration.php';
-use LondonFencing\Registration as REG;
+require_once dirname(__DIR__).'/registration.php';
+
+use LondonFencing\registration as REG;
+
 if (isset($_GET['s']) && is_numeric($_GET['s']) && isset($_GET['r'])){
     $reg = new REG\Registration($db);
     $regNfo = $reg->getSavedRegistration($_GET['s'],$_GET['r']);
@@ -38,6 +40,9 @@ if (isset($_GET['s']) && is_numeric($_GET['s']) && isset($_GET['r'])){
     </div>
     <div>
         <label>Birth Date: </label><?php echo date('Y-m-d',$regNfo["birthDate"]);?>
+    </div>
+    <div>
+        <label>Gender: </label><?php echo $regNfo["gender"];?>
     </div>
     <div>
         <label>Address: </label><?php echo $regNfo["address"];?>

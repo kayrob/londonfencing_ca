@@ -1,12 +1,12 @@
 <?php
-namespace LondonFencing\Apps\Admin\Calendar;
-use LondonFencing\Apps\Calendar as Cal;
+namespace LondonFencing\calendar\Apps;
+use LondonFencing\calendar as Cal;
 /**
 * Admin methods for the events calendar. Not to be used without /includes/apps/calendar/Calendar.php
 * created: November 11, 2010 by Karen Laansoo
 * @package apps/calendar
 */
-class adminCalendar extends Cal\Calendar{
+class adminCalendar extends Cal\calendar{
 	/**
 	* @var array $recurrenceOpts
 	* @access protected
@@ -541,6 +541,7 @@ class adminCalendar extends Cal\Calendar{
 			}
 			if ($set != ''){
 				$qry = sprintf("UPDATE tblCalendars SET ".rtrim($set,',')." WHERE itemID = '%d'",(int)trim($post['itemID']));
+                                echo $qry;
 				$res = $this->db->query($qry, $this->db->dblink);
 				if ($this->db->affected_rows($res) == 1){
 					return 1;
@@ -636,7 +637,7 @@ class adminCalendar extends Cal\Calendar{
 		$calsList = '<p id="calsList">There are no calendars</p>';
 		if ($res != false){
 			$calsList = '<ul id="calsList">';
-			while ($row = mysql_fetch_assoc($res)){
+			while ($row = $this->db->fetch_assoc($res)){
 				$checked = (trim($row['sysStatus']) == 'active' && trim($row['sysOpen']) == 1)?'checked="checked"':'';
 				$calsList .= '<li style="color:'.trim($row['eventBackgroundColor']).';font-weight:bold">
 				<div class="calendarsListItem"><input type="checkbox" style="margin-right:5px;" id="calendarInfo'.trim($row['itemID']).'" name="calendarInfo[]" '.$checked.' value="'.trim($row['itemID']).'" /><span id="cal'.trim($row['itemID']).'">'.trim($row['calendarName']).
@@ -656,7 +657,7 @@ class adminCalendar extends Cal\Calendar{
 		$res = $this->get_calendars_common();
 		$calsList = "";
 		if ($res != false){
-			while($row = mysql_fetch_assoc($res)){
+			while($row = $this->db->fetch_assoc($res)){
 				$calsList .= '<option value="'.trim($row['itemID']).'" style="color:'.trim($row['eventBackgroundColor']).'">'.trim($row['calendarName']).'</option>';
 			}
 		}

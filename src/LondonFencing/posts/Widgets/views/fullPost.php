@@ -1,7 +1,6 @@
 <?php
-
-require_once dirname(__DIR__)."/Blog.php";
-use LondonFencing\Apps\Blog as Blog;
+require_once dirname(dirname(__DIR__))."/posts.php";
+use LondonFencing\posts\Widgets as Blog;
 
 if (isset($db) && $this INSTANCEOF Quipp){
 
@@ -9,10 +8,10 @@ if (isset($db) && $this INSTANCEOF Quipp){
         $blogStatus = "active";
     }
     
-	if (!isset($blog)){
+    if (!isset($blog)){
 
-	   $blog = new Blog\Blog($db, $this->siteID, $blogStatus);
-	}    
+        $blog = new Blog\Blog($db, $this->siteID, $blogStatus);
+    }    
     $slug = 'latest';
     if (isset($_GET['slug'])) {
         $slug = $_GET['slug'];
@@ -30,7 +29,7 @@ if (isset($db) && $this INSTANCEOF Quipp){
 ?>
     
 <div id="news-article-<?php echo $post['itemID']; ?>" class="news-article">
-    <h1><?php echo $post['title']; ?></h1>
+    <h2><?php echo $post['title']; ?></h2>
     <h5>Posted by <?php echo $post['author']; ?> on <?php print date('F j, Y', strtotime($post['displayDate'])); ?></h5>
 <?php 
             echo $post['body'];
@@ -41,21 +40,6 @@ if (isset($db) && $this INSTANCEOF Quipp){
 ?>
                 <p><small>tags: <?php print $post['category'];?></small></p>
 <?php 
-            }
-            if (isset($post['slug'])){
-?>            
-                <div id="disqus_thread"></div>
-                <script type="text/javascript">
-                    var disqus_shortname = 'royalyorkortho';
-                    var disqus_identifier = '/blog/<?php echo trim($post['slug']); ?>';
-                    var disqus_url = 'http://<?php echo $_SERVER['SERVER_NAME']; ?>/blog/<?php echo ($post['slug']); ?>';
-                    (function() {
-                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-                    })();
-                </script>
-<?php          
             }
 ?>
 </div>

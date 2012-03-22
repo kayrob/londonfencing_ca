@@ -1,10 +1,9 @@
 <?php
-require_once dirname(dirname(dirname(__DIR__))) ."/calendar/Calendar.php";
-require_once dirname(dirname(dirname(__DIR__)))."/calendar/Apps/adminCalendar.php";
-require_once dirname(__DIR__)."/adminRegister.php";
+require_once dirname(dirname(dirname(__DIR__))) ."/calendar/calendar.php";
+require_once dirname(dirname(__DIR__))."/registration.php";
 
-use LondonFencing\Apps\Admin\Calendar as aCal;
-use LondonFencing\Apps\Admin\Register as AReg;
+use LondonFencing\calendar\Apps as aCal;
+use LondonFencing\registration\Apps as AReg;
 
 $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
 require $root . '/inc/init.php';
@@ -21,7 +20,7 @@ if ($auth->has_permission("canEditReg")){
 if ($hasPermission) {
     
     $cal = new aCal\adminCalendar($db);
-    $aReg = new AReg\adminRegister($cal,$db);
+    $aReg = new AReg\AdminRegister($cal,$db);
     
     $quipp->js['footer'][] = "/src/LondonFencing/registration/assets/js/adminRegistration.js";
     
@@ -554,6 +553,6 @@ include $root. "/admin/templates/footer.php";
 
 }
 else{
-    echo 'no permission';
+   $auth->boot_em_out(1);
 
 }

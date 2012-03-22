@@ -3,5 +3,22 @@
     <module name="blog">
         <ns>\Apps\Blog</ns>
         <label>Blog Manager</label>
+        <admin enabled="0">posts/Apps/views/blog.php</admin>
+        <widget name="Blog: Full Post" adminLink="0" enabled="0">Widgets/views/fullPost.php</widget>
+        <widget name="Blog: Side Nav (Archive)" adminLink="0" enabled="0">Widgets/views/blogSideNav.php</widget>
+        <widget name="Blog: Archive" adminLink="0" enabled="0">Widgets/views/blogArchiveInclude.php</widget>
+         <icon>posts/assets/img/dashboard_icon.png</icon>
+        <help>Use this tool to create blog posts about trending topics.</help>
+    </module>
+    <module name="news">
+        <ns>\Apps\News</ns>
+        <label>News Manager</label>
+        <admin enabled="1">posts/Apps/views/news.php</admin>
+        <widget name="News: Full Article" adminLink="1" enabled="1">Widgets/views/full_article.php</widget>
+        <widget name="News: Side Nav (Archive)" adminLink="0" enabled="1">Widgets/views/newsWidget.php</widget>
+        <widget name="News: Archive" adminLink="0" enabled="1">Widgets/views/newsArchive.php</widget>
+        <widget name="News: Callout" adminLink="0" enabled="1">Widgets/views/homeWidget.php</widget>
+        <icon>posts/assets/img/dashboard_icon.png</icon>
+        <help>Use this tool to create news items and important announcements.</help>
     </module>
 </modules>

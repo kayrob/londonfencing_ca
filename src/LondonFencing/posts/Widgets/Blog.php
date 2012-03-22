@@ -1,18 +1,17 @@
 <?php
-namespace LondonFencing\Apps\Blog;
+namespace LondonFencing\posts\Widgets;
 
+use LondonFencing\posts as Posts;
 use \Exception as Exception;
 
-class Blog{
+class Blog extends Posts\posts{
     
-    protected $_db;
     protected $_siteID;
     protected $_status;
     
     public function __construct($db, $siteID, $status){
         if (is_object($db)){
-            
-            $this->_db = $db;
+            parent::__construct($db);
             $this->_siteID = (int)$siteID;
             $this->_status = $this->_db->escape($status);
         

@@ -1,10 +1,9 @@
 <?php
-$root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
-require_once($root."/src/LondonFencing/posts/Widgets/News.php");
+require_once dirname(dirname(__DIR__))."/posts.php";
 
-use LondonFencing\Apps\News as news;
+use LondonFencing\posts\Widgets as news;
 if (!isset($news)) {
-    
+
     $news = new news\News($db);
 }
     
@@ -17,7 +16,7 @@ if (!isset($news)) {
     
 <div id="news-article-<?php print $article['itemID']; ?>" class="news-article">
     <h2><?php print $article['title']; ?></h2>
-    <h5>Posted by <?php print $article['author']; ?> on <?php print date('F j, Y', strtotime($article['displayDate'])); ?></h5>
+    <h4><?php print date('M j, Y', strtotime($article['displayDate'])); ?> | <span class="lowlight">Posted By: <?php print $article['author']; ?></span></h4>
     <?php print $article['body']; ?>
     <?php 
         if (isset($article['externalLink']) && $article['externalLink'] != '') {

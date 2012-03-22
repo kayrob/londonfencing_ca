@@ -1,7 +1,9 @@
 <?php
+require_once(dirname(dirname(__DIR__)))."/calendar.php";
+use LondonFencing\calendar\Widgets AS cWid;
 if (!isset($cal)){
-	$cal = new calendarWidgets($db);
-	$cal->url = "/vacation-calendar";
+        $cal = new cWid\calendarWidgets($db);
+        $cal->url = "/eventsr";
 }
 $eventRequested = $cal->get_event_details_byID($_GET);
 $dlgTitle = (isset($eventRequested[6]))?$eventRequested[6]:"title";
