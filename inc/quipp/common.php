@@ -82,16 +82,16 @@ function alert_box($message, $alertType, $otherIcon = "")
 
     switch ($alertType) {
     case 1:
-        $img   = "/img/alert1.gif";
+        $img   = "/themes/LondonFencing/img/accepted.png";
         $class = "alertBoxFunctionGood";
         break;
     case 2:
-        $img   = "/img/alert2.gif";
+        $img   = "/themes/LondonFencing/img/error.png";
         $class = "alertBoxFunctionBad";
         break;
     case 3:
     default:
-        $img   = "/img/alert3.gif";
+        $img   = "/themes/LondonFencing/img/warning_blue.png";
         $class = "alertBoxFunctionWarn";
         break;
     case 4:
@@ -105,11 +105,11 @@ function alert_box($message, $alertType, $otherIcon = "")
     }
 
     if($img) {
-        $background = "background-image: url('$img');";
+        $background = "background-image:url($img);";
     }
     return sprintf('<div class="%s" style="%sdisplay:block;">%s</div>',
         $class,
-        $img,
+        $background,
         $message);
 }
 
@@ -530,8 +530,13 @@ function validate_form($formData = false)
     $validationClasses = array(
         'valDATE' => array(
             'myItem'     => array(), 
-            'myPattern' => '^([0-9]{4})(-[0-9]{2})(-[0-9]{2})?$', 
+            'myPattern' => '^([0-9]{4})\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$', 
             'myTitle'     => 'Date (YYYY-DD-MM)'
+        ),
+        'valTIME' => array(
+            'myItem'     => array(), 
+            'myPattern' => '^([01][0-9]|2[0-4])\:([0-5][0-9])(\s[AP]M)?$', 
+            'myTitle'     => 'Time (hh:mm) with or without A/PM'
         ),
         'valNUMB' => array(
             'myItem'     => array(), 

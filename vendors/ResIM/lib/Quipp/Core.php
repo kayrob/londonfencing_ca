@@ -194,7 +194,7 @@ class Core {
      */
     public function getModule($name) {
         if (false === ($psr = $this->config("modules.{$name}"))) {
-            throw new InvalidArgumentException("Module '{$name}' not found");
+            throw new \InvalidArgumentException("Module '{$name}' not found");
         }
 
         return $this->factory($psr, array($this));

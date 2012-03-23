@@ -454,6 +454,12 @@ class Auth {
 				</div>";		
 				return alert_box($message, 2);
 				break;
+                                                    default:
+                                                                        $message = "<div align=\"left\">
+					<strong> Access Denied </strong>
+					<p>Either your session expired, or you do were denied permission. </p>
+				</div>";
+                                                                        break;
 		}
 		return false;
 	}

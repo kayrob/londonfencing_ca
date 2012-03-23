@@ -1,21 +1,37 @@
 <?php
+//$root set in header.php
+if (!defined('ADMAPPS')){
+    if (is_dir($root."/src/LondonFencing")){
 
+        $dh = opendir($root."/src/LondonFencing");
+        if ($dh){
+            while (false !== ($file = readdir($dh))){
+                if (is_dir($root."/src/LondonFencing/".$file) && $file != "." && $file !=".."){
 
-   
-    $apps = new \ArrayIterator();
-    
-    foreach (Quipp()->modules() as $module) {
-        $apps += $module->getAppsList();
+                    if (file_exists($root."/src/LondonFencing/".$file."/Module.xml")){
+
+                        $mXml = simplexml_load_file($root."/src/LondonFencing/".$file."/Module.xml");
+                        foreach($mXml->module as $mod){
+                                $attr = $mod->attributes();
+                                if (isset($mod->admin)){
+                                    $adAttr = $mod->admin->attributes();
+                                    if (isset($adAttr->enabled) && (int)$adAttr->enabled == 1){
+                                        $applications[(string)$attr['name']] = array(
+                                            "label" =>(string)$mod->{'label'},
+                                            "src"   =>(string)$mod->admin,
+                                            "icon"  => (string)$mod->icon,
+                                            "info"  => html_entity_decode((string)$mod->help)
+                                        );
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+            closedir($dh);
+        }
     }
-    
-    sort($apps);
-    
-    foreach ($apps as $slug => $namespace) {
-        
+    if (isset($applications)){
+        define('ADMAPPS', json_encode($applications));
     }
-    
-    
-    
-    $app = $_GET['app'];
-    $app_instance = new $apps[$app](Quipp(), 1/* fuck me*/ );
-    $app_instance->viewPanel();
+}

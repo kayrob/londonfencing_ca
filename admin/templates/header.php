@@ -1,27 +1,8 @@
 <?php
-$applications = array();
-/*
-	"photo-gallery" => array(
-		"label"	=> "Photo Manager",
-	),
-	"notification-manager" => array(
-		"label" => "Notification Manager",
-	),
-	"banners" => array(
-		"label" => "Banner Manager",
-	),
-	"news" => array(
-		"label" => "News Manager",
-	),
-	"calendar" => array(
-		"label" => "Events Manager"
-	),
-	"http://disqus.com/admin/login/" => array(
-	   "label" => "&#8594; Disqus Comment Admin"
-    )
-);
-/**/
+$root = dirname(dirname(__DIR__));
+require_once(dirname(__DIR__).'/loadModule.php'); //this file sets applications
 
+$applications = json_decode(ADMAPPS);
 $userEditors = array(
 	"users" => array(
 		"label" => "Site Users",
@@ -56,10 +37,11 @@ $modifyPages = $auth->has_permission('modifypages');
   <!-- <link rel="stylesheet" href="/min/?f=css/reset.css"> -->
   <link rel="stylesheet" href="/admin/css/reset.css">
   <link rel="stylesheet" href="/admin/css/admin.css">
-  <link rel="stylesheet" href="/admin/css/plugins/ui-lightness/jquery-ui-1.8.16.custom.css">
-  <link rel="stylesheet" href="/admin/css/plugins/jquery.fancybox-1.3.4.css">
+  <link rel="stylesheet" href="/js/jquery-ui/jquery-ui-1.8.18.custom.css">
+  <link rel="stylesheet" href="/js/fancybox/jquery.fancybox-1.3.4.css">
   <link rel="stylesheet" href="/admin/js/growl/jquery.gritter.css">
   <link rel="stylesheet" href="/admin/css/plugins/jquery.jscrollpane.css">
+  <link rel="stylesheet" href="/js/jquery-ui/jquery-ui-timepicker-addon.css">
  <?php 
 	//print out any scripts that are needed for the page calling in this header file, 
 	//this is set in that particular file using array_push($quipp->js['header'],"/path/to/script.js", "/path/to/another/script.js");
@@ -97,7 +79,7 @@ $modifyPages = $auth->has_permission('modifypages');
 <body class="<?php print Page::body_class($meta['body_classes']); ?>" id="<?php if (!empty($meta['body_id'])) print $meta['body_id']; ?>">
   <div id="container">
     <header>
-		<span class="user">Welcome Back, <?php print $username; ?></span>
+                                    <span class="user">Welcome Back, <?php print $username; ?></span>
 		<span class="currentSection"><?php if(!isset($meta['title'])) { print "Dashboard"; } else { print $meta['title']; } ?></span>
 		<span class="profileLogout"><a href="/admin/users.php?view=edit&amp;id=<?php print base_convert($user->id, 10, 36); ?>">Profile</a> / <a href="/logout">Logout</a></span>
     </header>
@@ -110,7 +92,7 @@ $modifyPages = $auth->has_permission('modifypages');
             <?php if (is_file($_SERVER['DOCUMENT_ROOT'] . '/img/layout/logo.png')): ?>
         		<img src="/admin/img/layout/logo.png" alt="<?php echo Quipp()->config('meta.title'); ?>" />
             <?php else: ?>
-                <img src="/admin/img/layout/resIMlogo.png" alt="Resolution Interactive Media" />
+                <img src="/admin/img/layout/adminLogo.png" alt="London Fencing Club" />
             <?php endif; ?>
         </span>
 		
@@ -126,7 +108,7 @@ $modifyPages = $auth->has_permission('modifypages');
 							print ' class="current"'; 
 						} ?>><a href="#pages" class="edit-pages">Pages</a>
 						</td>
-					<td <?php if (strpos($_SERVER['PHP_SELF'], '/apps/') !== false) { print ' class="current"'; } ?>><a href="#applications" class="edit-apps">Apps</a></td>
+					<td <?php if (stristr($_SERVER['PHP_SELF'], '/apps/') !== false || stristr($_SERVER['PHP_SELF'], '/super-powers/') !== false) { print ' class="current"'; } ?>><a href="#applications" class="edit-apps">Apps</a></td>
 					<?php if($auth->has_permission("approvepages")) { ?>
 						<td><a href="#stream" class="edit-stream">Stream</a></td>
 					<?php } ?>
@@ -174,20 +156,25 @@ $modifyPages = $auth->has_permission('modifypages');
 		<div id="applications" style="display:none;">
 			<ul class="sidebarLargeList">
 			<?php
-				foreach($applications as $appName => $appInfo){
-				
+				foreach($applications as $appName => $appInfo){				
 				    
 					echo("<li><a ");
-					if (strpos($_SERVER['PHP_SELF'], $appName) !== false) { echo ' class="selected" '; }
+					if (strpos($_SERVER['PHP_SELF'], $appInfo->src) !== false) { echo ' class="selected" '; }
 					
-					if (strpos($appName, 'http') === 0) {
-					   echo "href=\"" . $appName . "/\" target=\"_blank\">".$appInfo["label"]."</a></li>";
+					if (strstr($appInfo->src, 'http') !== false) {
+					   echo "href=\"" . $appInfo->src . "/\" target=\"_blank\">".$appInfo->label."</a></li>";
 					   
-					} else { 
-					   echo "href=\"/admin/apps/".$appName."\">".$appInfo["label"]."</a></li>";
+					} else {
+                                                                                                            $src = basename(dirname(dirname(dirname($appInfo->src))));
+					   echo "href=\"/admin/apps/".$src."/".basename($appInfo->src,".php")."\">".$appInfo->label."</a></li>";
 					
 					}
 				}
+                                                                        if ($auth->has_permission('root')){
+                                                                            
+                                                                            echo '<li><a href="/admin/super-powers/widgets.php"'.(strstr($_SERVER['PHP_SELF'], "super-powers") !== false ? ' class="selected" ':'').'>Widgets</a></li>';
+                                                                            
+                                                                        }
 			?>
    	    	</ul>
 		</div>

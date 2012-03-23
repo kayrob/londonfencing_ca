@@ -356,7 +356,7 @@ Calendar Styles - some to change per project
 #calendarWrap .fc-header .fc-state-default, #calendarWrap .fc-header .ui-state-default { border-color:#333; }
 
 #calendarWrap .fc-header .fc-state-default span, .spICS a, #customMonthYear {
-	background:url(/img/calendar/calendarBtnBack.png) repeat-x top #E7E8EC; 
+	background:url(/src/LondonFencing/calendar/assets/img/calendarBtnBack.png) repeat-x top #E7E8EC; 
 	color:#333; 
 	-moz-box-shadow:inset 2px 0px 0px rgba(255,255,255,0.4);
 	-webkit-box-shadow:inset 1px 1px 0px rgba(255,255,255,0.4);
@@ -388,7 +388,7 @@ Calendar Styles - some to change per project
 
 .ui-dialog { border:2px solid #B3B4B7 !important; }
 .ui-widget-header {
-	background:url(/img/calendar/calendarBtnBack.png) repeat-x top #E7E8EC !important; 
+	background:url(/src/LondonFencing/calendar/assets/img/calendarBtnBack.png) repeat-x top #E7E8EC !important; 
 	color:#333 !important; 
 	-moz-box-shadow:inset 2px 0px 0px rgba(255,255,255,0.4);
 	-webkit-box-shadow:inset 1px 1px 0px rgba(255,255,255,0.4);

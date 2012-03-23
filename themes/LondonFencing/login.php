@@ -1,3 +1,10 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="/themes/LondonFencing/default.css" media="screen" type="text/css"/>
+    </head>
+<body>
 <?php
 
     $qcore = Quipp();
@@ -22,9 +29,8 @@
     $showQuippBrand = " class=\"quippBranding\"";
     ?>
         <div id="loginBox" <?php print $showQuippBrand; ?>>
- 
+            <div><img src="/themes/LondonFencing/img/logo.png" alt="Logo" /></div>
             <form action="<?php print $_SERVER['REQUEST_URI']; ?>?login<?php print $qs; ?>" id="loginBoxForm" method="post">
-            	<h2>Sign-In</h2>
                 <input type="hidden" name="nonce" value="<?php echo $qcore->config('security.nonce'); ?>" />
                 
                         <div id="loginBoxUsername">
@@ -35,18 +41,13 @@
                             <label for="password">Password</label>
                             <input type="password" class="loginText" style="width:160px;" id="password" name="password" value="" />
                         </div>
-                        <input type="checkbox" id="keepSignedIn">
-                        <label for="keepSignedIn">Keep me signed in</label>
                         <div id="loginBoxButtons">
-                            <input type="submit"  value="Sign-in" class="btnStyleGreen" />
+                            <label>&nbsp;</label><input type="submit"  value="Sign-in" class="btnStyle" />
                         </div>
                         
                         <div class="loginTips"><a href="/forgot-password">Password Recovery</a></div>
-                        
-           
-                <div class="clearBox">&nbsp;</div>
+
             </form>
         </div>
-    <?php
-
-//    require 'footer.php';
+</body>
+</html>

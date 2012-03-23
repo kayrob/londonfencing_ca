@@ -18,10 +18,11 @@
 <script type="text/javascript" src="/js/jquery.cookie.js"></script>
 <script type="text/javascript" src="/js/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="/js/jquery.jstree/jquery.jstree.js"></script>
-<script type="text/javascript" src="/js/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui/jquery-ui-timepicker-addon.js"></script>
 
 <script type="text/javascript" src="/js/jquery.easing-1.3.pack.js"></script>
-<script type="text/javascript" src="/js/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 <script type="text/javascript" src="/js/uniform_js/jquery.uniform.min.js"></script>
 
 <script type="text/javascript" src="/admin/js/jquery.mousewheel.js"></script>

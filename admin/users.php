@@ -108,9 +108,6 @@
         $_REQUEST['action'] = null;
     }
 
-    $uam = Quipp()->getModule('AccountManagement');
-
-    // @cBq
     switch ($_REQUEST['action']) {
         case "insert":
         
@@ -183,10 +180,7 @@
         
             break;
         case "delete":
-/* @cBq
-            $uam->getAccount($uam->getAccount($_GET['id']));
-            break;
-*/
+
             //this delete query will work for most single table interactions, you may need to cusomize your own
         
         
@@ -221,7 +215,21 @@
         }
         $db->query('OPTIMIZE TABLE sysUGLinks');
     
+        if (isset($_POST['sites']) && is_array($_POST['sites'])) {
     
+            $qry = sprintf("DELETE FROM sysUSites WHERE userID='%d';",
+                (int) $_GET['id']);
+            $db->query($qry);
+            $qry = "INSERT INTO sysUSites (userID, siteID,sysDateCreated) VALUES ";
+            foreach ($_POST['sites'] as $sID => $sVal) {
+                $qry .= sprintf("('%d', '%d',NOW()),",
+                    (int) $_GET['id'],
+                    (int) $sID);
+            }
+            echo $qry;
+            $qry = substr($qry, 0, -1);
+            $db->query($qry);
+        }
     
     
         if (isset($_POST['meta']) && is_array($_POST['meta'])) {
@@ -270,7 +278,7 @@
     
         }
     
-        header('Location:' . $_SERVER['PHP_SELF'] . '?' . strtolower($_POST['action']) . '=true');
+        //header('Location:' . $_SERVER['PHP_SELF'] . '?' . strtolower($_POST['action']) . '=true');
     }
     
     
@@ -306,10 +314,32 @@
         'dbValue'   => false
     );
     
+    //sites allowed to edit (if more than one site)
+    $sQry = "SELECT sd.`domain`, s.`itemID` FROM `sysSites` AS s 
+        INNER JOIN `sysSitesDomains` AS sd ON s.`itemID` = sd.`siteID` 
+        WHERE  s.`sysStatus` = 'active' AND s.`sysOpen` = '1' AND sd.`sysStatus` = 'active' 
+        AND sd.`sysOpen` = '1' ORDER BY sd.`myOrder` ASC LIMIT 0,1";
     
+    $rRes = $db->query($sQry);
+    $sitesFieldsBuffer = '<dl>';
+    if ($db->valid($rRes)){
+        while ($row = $db->fetch_assoc($rRes)){
+            $checked = ($db->return_specific_item(false, "sysUSites", "siteID",false,"siteID=".trim($row['itemID'])." AND userID=".$user->id))?' checked="checked"':'';
+            $sitesFieldsBuffer = '<dd><input type="checkbox" name="sites['.trim($row['itemID']).']" id="sites_'.trim($row['itemID']).
+                    ' value="'.trim($row['itemID']).'"'.$checked.' />'.trim($row['domain']).'</dd>';
+        }
+    }
+    $sitesFieldsBuffer .= '</dl>';
     
-    
-    
+    $fields[] = array(
+        'label'   => "Sites",
+        'dbColName'  => false,
+        'tooltip'   => "Which site(s) a user is allowed to edit",
+        'writeOnce'  => false,
+        'widgetHTML' => $sitesFieldsBuffer, // <-- the contents of this variable are built above
+        'valCode'   => false,
+        'dbValue'   => false
+    ); 
     //view = view state, these standard views will do for most single table interactions, you may need to replace with your own
     if (!isset($_REQUEST['view'])) { 
         $_REQUEST['view'] = null; 
@@ -351,15 +381,12 @@
                 print $message;
             }
         
-            $formBuffer = "
-        					<form enctype=\"multipart/form-data\" name=\"tableEditorForm\" id=\"tableEditorForm\" method=\"post\" action=\"" . $_SERVER['REQUEST_URI'] .  "\">
-        					<table>
-        				";
+            $formBuffer = "<form enctype=\"multipart/form-data\" name=\"tableEditorForm\" id=\"tableEditorForm\" method=\"post\" action=\"" . $_SERVER['REQUEST_URI'] .  "\">
+        <table>";
         
             //print the base fields
             $f=0;
             foreach ($fields as $field) {
-        
                 $formBuffer .= "<tr>";
                 //prepare an ID and Name string with a validation string in it
         

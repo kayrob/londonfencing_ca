@@ -292,7 +292,7 @@ class Nav
 
 		if(!isset($pageUtility)) {
 			require_once $_SERVER['DOCUMENT_ROOT'] . "/admin/classes/PageUtility.php";
-			$pageUtility = new PageUtility();
+			$pageUtility = new PageUtility($db);
 		}
 
 		if(!is_numeric($id)) {

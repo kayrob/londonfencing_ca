@@ -11,4 +11,21 @@ jQuery(document).ready(function($) {
         out: dropdownMouseout
     }
     $('.dropdown').hoverIntent(config);
+    $('.fbMap').fancybox();
+    if ($('.primeImg').length == 1){
+        $('.primeImg').cycle({
+        fx: 'fade',
+        next: '.next',
+        prev: '.prev',
+        before: afterCycle
+    });
+    }
+    function afterCycle(){
+        $('.banner img').each(function(imgIndex){
+            if (imgIndex > 0 && imgIndex < 7){
+                $(this).removeClass().addClass('homeThumb');
+            }
+        });
+        $('.banner img:eq('+($(this).index() +1)+')').removeClass('homeThumb').addClass('homeThumbB');
+    }
 });

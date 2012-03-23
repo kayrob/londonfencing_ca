@@ -93,6 +93,10 @@ Quipp()->debug()->add("Cache stored under key {$mc_key}");
         
         return $res;
     }
+    
+    function free_result(){
+        mysqli_free_result();
+    }
 
     function valid($res) {
         return (false == $res || $res->num_rows == 0 ? false : true);

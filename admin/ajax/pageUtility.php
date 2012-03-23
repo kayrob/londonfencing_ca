@@ -7,7 +7,7 @@ require '../../inc/init.php';
 
 if (!isset($pageUtility)) {
 	require_once "../classes/PageUtility.php";
-	$pageUtility = new PageUtility();
+	$pageUtility = new PageUtility($db);
 }
 
 if (!isset($approvalUtility)) {

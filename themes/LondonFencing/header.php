@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/plain" rel="author" href="/humans.txt" />
     
-    <link rel="stylesheet" href="/min/?f=themes/LondonFencing/default.css,css/plugins/jquery.fancybox-1.3.4.css">
+    <link rel="stylesheet" href="/min/?f=themes/LondonFencing/default.css,js/fancybox/jquery.fancybox-1.3.4.css,js/jquery-ui/jquery-ui-1.8.18.custom.css">
     <link rel="alternate" type="application/rss+xml" href="/feed/blog">
     <?php
     if(isset($quipp->css) && is_array($quipp->css)) {
@@ -38,7 +38,7 @@
 
 	<header>
 
-    	<a class="logo" href="/"><img src="/themes/LondonFencing/img/logo.png" alt="Royal York Orthodics" /></a>
+            <h1><a class="logo" href="/"><img src="/themes/LondonFencing/img/logo.png" alt="London Fencing Club" /></a>London Fencing Club</h1>
 
     		<nav><?php print $nav->build_nav($nav->get_nav_items_under_bucket('primary'), $slug, true, false);  ?><div class="clearfix"></div></nav>
     
@@ -46,6 +46,4 @@
 	</header>
 	
 	<div id="content">
-	
-	<section id="addressWrap"><div id="address"><h3>3029 Bloor Street West &bull; Toronto Ontario &bull; M8X 1C5 &bull; 416-207-0885</h3></div></section>
 

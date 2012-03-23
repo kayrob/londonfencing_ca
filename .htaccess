@@ -295,8 +295,12 @@ FileETag None
  
 #  RewriteRule ^logout$ /auth.php?mode=logout [NC,L]
 #  RewriteRule ^login$ /auth.php?mode=login [QSA,NC,L]
-  RewriteRule ^blog/(.*)$ /index.php?p=blog&slug=$1 [QSA,NC,L]
+  RewriteRule ^news/(.*)$ /index.php?p=news&slug=$1 [QSA,NC,L]
   RewriteRule ^feed/blog$ /src/LondonFencing/posts/assets/rss/blog.php [NC,L]
+RewriteRule ^print-reg/(.*)/(.*)$ /src/LondonFencing/registration/assets/printRegistration.php?s=$1&r=$2 [NC,L]
+  RewriteRule ^admin/assets/(.*)/ajax/(.*)$ /src/LondonFencing/$1/assets/ajax/$2 [NC,L]
+    RewriteRule ^admin/apps/(.*)/([^\?]*)\?(.*)$ /src/LondonFencing/$1/Apps/views/$2.php?$3 [NC,L]
+  RewriteRule ^admin/apps/(.*)/(.*)$ /src/LondonFencing/$1/Apps/views/$2.php [NC,L]
   
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d

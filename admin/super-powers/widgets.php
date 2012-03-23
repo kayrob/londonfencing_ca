@@ -58,6 +58,16 @@ $fields[] = array(
     'stripTags' => true
 );
 
+$fields[] = array(
+    'label'   => "Properties Admin Link",
+    'dbColName'  => 'appPropertiesAdminLink',
+    'tooltip'   => "/admin/apps/appname/properties.php",
+    'writeOnce'  => false,
+    'widgetHTML' => "<input style=\"width:450px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+    'valCode'   => "OPvalALPH",
+    'dbValue'   => false,
+    'stripTags' => true
+);
 
 $statuses = array(
     '0' => 'Deleted',
@@ -78,6 +88,19 @@ $fields['sysStatus'] = array(
     'stripTags' => true
 );
 
+if (isset($_GET['id'])) {
+    $protected = $db->return_specific_item($_GET['id'], 'sysPageContent', 'isProtected');
+}
+$fields[] = array(
+    'label'   => "Protected",
+    'dbColName'  => 'isProtected',
+    'tooltip'   => 'Protected Apps can not link to an admin app and are \'greyed\' out',
+    'writeOnce'  => false,
+    'widgetHTML' => '<input type="checkbox" name="FIELD_ID" id="FIELD_ID" value="1" '.((int)$protected == 1 ?'checked="checked"':'').'/>',
+    'valCode'   => "OPvalNUMB",
+    'dbValue'   => false,
+    'stripTags' => true
+);
 
 ?>
 
@@ -124,7 +147,12 @@ case "insert":
 
             $requestFieldID = $dbField['valCode'] . str_replace(" ", "_", $dbField['label']);
             
-            $fieldColValues .= "'" . $db->escape($_REQUEST[$requestFieldID], $dbField['stripTags']) . "',";
+            if ($dbField['dbColName'] == 'isProtected'){
+                $fieldColValues .= (isset($_POST['$requestFieldID']))?'1,':'0,';
+            }
+            else{
+                    $fieldColValues .= "'" . $db->escape($_REQUEST[$requestFieldID], $dbField['stripTags']) . "',";
+            }
             
             $fieldColNames .= $dbField['dbColName'] . ",";
 

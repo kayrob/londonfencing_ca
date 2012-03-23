@@ -28,7 +28,9 @@ use Symfony\Component\HttpFoundation\Session;
             require_once $file;
         }
     });
-
+    
+    require_once dirname(__DIR__) ."/vendors/PHPThumb/ThumbLib.inc.php";
+    
     // Note: Should not overwrite this var - if developer is using filter_var (as they should be) it won't read this
     // Instead, should write to a constant and devs should read that.  (RES_DOC_ROOT for example)
     $_SERVER['DOCUMENT_ROOT'] = dirname(__DIR__);

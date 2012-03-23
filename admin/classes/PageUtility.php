@@ -2,25 +2,28 @@
 
 class PageUtility
 {
+                  protected $_db;
 
-
-	function __construct()
+	function __construct($db)
 	{
-	
+                        if (is_object($db)){
+                            $this->_db = $db;
+                        }
+                        else{
+                            throw new Exception("You are not connected to a database");
+                        }
 	}
 
 
 	function get_page_properties($pageID = false) {
-	
-		global $quipp, $db, $notify;
 		
 		if($pageID) {
-			$res = $db->query($qs = "SELECT * FROM sysPage WHERE itemID = '$pageID'");
+			$res = $this->_db->query($qs = "SELECT * FROM sysPage WHERE itemID = '$pageID'");
 		} 
 		
-		if ($db->valid($res)) {
+		if ($this->_db->valid($res)) {
 
-			$rs = $db->fetch_assoc($res);
+			$rs = $this->_db->fetch_assoc($res);
 			return $rs;
 
 		}
@@ -29,7 +32,7 @@ class PageUtility
 
 	function create_empty_page($underThisParentID = 1, $parentType="bucket")
 	{
-		global $quipp, $db, $nav;
+		global $nav;
 		
 
 		if(!isset($nav)) {
@@ -42,9 +45,9 @@ class PageUtility
 			//yell("CREATE EMPTY PAGE BUCKET!");
 			//get the instance ID based on the bucket
 			$qry = sprintf("SELECT instanceID FROM sysNavBuckets WHERE itemID = '%d'",
-				$db->escape($underThisParentID));
-			$res = $db->query($qry);
-			$rs = $db->fetch_assoc($res);
+				$this->_db->escape($underThisParentID));
+			$res = $this->_db->query($qry);
+			$rs = $this->_db->fetch_assoc($res);
 			$pageInstanceID = $rs['instanceID'];
 
 			if(!is_numeric($pageInstanceID)) {
@@ -58,10 +61,10 @@ class PageUtility
 
 			//get the instance ID based on the bucket via the nav item
 			$qry = sprintf("SELECT instanceID FROM sysNavBuckets WHERE itemID = (SELECT bucketID FROM sysNav WHERE itemID = '%d')",
-				$db->escape($underThisParentID));
+				$this->_db->escape($underThisParentID));
 			//yell($qry);
-			$res = $db->query($qry);
-			$rs = $db->fetch_assoc($res);
+			$res = $this->_db->query($qry);
+			$rs = $this->_db->fetch_assoc($res);
 			$pageInstanceID = $rs['instanceID'];
 
 			if(!is_numeric($pageInstanceID)) {
@@ -70,9 +73,9 @@ class PageUtility
 
 			//get the bucket ID via the nav item
 			$qry = sprintf("SELECT bucketID FROM sysNav WHERE itemID = '%d';",
-				$db->escape($underThisParentID));
-			$res = $db->query($qry);
-			$rs = $db->fetch_assoc($res);
+				$this->_db->escape($underThisParentID));
+			$res = $this->_db->query($qry);
+			$rs = $this->_db->fetch_assoc($res);
 			$bucketID = $rs['bucketID'];
 
 			if(!is_numeric($bucketID)) {
@@ -86,10 +89,10 @@ class PageUtility
 
 		//$pageHash = substr(md5((time("c") + rand()));
 		$nQry = sprintf("SELECT MAX(itemID)+1 as newest FROM sysPage");
-		$nRes = $db->query($nQry);
+		$nRes = $this->_db->query($nQry);
 		
-		if($db->valid($nRes)) {  //grab the page data
-			$newest = $db->fetch_assoc($nRes);
+		if($this->_db->valid($nRes)) {  //grab the page data
+			$newest = $this->_db->fetch_assoc($nRes);
 			$pageTempName = "Untitled-" . $newest['newest'];
 		} else {
 			$pageHash = md5((time("c") + rand()));
@@ -99,13 +102,13 @@ class PageUtility
 		//each page gets a random md5 hash system name
 		//note: we're using inactive here because we don't want this to be available
 		$qry = sprintf("INSERT INTO sysPage (instanceID, templateID, systemName, label, masterHeading, sysDateCreated, sysVersion, sysStatus, sysOpen) VALUES ('%d','1', '%s', 'Untitled', '%s', NOW(), 'draft', 'inactive', '1');",
-			$db->escape($pageInstanceID),
-			$db->escape($pageTempName),
-			$db->escape($pageTempName));
+			$this->_db->escape($pageInstanceID),
+			$this->_db->escape($pageTempName),
+			$this->_db->escape($pageTempName));
 		//yell($qry);
-		if($db->query($qry)) {
+		if($this->_db->query($qry)) {
 
-			$pageID = $db->insert_id();
+			$pageID = $this->_db->insert_id();
 			//yell("create_empty_page pageID" . $pageID);
 			//then create the nav record
 			//$nav->create_nav_item($bucketID, $parentID, $myOrder, $pageSystemName, $url, $target, $label, $active);
@@ -114,10 +117,10 @@ class PageUtility
 			if(is_numeric($navID)) {
 				//then ceate the page link (THIS IS DEPRECATED AND WILL BE REMOVED ON THE NEXT PROJET, hopefully?)
 				$qry = sprintf("INSERT INTO sysSitesInstanceDataLink (instanceID, appID, appItemID, sysDateCreated, sysStatus, sysOpen) VALUES ('%d', 'page', '%s', NOW(), 'active', '1');",
-					$db->escape($pageInstanceID),
-					$db->escape($pageTempName)
+					$this->_db->escape($pageInstanceID),
+					$this->_db->escape($pageTempName)
 				);
-				if($db->query($qry)) {
+				if($this->_db->query($qry)) {
 					return $navID;
 				} else {
 					return false;
@@ -129,24 +132,40 @@ class PageUtility
 			return false;
 		}
 	}
+                    
+                 function copy_live_content_properties($liveContentID, $draftContentID){
+                     $res = $this->_db->query(sprintf("SELECT `propertyData` FROM `sysPageContentDataLink` WHERE `pageTemplateRegionContentID` = %d",
+                             (int)$liveContentID
+                             ));
+                     
+                     if ($this->_db->valid($res)){
+                         $row = $this->_db->fetch_assoc($res);
+                         $this->_db->free_result();
+                         
+                        $this->_db->query(sprintf("INSERT INTO `sysPageContentDataLink` (`propertyData`, `pageTemplateRegionContentID`, `sysDateCreated`, `sysOpen`) 
+                             VALUES ('%s', '%d', NOW(), 1)",
+                                 (string)$row['propertyData'],
+                                 (int)$draftContentID)
+                        );
+                     }
+                 }
 
 	function create_draft_copy_of_live_page($systemName)
 	{
-		
-		global $quipp, $db;
-		
+		global $quipp;
+                
 		error_log("Calling create_draft_copy_of_live_page(" . $systemName . ")  \n", 3, Quipp()->config('yell_log'));
 		
 		//only create a draft if one doesn't already exist, if it does, just return that id instead
 		//drafts get killed by the approval process where they are promoted to live, this function will come in to create a new draft where necessary
 		//it's used in content.php when editing a page already set as a live, and in approve_draft_and_make_live to replace the promoted draft when it's set to live
 		$pQry  = sprintf("SELECT itemID FROM sysPage WHERE sysOpen = '1' AND systemName ='%s' AND sysVersion = 'draft';",
-				$db->escape($systemName));
-			$pRes = $db->query($pQry);
+				$this->_db->escape($systemName));
+			$pRes = $this->_db->query($pQry);
 	
 			
-			if($db->valid($pRes)) {  //grab the page data
-				if($pageID = $db->fetch_assoc($pRes)) {
+			if($this->_db->valid($pRes)) {  //grab the page data
+				if($pageID = $this->_db->fetch_assoc($pRes)) {
 					return $pageID['itemID'];
 				}
 			}
@@ -155,12 +174,12 @@ class PageUtility
 		
 		//get the data for this page
 		$pQry  = sprintf("SELECT * FROM sysPage WHERE sysOpen = '1' AND systemName ='%s' AND sysVersion = 'live';",
-			$db->escape($systemName));
-		$pRes = $db->query($pQry);
+			$this->_db->escape($systemName));
+		$pRes = $this->_db->query($pQry);
 		error_log($pQry . " \n", 3, Quipp()->config('yell_log'));
 
-		if($db->valid($pRes)) {  //grab the page data
-			$pageRS = $db->fetch_assoc($pRes);
+		if($this->_db->valid($pRes)) {  //grab the page data
+			$pageRS = $this->_db->fetch_assoc($pRes);
 		} else {
 			$quipp->system_log("Issue: A request was received to create a draft version of [" . $systemName . "] but a live version of that page could not be found to use as a copy source. [create_draft_copy_of_live_page()]");
 			return false;
@@ -169,54 +188,59 @@ class PageUtility
 		//insert a new page record to use as a base for the new draft
 		//Note, that we're setting active here because we can assume that if a user wants to make something live that the content will be 'active'
 		$dQry = sprintf("INSERT INTO sysPage (checkOutID, privID, editPrivID, templateID, systemName, label, masterHeading, pageDescription, pageKeywords, isHomepage, isProtected, isDevLocked, sysDateCreated, sysVersion, sysStatus, sysOpen) VALUES (NULL, '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', %s, 'draft', '%s', '1');%s",
-			$db->escape($pageRS['privID']),
-			$db->escape($pageRS['editPrivID']),
-			$db->escape($pageRS['templateID']),
-			$db->escape($pageRS['systemName']),
-			$db->escape($pageRS['label']),
-			$db->escape($pageRS['masterHeading']),
-			$db->escape($pageRS['pageDescription']),
-			$db->escape($pageRS['pageKeywords']),
-			$db->escape($pageRS['isHomepage']),
-			$db->escape($pageRS['isProtected']),
-			$db->escape($pageRS['isDevLocked']),
-			$db->now,
-			$db->escape($pageRS['sysStatus']),
-			$db->last_insert);
-		$db->query($dQry);
-		$draftID = $db->insert_id();
+			$this->_db->escape($pageRS['privID']),
+			$this->_db->escape($pageRS['editPrivID']),
+			$this->_db->escape($pageRS['templateID']),
+			$this->_db->escape($pageRS['systemName']),
+			$this->_db->escape($pageRS['label']),
+			$this->_db->escape($pageRS['masterHeading']),
+			$this->_db->escape($pageRS['pageDescription']),
+			$this->_db->escape($pageRS['pageKeywords']),
+			$this->_db->escape($pageRS['isHomepage']),
+			$this->_db->escape($pageRS['isProtected']),
+			$this->_db->escape($pageRS['isDevLocked']),
+			$this->_db->now,
+			$this->_db->escape($pageRS['sysStatus']),
+			$this->_db->last_insert);
+		$this->_db->query($dQry);
+		$draftID = $this->_db->insert_id();
 		
 		error_log($dQry . " \n", 3, Quipp()->config('yell_log'));
 
 		//dupicate page content, from the old live version
 		//pull it first
-		$pcQry = sprintf("SELECT c.*, l.pageID AS contentPageID, l.regionID AS contentRegionID, l.myOrder AS contentMyOrder
+		$pcQry = sprintf("SELECT c.*, l.pageID AS contentPageID, l.regionID AS contentRegionID, l.myOrder AS contentMyOrder, l.`itemID` AS ptrcID
 				FROM sysPageTemplateRegionContent AS l
 				LEFT OUTER JOIN sysPageContent AS c ON (l.contentID = c.itemID AND l.pageID = '%d')
 				WHERE c.sysOpen = '1';",
 			$pageRS['itemID']);
-		$pcRes = $db->query($pcQry);
+		$pcRes = $this->_db->query($pcQry);
 		error_log($pcQry . " \n", 3, Quipp()->config('yell_log'));
+                                    
+                                    $ptrcID =null;
+                
 		//insert the new copies of the content boxes
-		if($db->valid($pcRes)) {
-			while ($contentRS = $db->fetch_assoc($pcRes)) {
-
+		if($this->_db->valid($pcRes)) {
+			while ($contentRS = $this->_db->fetch_assoc($pcRes)) {
+                                                                        $ptrcID = trim($contentRS['ptrcID']);
 				if($contentRS['isAnApp'] != "1") { //if this is a regular content box
 					$pcQry = sprintf("INSERT INTO sysPageContent (divBoxStyle, adminTitle, htmlContent, includeOverride, isAnApp, appAdminLink, isProtected, divHideTitle, sysOpen) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '1');%s",
-						$db->escape($contentRS['divBoxStyle']),
-						$db->escape($contentRS['adminTitle']),
-						$db->escape($contentRS['htmlContent']),
-						$db->escape($contentRS['includeOverride']),
-						$db->escape($contentRS['isAnApp']),
-						$db->escape($contentRS['appAdminLink']),
-						$db->escape($contentRS['isProtected']),
-						$db->escape($contentRS['divHideTitle']),
-						$db->last_insert);
-					$db->query($pcQry);
-					$draftContentID = $db->insert_id();
+						$this->_db->escape($contentRS['divBoxStyle']),
+						$this->_db->escape($contentRS['adminTitle']),
+						$this->_db->escape($contentRS['htmlContent']),
+						$this->_db->escape($contentRS['includeOverride']),
+						$this->_db->escape($contentRS['isAnApp']),
+						$this->_db->escape($contentRS['appAdminLink']),
+						$this->_db->escape($contentRS['isProtected']),
+						$this->_db->escape($contentRS['divHideTitle']),
+						$this->_db->last_insert);
+					$this->_db->query($pcQry);
+					$draftContentID = $this->_db->insert_id();
 					error_log($pcQry . " \n", 3, Quipp()->config('yell_log'));
 				} else { //otherwise, must be an app, just link it (we don't duplicate apps)
 					$draftContentID = $contentRS['itemID'];
+                                                                                            //check if live has properties. if yes, need to create a new link
+      
 				}
 
 				//insert a new link between the newly created content boxes (or apps) and the new draft page
@@ -225,7 +249,9 @@ class PageUtility
 					$draftID,
 					$contentRS['contentRegionID'],
 					$contentRS['contentMyOrder']);
-				$db->query($qry);
+				$this->_db->query($qry);
+                                                                        $newPTRCID = $this->_db->insert_id();
+                                                                        $this->copy_live_content_properties($ptrcID, $newPTRCID);
 				error_log($qry . " \n", 3, Quipp()->config('yell_log'));
 			}
 		}
@@ -237,29 +263,27 @@ class PageUtility
 	function perm_delete_specific_page_id_and_content($pageID) 
 	{
 		
-		global $quipp, $db, $notify;
-		
 		//delete the page record
 		$pQry  = sprintf("DELETE FROM sysPage WHERE itemID ='%d';",
-			$db->escape($pageID));
-		$pRes = $db->query($pQry);
+			$this->_db->escape($pageID));
+		$pRes = $this->_db->query($pQry);
 		//yell($pQry);
 		
 		//get all the links first so that we can grab the specific content records
 		$pQry  = sprintf("SELECT * FROM sysPageTemplateRegionContent WHERE pageID ='%d';",
-			$db->escape($pageID));
-		$pRes = $db->query($pQry);
-		if($db->valid($pRes)) {  //grab the page data
-			while($clRS = $db->fetch_assoc($pRes)) {
+			$this->_db->escape($pageID));
+		$pRes = $this->_db->query($pQry);
+		if($this->_db->valid($pRes)) {  //grab the page data
+			while($clRS = $this->_db->fetch_assoc($pRes)) {
 				//purge the associated content box so long as it's not an app
 				$pQry  = sprintf("DELETE FROM sysPageContent WHERE itemID ='%d' AND isAnApp = '0';",
-				$db->escape($clRS['contentID']));
-				$db->query($pQry);
+				$this->_db->escape($clRS['contentID']));
+				$this->_db->query($pQry);
 			}
 				//purge all the content links
 				$pQry  = sprintf("DELETE FROM sysPageTemplateRegionContent WHERE pageID ='%d';",
-				$db->escape($pageID));
-				$db->query($pQry);
+				$this->_db->escape($pageID));
+				$this->_db->query($pQry);
 		
 		}
 		
@@ -269,13 +293,13 @@ class PageUtility
 
 	function live_version_exists($systemName) 
 	{
-		global $quipp, $db, $notify;
+		
 		$pQry  = sprintf("SELECT itemID FROM sysPage WHERE sysOpen = '1' AND systemName ='%s' AND sysVersion = 'live';",
-			$db->escape($systemName));
-		$pRes = $db->query($pQry);
+			$this->_db->escape($systemName));
+		$pRes = $this->_db->query($pQry);
 		//yell($pQry);
 
-		if($db->valid($pRes)) {  
+		if($this->_db->valid($pRes)) {  
 			//yes a live exists
 			return true;
 		} else {
@@ -287,16 +311,15 @@ class PageUtility
 
 	function start_over_from_live($pageID) 
 	{
-		global $quipp, $db, $notify;
 		
 		//get the data for this page
 		$pQry  = sprintf("SELECT * FROM sysPage WHERE sysOpen = '1' AND itemID ='%d' ORDER BY sysStatus DESC, sysDateCreated DESC;",
-			$db->escape($pageID));
-		$pRes = $db->query($pQry);
+			$this->_db->escape($pageID));
+		$pRes = $this->_db->query($pQry);
 		//yell($pQry);
 
-		if($db->valid($pRes)) {  //grab the page data
-			$pageRS = $db->fetch_assoc($pRes);
+		if($this->_db->valid($pRes)) {  //grab the page data
+			$pageRS = $this->_db->fetch_assoc($pRes);
 		} else {
 			//this page could not be found
 			return false;
@@ -315,7 +338,7 @@ class PageUtility
 
 	function approve_draft_and_make_live($pageID)
 	{
-		global $quipp, $db, $notify, $approvalUtility;
+		global $quipp, $approvalUtility, $notify;
 		
 		error_log("Calling approve_draft_and_make_live(" . $pageID . ")  \n", 3, Quipp()->config('yell_log'));
 		
@@ -331,12 +354,12 @@ class PageUtility
 		
 		//get the data for this page
 		$pQry  = sprintf("SELECT * FROM sysPage WHERE sysOpen = '1' AND itemID ='%d' ORDER BY sysStatus DESC, sysDateCreated DESC;",
-			$db->escape($pageID));
-		$pRes = $db->query($pQry);
+			$this->_db->escape($pageID));
+		$pRes = $this->_db->query($pQry);
 		//yell($pQry);
 
-		if($db->valid($pRes)) {  //grab the page data
-			$pageRS = $db->fetch_assoc($pRes);
+		if($this->_db->valid($pRes)) {  //grab the page data
+			$pageRS = $this->_db->fetch_assoc($pRes);
 		} else {
 			return false;
 		}
@@ -346,26 +369,26 @@ class PageUtility
 		
 		//get any tickets which have the page ID set and approve them
 		$pQry  = sprintf("SELECT itemID FROM sysApprovalTickets WHERE appName = 'page' AND appItemID ='%d' AND sysStatus = 'active';",
-			$db->escape($pageID));
-		$pRes = $db->query($pQry);
+			$this->_db->escape($pageID));
+		$pRes = $this->_db->query($pQry);
 		yell($pQry);
 
-		if($db->valid($pRes)) {  //grab the page data
-			while($rs = $db->fetch_assoc($pRes)) {
+		if($this->_db->valid($pRes)) {  //grab the page data
+			while($rs = $this->_db->fetch_assoc($pRes)) {
 				$approvalUtility->approve_ticket($rs['itemID']);
 			}
 		} 	
 		
 		//first, archive the current live (if one exists)
 		$qry = sprintf("UPDATE sysPage SET sysVersion = 'archive', checkOutID = NULL, approveNotifyID = NULL WHERE sysOpen = '1' AND sysVersion = 'live' AND systemName = '%s';",
-			$db->escape($pageRS['systemName']));
-		$db->query($qry);
+			$this->_db->escape($pageRS['systemName']));
+		$this->_db->query($qry);
 		error_log($qry . " \n", 3, Quipp()->config('yell_log'));
 
 		//then, set this draft page as the live page by setting sysVersion = 'live', this will not touch sysStatus, ensuring new files must be 'activated first'
 		$qry = sprintf("UPDATE sysPage SET sysVersion = 'live', checkOutID = NULL WHERE sysOpen = '1' AND itemID = '%d';",
 			(int) $pageRS['itemID']);
-		$db->query($qry);
+		$this->_db->query($qry);
 		error_log($qry . " \n", 3, Quipp()->config('yell_log'));
 		
 		//then create a new draft version and supply it back to the user, if a draft already exists it will be returned, otherwise a new one will be created and it's ID will be returned
@@ -377,37 +400,36 @@ class PageUtility
 
 	function change_page_system_name($oldSystemName, $newSystemName)
 	{
-		global $quipp, $db;
 		//updating a system name is a huge deal as it's the key tying things to pages, so we must change a few things
 		//THIS WHOLE THING SHOULD LIKELY BE A TRANSACTION
 		
 		//run a check to see if this system name already exists, if it does, return a false
-		if(is_numeric($db->return_specific_item(false, "sysPage", "itemID", "--", " systemName = '" . $newSystemName . "'"))) {
+		if(is_numeric($this->_db->return_specific_item(false, "sysPage", "itemID", "--", " systemName = '" . $newSystemName . "'"))) {
 			return false;
 		}
 		
 		$qry = sprintf("UPDATE sysPage SET systemName = '%s' WHERE systemName = '%s';",
-			$db->escape($newSystemName),
-			$db->escape($oldSystemName)
+			$this->_db->escape($newSystemName),
+			$this->_db->escape($oldSystemName)
 		);
 
 
-		if($db->query($qry)) {
+		if($this->_db->query($qry)) {
 			$qry = sprintf("UPDATE sysNav SET pageSystemName = '%s' WHERE pageSystemName = '%s';",
-				$db->escape($newSystemName),
-				$db->escape($oldSystemName)
+				$this->_db->escape($newSystemName),
+				$this->_db->escape($oldSystemName)
 			);
-			if($db->query($qry)) {
+			if($this->_db->query($qry)) {
 				$qry = sprintf("UPDATE sysPageDataLink SET pageSystemName = '%s' WHERE pageSystemName = '%s';",
-					$db->escape($newSystemName),
-					$db->escape($oldSystemName)
+					$this->_db->escape($newSystemName),
+					$this->_db->escape($oldSystemName)
 				);
-				if($db->query($qry)) {
+				if($this->_db->query($qry)) {
 					$qry = sprintf("UPDATE sysSitesInstanceDataLink SET appItemID = '%s' WHERE appItemID = '%s' AND appID = 'page';",
-						$db->escape($newSystemName),
-						$db->escape($oldSystemName)
+						$this->_db->escape($newSystemName),
+						$this->_db->escape($oldSystemName)
 					);
-					if($db->query($qry)) {
+					if($this->_db->query($qry)) {
 						return true;
 					} else {
 						return false;
@@ -430,16 +452,15 @@ class PageUtility
 	//- a user should finish creating this page before making it the homepage
 	function set_as_home_page($systemName)
 	{
-		global $quipp, $db;
 		//un-set any pages which are marked as the homepage
 		$qry = sprintf("UPDATE sysPage SET isHomepage = '0' WHERE isHomepage = '1' AND systemName IN(SELECT appItemID FROM sysSitesInstanceDataLink WHERE appID = 'page' and instanceID = '%s');",
-			$db->escape($db->return_specific_item(false, "sysSitesInstanceDataLink", "instanceID", "--", " appItemID = '" . $systemName . "'")));
+			$this->_db->escape($this->_db->return_specific_item(false, "sysSitesInstanceDataLink", "instanceID", "--", " appItemID = '" . $systemName . "'")));
 
-		if($db->query($qry)) {
+		if($this->_db->query($qry)) {
 			$qry = sprintf("UPDATE sysPage SET isHomepage = '1' WHERE systemName = '%s';",
-				$db->escape($systemName));
+				$this->_db->escape($systemName));
 
-			if($db->query($qry)) {
+			if($this->_db->query($qry)) {
 				return true;
 			} else {
 				return false;
@@ -456,7 +477,7 @@ class PageUtility
 	function adjust_password_protect($pageID, $permissionGroups) 
 	{
 	
-		global $quipp, $db, $auth;
+		global $auth;
 		
 		if(!isset($auth)) {
 			require_once $_SERVER['DOCUMENT_ROOT'] . "/inc/quipp/Auth.php";
@@ -465,7 +486,7 @@ class PageUtility
 		
 		
 		//get details from the page record (this could likely be converted to a single query to be more efficient, but I'm doing this for coding speed right now)
-		$privID = $db->return_specific_item($pageID, "sysPage", "privID");
+		$privID = $this->_db->return_specific_item($pageID, "sysPage", "privID");
 		
 			
 		//we have groups to 'add' or 'adjust'
@@ -474,23 +495,23 @@ class PageUtility
 			if(!is_numeric($privID) || $privID == 0) { 
 				//we do not have a good privID to work with, create one
 				
-				$pageSystemName = $db->return_specific_item($pageID, "sysPage", "systemName");
+				$pageSystemName = $this->_db->return_specific_item($pageID, "sysPage", "systemName");
 				$pageSystemName = "access_" . $pageSystemName . "_page"; 
-				$pageLabel = $db->return_specific_item($pageID, "sysPage", "label");
+				$pageLabel = $this->_db->return_specific_item($pageID, "sysPage", "label");
 				$pageLabel = "Can access [" . $pageLabel . "] page";
 				
 				
 				//first check to see if one exists already that we could re-use by checking the permission table for the permission system name
-				$oldPrivToReuse = $db->return_specific_item(false, "sysPrivileges", "itemID", "--", " systemName = '" . $pageSystemName . "'");
+				$oldPrivToReuse = $this->_db->return_specific_item(false, "sysPrivileges", "itemID", "--", " systemName = '" . $pageSystemName . "'");
 				if(!is_numeric($oldPrivToReuse)) { //no prermission pre-exists so create one
 				
 					$qry = sprintf("INSERT INTO sysPrivileges (groupID, systemName, label, myOrder, sysStatus, sysOpen)  VALUES ('4', '%s', '%s', '0', 'active', '1');",
-					$db->escape($pageSystemName),
-					$db->escape($pageLabel)
+					$this->_db->escape($pageSystemName),
+					$this->_db->escape($pageLabel)
 					);
 				
-					if($db->query($qry)) {
-						$privID = $db->insert_id();
+					if($this->_db->query($qry)) {
+						$privID = $this->_db->insert_id();
 					} else {
 						return false;
 					}
@@ -505,11 +526,11 @@ class PageUtility
 			//write the permission links
 			foreach($permissionGroups as $group) {
 				$qry = sprintf("INSERT INTO sysUGPLinks (privID, groupID, sysStatus, sysOpen) VALUES ('%d', '%d', 'active', '1');",
-				$db->escape($privID),
-				$db->escape($group)
+				$this->_db->escape($privID),
+				$this->_db->escape($group)
 				);
 				
-				$db->query($qry);
+				$this->_db->query($qry);
 			}
 			
 		} else {
@@ -530,7 +551,7 @@ class PageUtility
 	function update_page_property($pageID, $fieldName, $value)
 	{
 
-		global $quipp, $db, $nav;
+		global $nav;
 
 
 		if(!isset($nav)) {
@@ -546,7 +567,7 @@ class PageUtility
 		case "systemName":
 			//updating a system name is a huge deal as it's the key tying things to pages, so we must change a few things
 			$runDefaultQuery = false;
-			if($this->change_page_system_name($db->return_specific_item($pageID, "sysPage", "systemName"), $value)) {
+			if($this->change_page_system_name($this->_db->return_specific_item($pageID, "sysPage", "systemName"), $value)) {
 				return true;
 			} else {
 				return false;
@@ -554,7 +575,7 @@ class PageUtility
 			break;
 		case "isHomepage":
 			$runDefaultQuery = false;
-			if($this->set_as_home_page($db->return_specific_item($pageID, "sysPage", "systemName"), $value)) {
+			if($this->set_as_home_page($this->_db->return_specific_item($pageID, "sysPage", "systemName"), $value)) {
 				return true;
 			} else {
 				return false;
@@ -568,10 +589,10 @@ class PageUtility
 			//POSSIBLE ISSUE: this doesn't check the instance ID, and probably should as it might change the label on other pages that share the same name.
 			
 			$qry = sprintf("SELECT itemID FROM sysNav WHERE pageSystemName = '%s';",
-				$db->escape($db->return_specific_item($pageID, "sysPage", "systemName")));
+				$this->_db->escape($this->_db->return_specific_item($pageID, "sysPage", "systemName")));
 
-			$res = $db->query($qry);
-			while ($nprs = $db->fetch_assoc($res)) {
+			$res = $this->_db->query($qry);
+			while ($nprs = $this->_db->fetch_assoc($res)) {
 				$nav->rename_nav_item($nprs['itemID'], $value);
 			}
 			break;
@@ -583,16 +604,16 @@ class PageUtility
 			$runDefaultQuery = false; //setting this to false as a safeguard in case the following queries fail. If they work, then we'll set it to true.
 			$qry = sprintf("SELECT r.itemID FROM sysPageTemplateRegion AS r LEFT OUTER JOIN sysPageTemplate AS t ON(t.itemID = r.templateID) WHERE r.isDefault = '1' AND t.itemID = '%d'",
 			(int) $value);
-			$res = $db->query($qry);
+			$res = $this->_db->query($qry);
 	
-			if ($db->valid($res)) { 
-				$reg = $db->fetch_assoc($res);
-				if ($db->valid($res)) { 
-					$tmp = $db->fetch_assoc($res);			
+			if ($this->_db->valid($res)) { 
+				$reg = $this->_db->fetch_assoc($res);
+				if ($this->_db->valid($res)) { 
+					$tmp = $this->_db->fetch_assoc($res);			
 					$qry = sprintf("UPDATE sysPageTemplateRegionContent SET regionID = '%d' WHERE  pageID = '%d'",
 						(int) $reg['itemID'],
 						(int) $pageID);
-					$db->query($qry);
+					$this->_db->query($qry);
 					$runDefaultQuery = true; 
 				}	
 			}			
@@ -608,13 +629,13 @@ class PageUtility
 		if($runDefaultQuery) {
 
 			$qry = sprintf("UPDATE sysPage SET %s = '%s' WHERE itemID = '%d';",
-				$db->escape($fieldName),
-				$db->escape($value),
-				$db->escape($pageID)
+				$this->_db->escape($fieldName),
+				$this->_db->escape($value),
+				$this->_db->escape($pageID)
 			);
 
 
-			if($db->query($qry)) {
+			if($this->_db->query($qry)) {
 				return true;
 			} else {
 				return false;
@@ -626,15 +647,15 @@ class PageUtility
 	function delete_content($contentID, $regionID, $pageID) 
 	{
 	
-		global $db, $quipp;
+		global $quipp;
 		
 		$qry = sprintf("DELETE FROM sysPageTemplateRegionContent WHERE contentID = '%d' AND pageID = '%d' AND regionID = '%d';",
 			(int) $contentID,
 			(int) $pageID,
 			(int) $regionID);
 		
-		if ($db->query($qry)) {
-			$quipp->system_log("Content Deleted From Page: " . $db->return_specific_item($pageID, "sysPage", "label") . ". " . $qry);
+		if ($this->_db->query($qry)) {
+			$quipp->system_log("Content Deleted From Page: " . $this->_db->return_specific_item($pageID, "sysPage", "label") . ". " . $qry);
 			return true;
 		} else {
 			return false;

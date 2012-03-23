@@ -15,6 +15,7 @@
       , 'theme'    => 'LondonFencing'
 
       , 'modules' => array(
+          'AccountManagement' => '\\Quipp\\Module\\AccountManagement\\Module'
         )
 
       , 'debug' => true
@@ -64,7 +65,7 @@
           , 'captcha_after_failures' => 1    // todo
           , 'lock_after_failures'    => 5    // todo
           , 'lock_duration'          => 300  // todo
-          , 'nonce'                  => md5(uniqid(mt_rand(), true))
+          , 'nonce'                  => 'e535a73400494790c1765ac9b67a2993'
         )
 
       , 'mailer' => array(

@@ -54,7 +54,8 @@ class Security {
      */
     public function preventCSRF($token) {
         if ($_SESSION['nonce'] != $token) {
-            throw new Exception('Invalid Token Provided', 400);
+            //throw new Exception('Invalid Token Provided', 400);
+            throw new Exception('Invalid Token Provided:' .$_SESSION['nonce'].": ".$token);
         }
     }
 

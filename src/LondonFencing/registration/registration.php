@@ -20,8 +20,9 @@ class registration{
     }
     public function getSavedRegistration($session, $regKey){
         if (is_numeric($session) && (int)$session > 0 && preg_match("%^[A-Z]{2}\-\d{4}\-\d+$%",$regKey,$matchKey)){
-            $qry = sprintf("SELECT cr.*, c.`level`, c.`fee`, c.`sessionName` 
+            $qry = sprintf("SELECT cr.*, c.`level`, c.`fee`, c.`sessionName` ,UNIX_TIMESTAMP(ce.`eventStartDate`) as eventStart
                 FROM `tblClassesRegistration` AS cr INNER JOIN `tblClasses` AS c ON cr.`sessionID` = c.`itemID`
+                INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
                 WHERE cr.`sessionID` = %d AND cr.`registrationKey` = '%s'",
                   (int)$session,
                    $this->_db->escape($regKey,true)

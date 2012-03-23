@@ -45,9 +45,8 @@ class Editor
 		$fields = null;
 		$i=0;
 		$res = $db->query($qry);
-		
 			
-		if ($db->valid($res)) {
+		if (is_object($res) && $res->num_rows > 0) {
 			//populate the visible headings
 			foreach ($headings as $value) {
 				$fields['headings'][$i]['label'] = $value;
@@ -78,13 +77,10 @@ class Editor
 			}
 			return $this->display_editor_list($fields);
 
-		} else if ($res === false || is_resource($res) && $db->num_rows($res) == 0) {
+		} else {
 			
 			return '<div>No data present</div>';
 		
-		} else {
-
-			return "bad query";
 		}
 	}
 
