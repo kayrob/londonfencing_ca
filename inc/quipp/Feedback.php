@@ -67,7 +67,6 @@ class Feedback {
 	
 	//register a message to display to the user
 	function message($message, $title = "Notice", $type = "3") {
-		global $DRAGGIN;
 		
 		if(!isset($_SESSION['quipp']['feedback'])) {
 			$_SESSION['quipp']['feedback'] = array();
