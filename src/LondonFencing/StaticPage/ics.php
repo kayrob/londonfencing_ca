@@ -8,7 +8,7 @@ $output .= "UID:uid".date('U')."@".$_SERVER['SERVER_NAME']."\n";
 $output .= "DTSTAMP;TZID=".date("e").":".date('Ymd')."T".date('Hi')."\n";
 $output .= "DTSTART;$eventStart\n";
 $output .= "DTEND;$eventEnd\n";
-$output .= "SUMMARY: ".trim($_GET['event'])."\n";
+$output .= "SUMMARY: ".urldecode(trim($_GET['event']))."\n";
 $output .= "LOCATION:".(isset($_GET['location']) ? stripslashes(trim($_GET['location'])) : '')."\n";
 $output .= "DESCRIPTION:".(isset($_GET['description']) ? trim($_GET['description']) : '')."\n";
 $output .= "PRIORITY:3\n";

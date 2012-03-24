@@ -19,7 +19,7 @@ if (!empty($tourns)){
         foreach ($tourns as $tourn){
             if ($tourn['tdate'] >= date('U')){
                 //if eID link to cal ICS, else static ICS with specific data
-                $icsHREF = ($tourn["eID"] !== false) ? "/admin/assets/rss/icalEvents.php?event=".$tourn["eID"]:"/src/LondonFencing/StaticPage/ics.php?event=".$tourn["title"]."&start=".$tourn['tdate']."&end=".$tourn['tend'];
+                $icsHREF = ($tourn["eID"] !== false) ? "/src/LondonFencing/calendar/assets/rss/icalEvents.php?event=".$tourn["eID"]:"/src/LondonFencing/StaticPage/ics.php?event=".urlencode($tourn["title"])."&start=".$tourn['tdate']."&end=".$tourn['tend'];
                 $description = ltrim($tourn['description'],"<br />");
                 $date = date('M d, Y g:i a',$tourn['tdate']);
                 $date .= (date('Y-m-d', $tourn['tdate']) == date('Y-m-d', $tourn['tend']))? ' to '.date('g:i a',$tourn['tend']): ' - '.date('M d, Y g:i a', $tourn['tend']);
