@@ -3,16 +3,21 @@ if (isset($_GET['event']) && isset($_GET['start']) && isset($_GET['end']) && is_
 
 $eventStart = "TZID=".date("e").":".date('Ymd',$_GET['start'])."T".date('Hi',$_GET['start']);
 $eventEnd = "TZID=".date("e").":".date('Ymd',$_GET['end'])."T".date('Hi',$_GET['end']);
+$output .= "BEGIN:VCALENDAR\nVERSION:2.0\n";
 $output .= "BEGIN:VEVENT\n";
 $output .= "UID:uid".date('U')."@".$_SERVER['SERVER_NAME']."\n";
 $output .= "DTSTAMP;TZID=".date("e").":".date('Ymd')."T".date('Hi')."\n";
 $output .= "DTSTART;$eventStart\n";
 $output .= "DTEND;$eventEnd\n";
 $output .= "SUMMARY: ".urldecode(trim($_GET['event']))."\n";
-$output .= "LOCATION:".(isset($_GET['location']) ? stripslashes(trim($_GET['location'])) : '')."\n";
-$output .= "DESCRIPTION:".(isset($_GET['description']) ? trim($_GET['description']) : '')."\n";
+if (isset($_GET['location'])){
+    $output .= "LOCATION:".urldecode(stripslashes(trim($_GET['location'])))."\n";
+}
+if (isset($_GET['description'])){
+    $output .= "DESCRIPTION:".urldecode(stripslashes(trim($_GET['description'])))."\n";
+}
 $output .= "PRIORITY:3\n";
-$output .= "\nEND:VEVENT\n";
+$output .= "END:VEVENT\n";
 $output .= "END:VCALENDAR";
 
 preg_match("/(www.)?(.*)(.com|.ca)/",$_SERVER['SERVER_NAME'],$matches);
