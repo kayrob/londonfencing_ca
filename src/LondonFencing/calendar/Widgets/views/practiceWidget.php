@@ -42,14 +42,16 @@ if ($this instanceof Page && isset($db)){
            echo '<h4'.$h4Class.'>' .$pData['type'].'</h4>';
            echo '<p>';
            echo '<a href="/src/LondonFencing/calendar/assets/rss/icalEvents.php?event='.$pData["eID"].'"><img src="/themes/LondonFencing/img/plusCalendar.png" alt="add to calendar" title="Add to Calendar" width="49px; height="49px" /></a>';
-           echo '<a href="'.$map.'" class="fbMap"><img src="/themes/LondonFencing/img/map.png" alt="view map" width="49p9x; height="px" title="View Map" /></a>';    
+           echo '<a href="#mapit_'.$pData["eID"].'" class="fbMap"><img src="/themes/LondonFencing/img/map.png" alt="view map" width="49p9x; height="px" title="View Map" /></a>';    
            echo'<span class="lowlight">Time:</span>&nbsp;&nbsp;'.date('g:i a',$pData['start']).' to  '.date('g:i a',$pData['end']).'<br />';
            echo '<span class="lowlight">Date:</span>&nbsp;&nbsp;&nbsp;'.date('D M j, Y',$pData['start']).'<br />';
            echo '<span class="lowlight">Where:</span>&nbsp;'.stripslashes($pData['location']).'</p>';
+           echo '<div style="display:none"><img src="'.$map.'" id="mapit_'.$pData["eID"].'" /></div>';
            $p++;
         }
+        global $quipp;
+        $quipp->js['footer'][] = "/src/LondonFencing/calendar/assets/js/practice.js";
     }
-    
 }
 ?>
 </section>
