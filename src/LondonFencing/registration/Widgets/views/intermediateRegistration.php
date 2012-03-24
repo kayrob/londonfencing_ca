@@ -40,6 +40,6 @@ if (isset($sessionNfo['isOpen'])){
         }
     }
     else{
-            print alert_box("The next beginner session starts on ".date('F j, Y',$sessionNfo['eventStart'])."<br />Registration will be open on  ".date('F j, Y',$sessionNfo['regOpen']), 3);
+            print alert_box("The next intermediate session starts on ".date('F j, Y',$sessionNfo['eventStart'])."<br />Registration will be open on  ".date('F j, Y',$sessionNfo['regOpen']), 3);
     }
 }

@@ -167,9 +167,9 @@ $("#pagePropertyLabel").change(function() { updatePageProperty("Name","label", $
 $("#pageSystemName").change(function() { updatePageProperty("URL/Address","systemName", $(this).val()); });
 $("#makeHomepageCheck").change(function() { updatePageProperty("Set As Homepage","isHomepage", $(this).val()); });
 //$("").change(function() { updatePageProperty("Set As Homepage","isHomepage", $(this).val()); });
-$("#makeThisLive").click(function() { approveDraftAndMakeLive() });
-$("#submitForReview").click(function() { submitForReview() });
-$("#startOverFromLive").click(function() { startOverFromLive() });
+$("#makeThisLive").click(function() { approveDraftAndMakeLive(); });
+$("#submitForReview").click(function() { submitForReview(); });
+$("#startOverFromLive").click(function() { startOverFromLive(); });
 
 
 
@@ -230,7 +230,7 @@ function startOverFromLive() {
 }
 
 function submitForReview() {
-	$.post("/admin/ajax/pageUtility.php", {
+    $.post("/admin/ajax/pageUtility.php", {
         "operation": "submit_for_review",
         "pageID": $("#currentlyEditingPageID").val(),
         "navID": $("#currentlyEditingNavID").val()
@@ -253,13 +253,13 @@ function submitForReview() {
 
 
 function approveDraftAndMakeLive() {
-	$.post("/admin/ajax/pageUtility.php", {
+    $.post("/admin/ajax/pageUtility.php", {
         "operation": "approve_draft_and_make_live",
         "pageID": $("#currentlyEditingPageID").val()
     }, function (r) {        
         
         if (!r.status) {
-            //console.log(r.message);
+            console.log(r.message);
             feedback(r.message, "Not Saved", 2);
         } else {
             //node
@@ -267,7 +267,7 @@ function approveDraftAndMakeLive() {
             $("#currentlyEditingPageID").val(r.draftPageID);
             reloadTemplate();
             feedback(r.message, "Pushed Live", 1);
-        	//console.log(r.message);
+            console.log(r.message);
         	
         }
     });

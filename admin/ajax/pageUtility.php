@@ -76,7 +76,7 @@ switch ($_REQUEST['operation']) {
 	case "approve_draft_and_make_live":
 		header("Content-Type: application/json; charset=utf-8");
 	
-		if ($newDraftPageID = $pageUtility->approve_draft_and_make_live($_REQUEST['pageID'])) {
+		if (true == ($newDraftPageID = $pageUtility->approve_draft_and_make_live($_REQUEST['pageID']))) {
 			$r = array("status" => 1, "message" => " This page is now live, <strong>you are now working on a new draft version.</strong>", "draftPageID" => $newDraftPageID);
 			print json_encode($r);
 		} else {

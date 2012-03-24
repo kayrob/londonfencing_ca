@@ -9,7 +9,7 @@
   <link rel="shortcut icon" type="image/png" href="/admin/favicon.png">
   <link rel="apple-touch-icon" href="/admin/apple-touch-icon.png">
   <link rel="stylesheet" href="/js/uniform_js/css/uniform.aristo2.css">
-  <link rel="stylesheet" href="/min/?f=css/style.css,css/admin.css,js/jquery-ui/jquery-ui-1.8.18.custom.css">
+  <link rel="stylesheet" href="/min/?f=css/style.css,css/admin.css,/js/jquery-ui/jquery-ui-1.8.18.custom.css">
  
    <?php 
 	//print out any scripts that are needed for the page calling in this header file, 

@@ -160,7 +160,8 @@
         
                     if ($dbField['dbColName'] == 'userIDPassword') {
                         if ($_REQUEST[$requestFieldID] != '') {
-                            $fieldColValue = "MD5('" . $db->escape($_REQUEST[$requestFieldID]) . "'),";
+                            //$fieldColValue = "MD5('" . $db->escape($_REQUEST[$requestFieldID]) . "'),";
+                            $fieldColValue = "'".Quipp()->secure()->hashPassword($db->escape($_REQUEST[$requestFieldID],true))."',";
                             $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
                         }
                     } else {
