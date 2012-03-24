@@ -27,13 +27,14 @@ if (!empty($tourns)){
         foreach ($tourns as $tourn){
             if ($tourn['tdate'] >= $filterStartDate && $tourn['tdate'] < $filterEndDate && $p >= $start){
                 //if eID link to cal ICS, else static ICS with specific data
-                $icsHREF = ($tourn["eID"] !== false) ? "/src/LondonFencing/calendar/assets/rss/icalEvents.php?event=".$tourn["eID"]:"/src/LondonFencing/StaticPage/ics.php?event=".urlencode($tourn["title"])."&start=".$tourn['tdate']."&end=".$tourn['tend'];
                 $description = ltrim($tourn['description'],"<br />");
                 $date = date('M d, Y g:i a',$tourn['tdate']);
                 $date .= (date('Y-m-d', $tourn['tdate']) == date('Y-m-d', $tourn['tend']))? ' to '.date('g:i a',$tourn['tend']): ' - '.date('M d, Y g:i a', $tourn['tend']);
                 $date = str_ireplace('12:00 am','',$date);
                 
                 $location = (preg_match('%[Ll]ocation\:(\s)?(.*)%', $description, $matches)) ? $matches[2] :'' ;
+                
+                $icsHREF = ($tourn["eID"] !== false) ? "/src/LondonFencing/calendar/assets/rss/icalEvents.php?event=".$tourn["eID"]:"/src/LondonFencing/StaticPage/ics.php?event=".urlencode($tourn["title"])."&start=".$tourn['tdate']."&end=".$tourn['tend'].'&location='.$location;
                 $h4Class = ($p > 0) ?' class="bordered"' : '';
                 echo '<h4'.$h4Class.'>'.preg_replace('%\(.*\)%' , '', $tourn["title"]);
                 echo '<a href="'.$icsHREF.'"><img src="/themes/LondonFencing/img/plusCalendar_32.png" alt="add to calendar" title="Add to Calendar" width="32px; height="32px" /></a>';

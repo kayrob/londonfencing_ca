@@ -1,19 +1,19 @@
 <?php
 if (isset($_GET['event']) && isset($_GET['start']) && isset($_GET['end']) && is_numeric($_GET['start']) && is_numeric($_GET['end'])){
 
-$eventStart = "TZID=".date("e").":".date('Ymd',$_GET['start'])."T".date('Hi',$_GET['start']);
-$eventEnd = "TZID=".date("e").":".date('Ymd',$_GET['end'])."T".date('Hi',$_GET['end']);
+$eventStart = "TZID=America/Toronto:".date('Ymd',$_GET['start'])."T".date('His',$_GET['start']);
+$eventEnd = "TZID=America/Toronto:".date('Ymd',$_GET['end'])."T".date('His',$_GET['end']);
 $output .= "BEGIN:VCALENDAR\nVERSION:2.0\n";
 $output .= "BEGIN:VEVENT\n";
 $output .= "UID:uid".date('U')."@".$_SERVER['SERVER_NAME']."\n";
-$output .= "DTSTAMP;TZID=".date("e").":".date('Ymd')."T".date('Hi')."\n";
+$output .= "DTSTAMP;TZID==America/Toronto:".date('Ymd')."T".date('His')."\n";
 $output .= "DTSTART;$eventStart\n";
 $output .= "DTEND;$eventEnd\n";
 $output .= "SUMMARY: ".urldecode(trim($_GET['event']))."\n";
-if (isset($_GET['location'])){
+if (isset($_GET['location']) && trim($_GET['location']) != ''){
     $output .= "LOCATION:".urldecode(stripslashes(trim($_GET['location'])))."\n";
 }
-if (isset($_GET['description'])){
+if (isset($_GET['description']) && trim($_GET['description']) != ''){
     $output .= "DESCRIPTION:".urldecode(stripslashes(trim($_GET['description'])))."\n";
 }
 $output .= "PRIORITY:3\n";
