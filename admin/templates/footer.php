@@ -15,7 +15,7 @@
 
 <script type="text/javascript" src="/js/script.js"></script>
 
-<script type="text/javascript" src="/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="/js/jquery_cookie.js"></script>
 <script type="text/javascript" src="/js/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="/js/jquery.jstree/jquery.jstree.js"></script>
 <script type="text/javascript" src="/js/jquery-ui/jquery-ui-1.8.16.custom.min.js"></script>

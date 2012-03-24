@@ -1,11 +1,3 @@
-<!doctype html>
-<html>
-    <head>
-        <title>Login</title>
-        <link rel="stylesheet" href="/themes/LondonFencing/default.css" media="screen" type="text/css"/>
-        <style type="text/css">.alertBoxFunctionBad{width: 280px;float: none;margin-top: 0px;</style>
-    </head>
-<body>
 <?php
 
     $qcore = Quipp();
@@ -24,7 +16,15 @@
     }
 
     $showQuippBrand = " class=\"quippBranding\"";
-    ?>
+?>
+<!doctype html>
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="/themes/LondonFencing/default.css" media="screen" type="text/css"/>
+        <style type="text/css">.alertBoxFunctionBad{width: 280px;float: none;margin-top: 0px;</style>
+    </head>
+<body>
         <div id="loginBox" <?php print $showQuippBrand; ?>>
             <div class="loginBoxHead"><img src="/themes/LondonFencing/img/logo.png" alt="Logo" /></div>
             <form action="<?php print $_SERVER['REQUEST_URI']; ?>?login<?php print $qs; ?>" id="loginBoxForm" method="post">

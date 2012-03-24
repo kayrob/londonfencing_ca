@@ -154,7 +154,7 @@ class PageUtility
 	{
 		global $quipp;
                 
-		error_log("Calling create_draft_copy_of_live_page(" . $systemName . ")  \n", 3, Quipp()->config('yell_log'));
+		//error_log("Calling create_draft_copy_of_live_page(" . $systemName . ")  \n", 3, Quipp()->config('yell_log'));
 		
 		//only create a draft if one doesn't already exist, if it does, just return that id instead
 		//drafts get killed by the approval process where they are promoted to live, this function will come in to create a new draft where necessary
@@ -176,7 +176,7 @@ class PageUtility
 		$pQry  = sprintf("SELECT * FROM sysPage WHERE sysOpen = '1' AND systemName ='%s' AND sysVersion = 'live';",
 			$this->_db->escape($systemName));
 		$pRes = $this->_db->query($pQry);
-		error_log($pQry . " \n", 3, Quipp()->config('yell_log'));
+		//error_log($pQry . " \n", 3, Quipp()->config('yell_log'));
 
 		if($this->_db->valid($pRes)) {  //grab the page data
 			$pageRS = $this->_db->fetch_assoc($pRes);
@@ -205,7 +205,7 @@ class PageUtility
 		$this->_db->query($dQry);
 		$draftID = $this->_db->insert_id();
 		
-		error_log($dQry . " \n", 3, Quipp()->config('yell_log'));
+		//error_log($dQry . " \n", 3, Quipp()->config('yell_log'));
 
 		//dupicate page content, from the old live version
 		//pull it first
@@ -215,7 +215,7 @@ class PageUtility
 				WHERE c.sysOpen = '1';",
 			$pageRS['itemID']);
 		$pcRes = $this->_db->query($pcQry);
-		error_log($pcQry . " \n", 3, Quipp()->config('yell_log'));
+		//error_log($pcQry . " \n", 3, Quipp()->config('yell_log'));
                                     
                                     $ptrcID =null;
                 
@@ -236,7 +236,7 @@ class PageUtility
 						$this->_db->last_insert);
 					$this->_db->query($pcQry);
 					$draftContentID = $this->_db->insert_id();
-					error_log($pcQry . " \n", 3, Quipp()->config('yell_log'));
+					//error_log($pcQry . " \n", 3, Quipp()->config('yell_log'));
 				} else { //otherwise, must be an app, just link it (we don't duplicate apps)
 					$draftContentID = $contentRS['itemID'];
                                                                                             //check if live has properties. if yes, need to create a new link
@@ -252,7 +252,7 @@ class PageUtility
 				$this->_db->query($qry);
                                                                         $newPTRCID = $this->_db->insert_id();
                                                                         $this->copy_live_content_properties($ptrcID, $newPTRCID);
-				error_log($qry . " \n", 3, Quipp()->config('yell_log'));
+				//error_log($qry . " \n", 3, Quipp()->config('yell_log'));
 			}
 		}
 		
@@ -340,7 +340,7 @@ class PageUtility
 	{
 		global $quipp, $approvalUtility, $notify;
 		
-		error_log("Calling approve_draft_and_make_live(" . $pageID . ")  \n", 3, Quipp()->config('yell_log'));
+		//error_log("Calling approve_draft_and_make_live(" . $pageID . ")  \n", 3, Quipp()->config('yell_log'));
 		
 		if(!isset($notify)) {
 			require_once $_SERVER['DOCUMENT_ROOT'] . "/inc/quipp/Notify.php";
@@ -383,13 +383,13 @@ class PageUtility
 		$qry = sprintf("UPDATE sysPage SET sysVersion = 'archive', checkOutID = NULL, approveNotifyID = NULL WHERE sysOpen = '1' AND sysVersion = 'live' AND systemName = '%s';",
 			$this->_db->escape($pageRS['systemName']));
 		$this->_db->query($qry);
-		error_log($qry . " \n", 3, Quipp()->config('yell_log'));
+		//error_log($qry . " \n", 3, Quipp()->config('yell_log'));
 
 		//then, set this draft page as the live page by setting sysVersion = 'live', this will not touch sysStatus, ensuring new files must be 'activated first'
 		$qry = sprintf("UPDATE sysPage SET sysVersion = 'live', checkOutID = NULL WHERE sysOpen = '1' AND itemID = '%d';",
 			(int) $pageRS['itemID']);
 		$this->_db->query($qry);
-		error_log($qry . " \n", 3, Quipp()->config('yell_log'));
+		//error_log($qry . " \n", 3, Quipp()->config('yell_log'));
 		
 		//then create a new draft version and supply it back to the user, if a draft already exists it will be returned, otherwise a new one will be created and it's ID will be returned
 		return $this->create_draft_copy_of_live_page($pageRS['systemName']);
