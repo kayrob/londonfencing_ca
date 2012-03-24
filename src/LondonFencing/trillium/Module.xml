@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <module name="trillium">
+        <ns>\Apps\Trillium</ns>
+        <label>Trillium: Callout</label>
+        <widget enabled="1" adminLink="0" name="Trillium: Callout">Widgets/views/trilliumCallout.php</widget>
+    </module>
+</modules>
