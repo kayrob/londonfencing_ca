@@ -5,9 +5,9 @@
     return $local + array(
         'db' => array(
             'host'  => 'localhost'
-          , 'user'  => 'hpwebuser'
+          , 'user'  => 'kare9015_webuser'
           , 'pass'  => '76hpwebuser76'
-          , 'name'  => 'londonfencing_ca'
+          , 'name'  => 'kare9015_londonfencing'
           , 'class' => 'DB_MySQLi'
         )
 

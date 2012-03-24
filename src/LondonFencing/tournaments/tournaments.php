@@ -19,8 +19,9 @@ class tournaments  extends Cal\calendar{
                         $description = (isset($dMatch[1]))?trim(str_replace($dMatch[1],"",(string)$tourn->description)):(string)$tourn->description;
                         $regLink =  (isset($dMatch[1]))? $dMatch[1] : false;
                         preg_match('%End:\s?([A-Za-z]+\s\d{1,2}\,\s?\d{4}(.*([apAP][mM]))?)%',$description,$mEnd);
-                        
-                        $tEnd = (isset($mEnd[1])) ? strtotime(str_replace('at','',$mEnd[1])) : (strtotime((string)$tourn->pubDate) + (60*60*5));
+
+                        $tEnd = (isset($mEnd[1])) ? strtotime(preg_replace('%(E[SD]T)(.*)%','',str_replace('at','',$mEnd[1]))) : (strtotime((string)$tourn->pubDate) + (60*60*5));
+
                         $tourney[] = array(
                             "tdate"             =>  strtotime((string)$tourn->pubDate),
                             "tend"              => $tEnd,

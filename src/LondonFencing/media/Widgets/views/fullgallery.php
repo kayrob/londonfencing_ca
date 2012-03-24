@@ -1,3 +1,4 @@
+<h2>Photo Gallery</h2>
 <?php
 require_once(dirname(dirname(__DIR__))."/media.php");
 use LondonFencing\media as MED;
@@ -9,17 +10,17 @@ if (isset($db) && isset($_GET['t'])){
 ?>
 	<div class="mediaPhotos">
 <?php
-                    foreach($photos[0] as $tagID => $album){
+                    foreach($photos as $tagID => $album){
                             $p = 0;
                             $tag = $db->return_specific_item($tagID,"tblMediaTags","tag");
                             $more = false;
                             echo '<h3>'.$tag.'</h3>';
                             echo '<ul class="mediaGallery">';
                             for ($a = 0; $a < count($album); $a++){
-                                    $photoID = preg_replace("%(\s)*(\')*%","_",$tag);
+                                    $photoID = preg_replace("%[\s\']%","_",$tag);
                                     $title = substr($album[$a]["title"],0,(strlen($album[$a]["title"])-4));
-                                    echo '<li><a href="/bin/media/large/'.$album[$a]["img"].'" rel="photo_'.$photoID.'" class="fbGallery" title="'.$title.'">
-                                    <img src="/bin/media/med/'.$album[$a]["img"].'" alt="" width="126px" height="126px" /></a></li>';
+                                    echo '<li><a href="/uploads/media/'.$album[$a]["img"].'" rel="photo_'.$photoID.'" class="fbGallery" title="'.$title.'">
+                                    <img src="/uploads/media/med/'.$album[$a]["img"].'" alt="" width="100px" height="100px" /></a></li>';
                                     if ($p == 23 && count($album) > 24){
                                             $more = true;
                                             echo '</ul>';

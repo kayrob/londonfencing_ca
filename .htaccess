@@ -301,6 +301,7 @@ RewriteRule ^print-reg/(.*)/(.*)$ /src/LondonFencing/registration/assets/printRe
   RewriteRule ^admin/assets/(.*)/ajax/(.*)$ /src/LondonFencing/$1/assets/ajax/$2 [NC,L]
     RewriteRule ^admin/apps/(.*)/([^\?]*)\?(.*)$ /src/LondonFencing/$1/Apps/views/$2.php?$3 [NC,L]
   RewriteRule ^admin/apps/(.*)/(.*)$ /src/LondonFencing/$1/Apps/views/$2.php [NC,L]
+RewriteRule ^photo-gallery/(\d+)$ /index.php?p=photo-gallery&t=$1 [NC,L]
   
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d

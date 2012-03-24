@@ -15,15 +15,22 @@ if ($this instanceof Page && isset($props[0])){
         $images = array_merge($media, $photos);
  ?>
 <ul class="banner">
-        <li><!--<img src="/themes/LondonFencing/img/leftArrow.png" class="prev" width="50px" height="50px"/>--></li>
+        <li>&nbsp;</li>
 <?php
         $a = 0;
         foreach($images as $tagID => $album){
-            if ($a < 6){
+            if ($a < 6 ){
                 echo '<li><a href="/uploads/media/'.$album['img'].'" class="fbGallery" rel="'.$props[0].'"><img class="homeThumb" src="/uploads/media/med/'.$album['img'].'" width="100px" height="100px" data-title="'.$album['title'].'" data-src="'.$album['img'].'"/></a></li>';
+                
             }
             else{
-                break; 
+                 echo '<li><a href="/gallery/'.$tagID.'">View All</a></li>';
+            }
+            if ($a == 5){
+                break;
+            }
+            else{
+                $a++;
             }
         }
 ?>

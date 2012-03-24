@@ -204,7 +204,7 @@ input:invalid, textarea:invalid { background-color: #f0dddd; }
 #loginBox img{
     margin: 10px 0 10px 120px;
 }
-#loginBox div:first-child{
+#loginBox .loginBoxHead{
     background-color: rgba(74,118,43, 0.83);
 }
 /* =============================================================================
@@ -571,9 +571,19 @@ a.readMore {font-style: italic}
 #practiceWidget h4, #tourneyWidget h4{ text-transform: uppercase; margin-bottom: 0}
 #practiceWidget p{margin-bottom: 20px}
 
-#practiceWidget {margin-bottom: 50px}
+#practiceWidget, #latestNews {margin-bottom: 50px}
 
 .moreTournaments{margin-top: 20px}
+
+
+/* Media Gallery
+------------------------------------------------------------------------------------ */
+.mediaGallery{list-style:none}
+.mediaGallery li {
+    list-style: none;
+    padding: 10px 12px 10px 12px;
+    display: inline;
+}
 
 /* Registration
 -------------------------------------------------------------------------------------*/

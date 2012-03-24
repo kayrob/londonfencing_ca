@@ -803,3 +803,9 @@ margin-right: 2px; }
     background-position: top left;
     background-repeat: no-repeat;
 }
+
+
+#adminTemplateSelectionTable{
+    border-collapse: separate;
+    border-spacing: 5px;
+}

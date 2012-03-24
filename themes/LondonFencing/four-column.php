@@ -11,7 +11,7 @@ require 'header.php';
 	<div id="colC"><?php print $page->get_col_content('fourColC'); ?></div>
 	<div id="colD"><?php print $page->get_col_content('fourColD'); ?></div>
 </section>
-<section id="colF"><?php print $page->get_col_content('fourColF'); ?></section>
+<!--<section id="colF"><?php /*print $page->get_col_content('fourColF');*/ ?></section>-->
 <?php
 
 require 'footer.php';
