@@ -125,7 +125,7 @@
                         $_REQUEST[$requestFieldID] = slug($_POST['RQvalALPHGroup_Name']);
                     }
                     if ($dbField['dbColName'] == 'userIDPassword') {
-                        $fieldColValues .= " MD5('" . $db->escape($_REQUEST[$requestFieldID], $dbField['stripTags']) . "'),";
+                        $fieldColValues .= "'".Quipp()->secure()->hashPassword($db->escape($_REQUEST[$requestFieldID],true))."',";
                     } else {
                         $fieldColValues .= "'" . $db->escape($_REQUEST[$requestFieldID], $dbField['stripTags']) . "',";
                     }
