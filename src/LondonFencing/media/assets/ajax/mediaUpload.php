@@ -86,5 +86,5 @@ ob_end_clean();
 
 
 
-$db->close();
+//$db->close();
 ?>

@@ -87,7 +87,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 }
 
 //brendan@resolutionim.com (Jun 2011)
-$db->close();
+//$db->close();
 }
 else{
     header('location:http://'.$_SERVER['SERVER_NAME']);

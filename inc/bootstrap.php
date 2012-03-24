@@ -141,7 +141,7 @@ function Quipp(array $config = array()) {
     $q->secure();
 
     register_shutdown_function(function($core) {
-        $core->db()->close(); // Is this necessary?
+        //$core->db()->close(); // Is this necessary?
 
         if ($core->debug() instanceof PHP_Debug) {
             $headers = headers_list();
