@@ -21,7 +21,6 @@ if ($hasPermission){
     if (isset($_GET['filter']) && (stristr($_GET['filter'],'active') !== false || $_GET['filter'] == 'all')){
         $filter = $db->escape($_GET['filter'],true);
     }
-    echo  $filter;
     
     $mem= new MEMB\members($db);
     $advanced = $mem->getMembersEmailList($filter);
