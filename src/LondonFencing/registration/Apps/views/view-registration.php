@@ -279,7 +279,6 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
 
 
         case "update":
-            print_r($_POST);
 
             //this default update query will work for most single table interactions, you may need to cusomize your own
             $fieldColNames  = '';
@@ -336,9 +335,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                 (string) $primaryTableName, 
                 (string) $fieldColNames,
                 (int)$_POST['id']);
-            
-            echo $qry;
-            
+                  
             $res = $db->query($qry);
 
             if ($db->affected_rows($res) == 1 || $db->error() === false){

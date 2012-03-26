@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <module name="members-email">
+        <ns>\Apps\Members\Email</ns>
+        <label>Members: Email List</label>
+       <admin enabled="1">members/Apps/views/member-email.php</admin>
+        <icon>members/assets/img/dashboard_contact.png</icon>
+        <help>Use this tool send email to all selected club members.</help>
+    </module>
+</modules>

@@ -695,6 +695,7 @@ body.gecko .adminTableList { font-family: droidSans, Sans-Serif; }
 #tableEditorForm table tr td table tr td { padding:5px; }
 
 #tableEditorForm .defaultSkin table { background-color:#F0F0EE; }
+#adminTableList_email th {text-align: left}
  
 /* FORMS */
  

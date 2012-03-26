@@ -2,7 +2,7 @@
 <modules>
     <module name="notificationManager">
         <ns>\Apps\Notification\Manager</ns>
-        <label>Notification Manager</label>
+        <label>Web Form Manager</label>
         <admin enabled="1">notificationManager/Apps/views/notify.php</admin>
         <icon>notificationManager/assets/img/dashboard_icon.png</icon>
         <help>Use this tool to assign an email address to a specific webform. This address will be used as the both the sender, and reply-to.</help>

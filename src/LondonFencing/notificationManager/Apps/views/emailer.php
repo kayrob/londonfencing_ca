@@ -4,19 +4,30 @@ use LondonFencing\notificationManager as NOTE;
 
 $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
 require $root . '/inc/init.php';
-if (isset($_POST['eList']) && is_array($_POST['eList'])){
+if ((isset($_POST['eList']) && is_array($_POST['eList'])) || (isset($_POST['aList']) && is_array($_POST['aList']))){
     
     $meta['title'] = 'Emailer';
     $meta['title_append'] = ' &bull; Quipp CMS';
     
     global $message;
+    $addresses = array();
+    $a_addresses = array();
     
-    foreach($_POST['eList'] as $emailID){
-        if (is_numeric($emailID) && (int)$emailID > 0){
-            $addresses[] = (int)$db->escape($emailID,true);
+    if (isset($_POST['eList'])){
+        foreach($_POST['eList'] as $emailID){
+            if (is_numeric($emailID) && (int)$emailID > 0){
+                $addresses[] = (int)$db->escape($emailID,true);
+            }
         }
     }
-    if (isset($addresses)){
+    if (isset($_POST['aList'])){
+        foreach($_POST['aList'] as $emailID){
+            if (is_numeric($emailID) && (int)$emailID > 0){
+                $a_addresses[] = (int)$db->escape($emailID,true);
+            }
+        }
+    }
+    if (!empty($addresses) || !empty($a_addresses)){
         
         $placeHolders = array("%NAME%" => "Name of Email Recipient");
 
@@ -92,13 +103,16 @@ if (isset($_POST['eList']) && is_array($_POST['eList'])){
                     case 'class-reg':
                         $sent = $ntfy->emailClassParticipants($_POST['RQvalALPHSubject'], $_POST['RQvalALPHMessage'], $addresses, $_POST['RQvalALPHSend_Type'], $_POST['RQvalALPHFormat']);
                         break;
+                    case 'all-reg':
+                        $sent = $ntfy->emailAllMembers($_POST['RQvalALPHSubject'], $_POST['RQvalALPHMessage'], $addresses, $a_addresses, $_POST['RQvalALPHSend_Type'], $_POST['RQvalALPHFormat']);
+                    break;
             }
 
         }
         include $root. "/admin/templates/header.php";
         
         ?>
-        <h1>Emailer (* <?php echo count($addresses);?> Recipients)</h1>
+        <h1>Emailer (* <?php echo (count($addresses) + count($a_addresses));?> Recipients)</h1>
         <p>This allows the ability to send pre-selected users an email from London Fencing Club.<br />Email will be sent from <strong>info@londonfencing.ca</strong></p>
         <div class="boxStyle">
 	<div class="boxStyleContent">
@@ -184,10 +198,17 @@ if (isset($_POST['eList']) && is_array($_POST['eList'])){
             $formBuffer .= "<tr><td colspan='2'>
                 <input type=\"hidden\" name=\"nonce\" value=\"".Quipp()->config('security.nonce')."\" />
                         <input type=\"hidden\" name=\"etype\" id=\"etype\" value=\"".$_POST['etype']."\" />";
-            foreach ($addresses as $eAddr){
-                $formBuffer .= "<input type=\"hidden\" name=\"eList[]\" id=\"eList_".$eAddr."\" value=\"".$eAddr."\" />";
+            if (!empty($addresses)){
+                foreach ($addresses as $eAddr){
+                    $formBuffer .= "<input type=\"hidden\" name=\"eList[]\" id=\"eList_".$eAddr."\" value=\"".$eAddr."\" />";
+                }
             }
-
+            if (!empty($a_addresses)){
+                foreach ($a_addresses as $aAddr){
+                    $formBuffer .= "<input type=\"hidden\" name=\"aList[]\" id=\"aList_".$aAddr."\" value=\"".$aAddr."\" />";
+                }
+            }
+            
             $formBuffer .= "</td></tr>";
             $formBuffer .= "</table>";
             $formBuffer .= "<div class=\"clearfix\" style=\"margin-top: 10px; height:10px; border-top: 1px dotted #B1B1B1;\">&nbsp;</div>";
