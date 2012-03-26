@@ -13,7 +13,7 @@ if ($auth->has_permission("canEditReg")){
 if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
     $listqry = sprintf("SELECT cr.*, c.`level`, c.`sessionName` 
                 FROM `tblClassesRegistration` AS cr INNER JOIN `tblClasses` AS c ON cr.`sessionID` = c.`itemID` 
-                WHERE cr.`sessionID` = %d AND cr.`isRegistered` = 1 
+                WHERE cr.`sessionID` = %d AND cr.`isRegistered` = 1 AND cr.`sysStatus` = 'active'
                 ORDER BY cr.`lastName` ASC, cr.`firstName` ASC", 
           (int)$db->escape($_GET['sid'],true)
      );
@@ -44,16 +44,17 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
         <h1><?php echo $rs[0]["sessionName"]." - (".ucwords($rs[0]["level"]).")";?></h1>
         <table>
             <thead>
-                <tr><th colspan="3">&nbsp;</th><th colspan="4" class="thEquip">Equipment</th></tr>
-                <tr><th>Last Name</th><th>First Name</th><th>Payment Status</th><th>Face Mask</th><th>Glove</th><th>Jacket</th><th>Plastron</th></tr>
+                <tr><th colspan="4">&nbsp;</th><th colspan="4" class="thEquip">Equipment</th></tr>
+                <tr><th>Last Name</th><th>First Name</th><th>Payment Status</th><th>Form Submitted</th><th>Face Mask</th><th>Glove</th><th>Jacket</th><th>Plastron</th></tr>
             </thead>
             <tbody>
                 <?php
                 foreach ($rs as $student){
-                    $paid = (trim($student["paymentDate"]) != "" && trim($student["paymentDate"]) != 0)?"Paid In Full":"Due";
+                    $paid = (trim($student["paymentDate"]) != "" && trim($student["paymentDate"]) != 0)?"Paid In Full":"";
+                    $formSub = (trim($student["formDate"]) != "" && trim($student["formDate"]) != 0)?date('Y-m-d',trim($student["formDate"])):"";
                     echo '<tr>';
                     echo '<td>'.trim($student["lastName"]).'</td><td>'.trim($student["firstName"]).'</td><td>'.$paid.'</td>';
-                    echo'<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>';
+                    echo '<td>'.$formSub.'</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>';
                     echo '</tr>';
                 }
                 ?>

@@ -23,6 +23,9 @@ jQuery(document).ready(function($){
         $('#OPvalDATEPayment_Date').datepicker({
                 dateFormat : 'yy-mm-dd'
         });
+        $('#OPvalDATEForm_Submitted').datepicker({
+                dateFormat : 'yy-mm-dd'
+        });
         $('#RQvalDATEBirth_Date').datepicker({
                 dateFormat : 'yy-mm-dd',
                 changeMonth: true,

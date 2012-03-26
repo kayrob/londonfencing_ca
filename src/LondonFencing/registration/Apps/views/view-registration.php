@@ -195,6 +195,16 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
         'dbValue'   => false,
         'stripTags'  => true
     );
+    $fields[] = array(
+        'label'   => "Form Submitted",
+        'dbColName'  => "formDate",
+        'tooltip'   => "",
+        'writeOnce'  => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode'   => "OPvalDATE",
+        'dbValue'   => false,
+        'stripTags'  => true
+    );
     if (!isset($_POST['dbaction'])) {
         $_POST['dbaction'] = null;
 
@@ -234,7 +244,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                             $fieldColValues .= strtotime($_POST[$requestFieldID]).",";
                             $fieldColNames .= "" . $dbField['dbColName'] . ", ";
                         }
-                        else if ($dbField['dbColName'] == 'paymentDate') {
+                        else if ($dbField['dbColName'] == 'paymentDate' || $dbField['dbColName'] == 'formDate') {
                             if (trim($_POST[$requestFieldID]) != ""){
                                 $fieldColValues .= strtotime(trim($_POST[$requestFieldID])).",";
                                 $fieldColNames .= "" . $dbField['dbColName'] . ",";
@@ -304,6 +314,10 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                         $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
                     }
                     else if ($dbField['dbColName'] == 'paymentDate' && trim($_POST[$requestFieldID]) != "") {
+                        $fieldColValue = strtotime(trim($_POST[$requestFieldID])).",";
+                        $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
+                    }
+                    else if ($dbField['dbColName'] == 'formDate' && trim($_POST[$requestFieldID]) != "") {
                         $fieldColValue = strtotime(trim($_POST[$requestFieldID])).",";
                         $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
                     }
@@ -483,7 +497,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                     if (isset($_POST[$newFieldID]) && $message != '') {
                         $field['dbValue'] = $_POST[$newFieldID];
                     }
-                    $field['dbValue'] = ($field['dbValue'] != "")? date('Y-m-d',$field['dbValue']):'';
+                    $field['dbValue'] = ($field['dbValue'] != "" && $field['dbValue'] != 0)? date('Y-m-d',$field['dbValue']):'';
                     $field['widgetHTML'] = str_replace("FIELD_VALUE", $field['dbValue'], $field['widgetHTML']);
                 }
                 else {
@@ -527,7 +541,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
        
         //list table query:
         
-        $listqry = sprintf("SELECT cr.`itemID`, concat(cr.`lastName`, ', ' ,cr.`firstName`) AS name, cr.`email`, 
+        $listqry = sprintf("SELECT cr.`itemID`, concat(cr.`lastName`, ', ' ,cr.`firstName`) AS name, cr.`email`, cr.`formDate`, 
                 UNIX_TIMESTAMP(cr.`sysDateCreated`) as dateReg, cr.`isRegistered`, cr.`waitlist`, cr.`paymentDate`, cr.`registrationKey` 
                 FROM $primaryTableName AS cr 
                 WHERE cr.`sessionID` = %d 
@@ -545,6 +559,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
             $titles[2] = "Email Address";
             $titles[3] = "Date Registered";
             $titles[4] = "Payment Date";
+            $titles[5] = "Form Submitted";
             
             while ($rs = $db->fetch_assoc($resqry)){
                  if ((int)$rs["isRegistered"] == 1){
@@ -557,19 +572,20 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
             }
             echo '<form name="frmSendEmail" action="/admin/apps/notificationManager/emailer" method="post" enctype="multipart/form-data">';
             echo '<table id="adminTableList_reg" class="adminTableList tablesorter" width="100%" cellpadding="5" cellspacing="0" border="1">';
-            echo '<thead><tr><th>'.$titles[0].'</th><th>'.$titles[1].'</th><th>'.$titles[2].'</th><th>'.$titles[3].'</th><th>'.$titles[4].'</th><th>Status</th>
+            echo '<thead><tr><th>'.$titles[0].'</th><th>'.$titles[1].'</th><th>'.$titles[2].'</th><th>'.$titles[3].'</th><th>'.$titles[4].'</th><th>'.$titles[5].'</th><th>Status</th>
                 <th>Email<input type="checkbox" id="emailAll" name="emailAll" value="all" /></th><th>&nbsp;</th><th>&nbsp;</th></tr></thead>';
             echo '<tbody>';
             foreach($registered as $dt){
                 $paymentDate = (trim($dt["paymentDate"]) != '' && $dt["paymentDate"] > 0)?date('Y-m-d',$dt["paymentDate"]):"Due";
-                echo '<tr><td>'.$dt['name'].'</td><td>'.$dt["registrationKey"].'</td><td>'.$dt["email"].'</td><td>'.date('Y-m-d',$dt["dateReg"]).'</td><td>'.$paymentDate.'</td><td>Registered</td>';
+                $formDate = (trim($dt["formDate"]) != '' && $dt["formDate"] > 0)?date('Y-m-d',$dt["formDate"]):"Due";
+                echo '<tr><td>'.$dt['name'].'</td><td>'.$dt["registrationKey"].'</td><td>'.$dt["email"].'</td><td>'.date('Y-m-d',$dt["dateReg"]).'</td><td>'.$paymentDate.'</td><td>'.$formDate.'</td><td>Registered</td>';
                 echo '<td style="width:70px;"><input type="checkbox" name="eList[]" id="eList_'.trim($dt['itemID']).'" value="'.trim($dt['itemID']).'" /></td>';
                 echo '<td style="width:40px;"><input class="btnStyle red noPad" id="btnDelete_'.$dt['itemID'].'" type="button" onclick="javascript:confirmDelete(\'?sid='.$_GET['sid'].'&action=delete&amp;id='.$dt['itemID'].'\');" value="Delete"></td>';
                 echo '<td style="width:40px;"><input class="btnStyle blue noPad" id="btnEdit_'.$dt['itemID'].'" type="button" onclick="javascript:window.location=\'?sid='.$_GET['sid'].'&view=edit&amp;id='.$dt['itemID'].'\';" value="Edit"></td></tr>';
             }
             if (isset($waitlist)){
                 ksort($waitlist);
-                echo '</tbody><tbody><tr><td colspan="9">&nbsp;</td></tr>';
+                echo '</tbody><tbody><tr><td colspan="10">&nbsp;</td></tr>';
                 $w = 0;
                 foreach ($waitlist as $dt){
                     echo '<tr><td>'.$dt['name'].'</td><td>'.$dt["registrationKey"].'</td><td>'.$dt["email"].'</td><td>'.date('Y-m-d',$dt["dateReg"]).'</td><td>N/A</td><td>Waitlist ('.(++$w).')</td>';
@@ -580,7 +596,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
             }
             echo '</tbody>
             <tbody>
-            <tr><td colspan="9">
+            <tr><td colspan="10">
             <input  style="float:right" class="btnStyle green noPad" id="btnPrint" type="button" onclick="javascript:window.open(\'/admin/apps/registration/print-reg-list?sid='.$_GET['sid'].'\');" value="Print">
             <input  style="float:right" class="btnStyle blue noPad" id="btnSelect" type="submit" value="Send Email">
             <input type="hidden" name="nonce" value="'.Quipp()->config('security.nonce').'" />
