@@ -170,7 +170,7 @@ $modifyPages = $auth->has_permission('modifypages');
 					
 					}
 				}
-                                                                        if ($auth->has_permission('root')){
+                                                                        if ($user->id == 1){
                                                                             
                                                                             echo '<li><a href="/admin/super-powers/widgets.php"'.(strstr($_SERVER['PHP_SELF'], "super-powers") !== false ? ' class="selected" ':'').'>Widgets</a></li>';
                                                                             
