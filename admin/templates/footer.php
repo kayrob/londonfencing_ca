@@ -527,22 +527,8 @@ $(function () {
 
 <?php 
 	//end-user 'pretty' error reporting for in-app errors that we want the user to see (ask Brendan about this if you are confused), do not remove!
-	if (isset($feedback) && is_object($feedback)) {
-	   $feedback->display_messages(true);  
-    }
-    if (isset($easterEgg)){
-        if ($user->id == 100 || $user->username == 'bkelly'){
-?>
-        <script type="text/javascript">
-        jQuery(document).ready(function($){
-             $.fancybox({
-                'content': '<img src="/themes/LondonFencing/img/Trollface.png" width="365px" height="290px"/>'
-            });
-        
-            });
-        </script>
-<?php
-        }
+    if (isset($feedback) && is_object($feedback)) {
+        $feedback->display_messages(true);  
     }
 ?>
 </body>

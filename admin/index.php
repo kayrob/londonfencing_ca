@@ -89,6 +89,5 @@ if (isset($applications)){
 ?>
 </div>
 <?php
-$easterEgg = true;
 require 'templates/footer.php';
 ?>
