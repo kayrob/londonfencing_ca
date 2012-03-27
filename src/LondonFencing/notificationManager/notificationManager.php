@@ -57,7 +57,7 @@ class notificationManager{
      * @param string $emailID
      * @return object
      */
-    protected function getEmailClassAddresses(string $emailID){
+    protected function getEmailClassAddresses($emailID){
         $qry = sprintf("SELECT cr.`firstName`, cr.`lastName`, cr.`email`,cr.`parentName`, cr.`registrationKey`, c.`sessionName` 
                 FROM `tblClassesRegistration` AS cr INNER JOIN `tblClasses` AS c ON cr.`sessionID` = c.`itemID` WHERE cr.`itemID` IN (%s)",
                     $this->_db->escape($emailID,true)
@@ -70,7 +70,7 @@ class notificationManager{
      * @param string $emailID
      * @return object
      */
-    protected function getEmailMemberAddresses(string $emailList){
+    protected function getEmailMemberAddresses($emailList){
         $qry = sprintf("SELECT m.`firstName`, m.`lastName`, m.`email`,m.`parentName`, m.`cffNumber` 
                 FROM `tblMembers` AS m WHERE m.`itemID` IN (%s)",
                     $this->_db->escape($emailList,true)
