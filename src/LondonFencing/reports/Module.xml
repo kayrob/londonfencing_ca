@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+    <module name="reports">
+        <ns>\Apps\Reports</ns>
+        <label>Reporting Tools</label>
+        <admin enabled="1">reports/Apps/views/index.php</admin>
+        <icon>reports/assets/img/dashboard_icon.png</icon>
+        <help>Use this tool to download or print specialized reports.</help>
+    </module>
+</modules>

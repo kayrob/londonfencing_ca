@@ -86,7 +86,7 @@ class registration{
     }
     protected function saveWaitlist($fields, $values){
 
-        $qry = sprintf("INSERT INTO `tblClassesRegistration` (%s, `sysDateCreated`, `sysStatus`, `sysOpen`,`membershipType`) VALUES (%s, NOW(), 'active','1','basic')",
+        $qry = sprintf("INSERT INTO `tblClassesRegistration` (%s, `sysDateCreated`, `sysStatus`, `sysOpen`,`membershipType`) VALUES (%s, NOW(), 'active','1','foundation')",
                 implode(",",$fields),
                 implode(",",$values)
         );
@@ -119,7 +119,7 @@ class registration{
                 $values[] = '1';
                 $fields[] = "waitlist";
                 $values[] = '0';
-                $qry = sprintf("INSERT INTO `tblClassesRegistration` (%s, `sysDateCreated`, `sysStatus`, `sysOpen`,`membershipType`) VALUES (%s, NOW(), 'active','1','basic')",
+                $qry = sprintf("INSERT INTO `tblClassesRegistration` (%s, `sysDateCreated`, `sysStatus`, `sysOpen`,`membershipType`) VALUES (%s, NOW(), 'active','1','foundation')",
                     implode(",",$fields),
                     implode(",",$values)
                 );

@@ -269,7 +269,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
             $fieldColValues = rtrim($fieldColValues,",");
             
             $regKey = strtoupper(substr(str_replace("'","",$_POST["RQvalALPHLast_Name"]),0,2))."-".str_pad($db->escape($_GET['sid'],true),4,'0',STR_PAD_LEFT)."-".$newCount;
-             $qry = sprintf("INSERT INTO %s (%s, sysDateCreated, sysOpen, sysStatus, membershipType, registrationKey, sessionID) VALUES (%s, NOW(),  '1', 'active','basic','%s', '%d')",
+             $qry = sprintf("INSERT INTO %s (%s, sysDateCreated, sysOpen, sysStatus, membershipType, registrationKey, sessionID) VALUES (%s, NOW(),  '1', 'active','foundation','%s', '%d')",
                     (string) $primaryTableName,
                     (string) $fieldColNames,
                     (string) $fieldColValues,
