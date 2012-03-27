@@ -26,7 +26,7 @@ class reports{
             $members = array();
             if ((int)$rangeStart > 0 && (int)$rangeEnd > 0){
                     //real query
-                /*$qry = sprintf("SELECT DISTINCT cr.`email`, cr.`lastName`, cr.`firstName`, cr.`gender`, cr.`birthDate`, cr.`address`, cr.`address2`,
+                $qry = sprintf("SELECT DISTINCT cr.`email`, cr.`lastName`, cr.`firstName`, cr.`gender`, cr.`birthDate`, cr.`address`, cr.`address2`,
                     cr.`city`, cr.`province`, cr.`postalCode`, cr.`phoneNumber` 
                     FROM `tblClassesRegistration` AS cr 
                     INNER JOIN `tblClasses` as c ON cr.`sessionID` = c.`itemID`
@@ -35,18 +35,8 @@ class reports{
                     AND UNIX_TIMESTAMP(ce.`eventStartDate`) >= %d AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) <= %d ORDER BY c.`level` DESC", 
                         $rangeStart, 
                         $rangeEnd
-                );*/
-                //test query - doesn't have registration close date in it
-                $qry = sprintf("SELECT DISTINCT cr.`email`, cr.`lastName`, cr.`firstName`, cr.`gender`, cr.`birthDate`, cr.`address`, cr.`address2`,
-                    cr.`city`, cr.`province`, cr.`postalCode`, cr.`phoneNumber` 
-                    FROM `tblClassesRegistration` AS cr 
-                    INNER JOIN `tblClasses` as c ON cr.`sessionID` = c.`itemID`
-                    INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
-                    WHERE cr.`isRegistered` = '1' AND c.`sysStatus` = 'active' AND c.`sysOpen` = '1'  AND cr.`sysOpen` = '1' 
-                    AND UNIX_TIMESTAMP(ce.`eventStartDate`) >= %d AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) <= %d ORDER BY c.`level` DESC", 
-                        $rangeStart, 
-                        $rangeEnd
                 );
+
                 $res = $this->_db->query($qry);
                 if (is_object($res) && $res->num_rows > 0){
                     while ($row = $this->_db->fetch_assoc($res)){
