@@ -23,9 +23,9 @@ header("Expires: 0");
 echo $csv;
         }
         else{
-            header('location:/admin/apps/reports/index?rpt=foundation&e=1');
+            header('location:/admin/apps/reports/index?rpt=Foundation&e=0');
         }
 }
 else{
-    header('location:/admin/apps/reports/index?rpt=foundation&e=2');
+    header('location:/admin/apps/reports/index?rpt=Foundation&e=1');
 }

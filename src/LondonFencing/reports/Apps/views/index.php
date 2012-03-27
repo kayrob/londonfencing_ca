@@ -18,7 +18,6 @@ if ($hasPermission) {
 include $root. "/admin/templates/header.php";   
 
 $foundationLog = $rpt->getLastReportLog('foundation');
-
 ?>
 <h1>Reporting Tools</h1>
 <p>Allows the creation/download of reports using simple input options</p>

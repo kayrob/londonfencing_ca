@@ -42,8 +42,8 @@ class reports{
                     while ($row = $this->_db->fetch_assoc($res)){
                         $members[] = $row;
                     }
+                    $this->updateReportLog('foundation','[Date Range: '.date("Y-m-d",$rangeStart).' to '.date("Y-m-d",$rangeEnd).']');
                 }
-                $this->updateReportLog('foundation','[Date Range: '.date("Y-m-d",$rangeStart).' to '.date("Y-m-d",$rangeEnd).']');
             }
             return $members;
         }
