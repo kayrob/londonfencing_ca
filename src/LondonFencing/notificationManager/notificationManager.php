@@ -8,7 +8,7 @@ class notificationManager{
     protected $_db;
     public $mailer;
     public $errs = array();
-    protected $_from = 'info@londonfencing.com';
+    protected $_from = 'info@londonfencing.ca';
     
     /** Create class properties for db connection and the php mailer
      * @access public
