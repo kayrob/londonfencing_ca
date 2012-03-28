@@ -44,11 +44,11 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
         }
         $emailBody = str_replace('%SERVERNAME%',$_SERVER['SERVER_NAME'],str_replace('%BODY%',$body,str_replace('%TITLE%',$title,$emailTemplate)));
         $subject = "London Fencing ".ucwords($sessionSaved['level'])." Session Registration";
-        $from = "no-reply@londonfencing.ca";
+        $from = "info@londonfencing.ca";
         $admEmail = $db->return_specific_item(false, 'sysStorageTable', 'value', '--', "application='".$sessionSaved['level']."-registration'");
         if ($admEmail == "--"){
-            //$admEmail = 'info@londonfencing.ca';
-            $admEmail = 'robertsonkaren@rogers.com';
+            $admEmail = 'info@londonfencing.ca';
+            //$admEmail = 'robertsonkaren@rogers.com';
         }
         $mail = new PHPMailer\PHPMailer();
         $mail->IsHTML(true);
