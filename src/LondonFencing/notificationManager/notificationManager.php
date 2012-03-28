@@ -159,6 +159,7 @@ class notificationManager{
             $this->mailer->Body .= '<p>---START---</p>'.$send.'</p><p>---END---</p><p>&nbsp;<p>Note that if you selected the individual option that you 
                 are viewing the last email sent. Content was personalized for each individual</p>';
             $this->mailer->Send();
+            return true;
         }
         return false;
     }
