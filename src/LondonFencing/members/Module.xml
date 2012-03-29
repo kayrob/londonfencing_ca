@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modules>
+     <module name="members">
+        <ns>\Apps\Members</ns>
+        <label>Members: Registration List</label>
+       <admin enabled="1">members/Apps/views/index.php</admin>
+        <icon>members/assets/img/dashboard_users.png</icon>
+        <help>Use this tool update member information (Regular/Advanced Members only).</help>
+    </module>
     <module name="members-email">
         <ns>\Apps\Members\Email</ns>
         <label>Members: Email List</label>
        <admin enabled="1">members/Apps/views/member-email.php</admin>
         <icon>members/assets/img/dashboard_contact.png</icon>
-        <help>Use this tool send email to all selected club members.</help>
+        <help>Use this tool send email to all selected club members (including Beginner and Intermediate Fencers).</help>
     </module>
 </modules>

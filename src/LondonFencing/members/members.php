@@ -18,22 +18,24 @@ class members {
 
     public function getMembersEmailList($active) {
         $members = array();
-        $sysActive = " WHERE `sysStatus` ='active'";
+        $sysActive = " WHERE `sysOpen` ='1'";
         switch ($active) {
             case 'all':
-                $sysActive = "";
+                $sysActive .= "";
                 break;
             case 'inactive':
-                $sysActive = " WHERE `sysStatus` ='inactive'";
+                $sysActive .= " AND `sysStatus` ='inactive'";
                 break;
             default:
+                $sysActive .= " AND `sysStatus` ='active'";
                 break;
         }
-        $qry = sprintf("SELECT `itemID`, `email`, concat(`lastName`,', ',`firstName`) as name, `parentName`, `sysStatus` 
-            FROM `tblMembers` %s 
+        $qry = sprintf("SELECT `itemID`, `email`, concat(`lastName`,', ',`firstName`) as name, `parentName`, `sysStatus` , `membershipType`
+            FROM `tblMembers` %s
             ORDER BY `lastName`, `firstName`", 
                 $sysActive
-       );
+       ); 
+        
         $res = $this->_db->query($qry);
         if (is_object($res) && $res->num_rows > 0) {
             while ($row = $this->_db->fetch_assoc($res)) {
@@ -43,6 +45,7 @@ class members {
                     "parent"            => trim($row['parentName']),
                     "status"             => trim($row['sysStatus']),
                     "level"                => "advanced",
+                    "membership"    => trim($row["membershipType"]),
                     "inputName"     => 'aList[]'
                 );
             }
@@ -84,6 +87,7 @@ class members {
                         "parent"                => trim($row['parentName']),
                         "status"                 => trim($row['sysStatus']),
                         "level"                   => trim($row['level']),
+                        "membership"    => 'foundation',
                         "inputName"         => 'eList[]'
                     );
                 }

@@ -8,5 +8,13 @@ jQuery(document).ready(function($){
     $(':input[name=goFilter]').click(function(){
         $(this).parent().submit();
     });
+    
+    $('#OPvalDATEBirth_Date').datepicker({
+        dateFormat : 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-80:+0"
+        
+    });
 });
 
