@@ -160,9 +160,10 @@ $gender = array("F" => "Female", "M" => "Male");
    $fields[] = array(
         'label'   => "Membership Type",
         'dbColName'  => "membershipType",
+        'tooltip'   => "Optional",
         'writeOnce'  => false,
         'widgetHTML' => "",
-        'valCode'   => "RQvalALPH",
+        'valCode'   => "OPvalALPH",
         'dbValue'   => false,
         'stripTags'  => true
     );
