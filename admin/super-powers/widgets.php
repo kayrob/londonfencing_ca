@@ -280,7 +280,15 @@ case "edit": //show an editor for a row (existing or new)
                 } else {
                     $field['widgetHTML'] = str_replace("FIELD_VALUE", '', $field['widgetHTML']);
                 }
-            } else {
+            } 
+            else if ($field['dbColName'] == 'isProtected') {
+                if ($field['dbValue'] == '1') {
+                    $field['widgetHTML'] = str_replace("FIELD_VALUE", 'checked="checked"', $field['widgetHTML']);
+                } else {
+                    $field['widgetHTML'] = str_replace("FIELD_VALUE", '', $field['widgetHTML']);
+                }
+            }
+            else {
                 if (isset($_POST[$newFieldID]) && (isset($message) && $message != '' || !isset($message))) {
                     $field['dbValue'] = $_POST[$newFieldID];
                 }
