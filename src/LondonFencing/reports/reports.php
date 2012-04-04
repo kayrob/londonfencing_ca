@@ -22,22 +22,30 @@ class reports{
             $this->_db->query($qry);
         }
         
-        public function getFoundationsClasses($rangeStart, $rangeEnd){
+        public function getFoundationsMembers($rangeStart, $rangeEnd){
             $members = array();
             if ((int)$rangeStart > 0 && (int)$rangeEnd > 0){
                     //real query
-                $qry = sprintf("SELECT DISTINCT cr.`email`, cr.`lastName`, cr.`firstName`, cr.`gender`, cr.`birthDate`, cr.`address`, cr.`address2`,
+                $qryClasses = sprintf("(SELECT DISTINCT cr.`email`, cr.`lastName`, cr.`firstName`, cr.`gender`, cr.`birthDate`, cr.`address`, cr.`address2`,
                     cr.`city`, cr.`province`, cr.`postalCode`, cr.`phoneNumber` 
                     FROM `tblClassesRegistration` AS cr 
                     INNER JOIN `tblClasses` as c ON cr.`sessionID` = c.`itemID`
                     INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
                     WHERE cr.`isRegistered` = '1' AND c.`sysStatus` = 'active' AND c.`sysOpen` = '1'  AND cr.`sysOpen` = '1' AND c.`regClose` <= UNIX_TIMESTAMP()
-                    AND UNIX_TIMESTAMP(ce.`eventStartDate`) >= %d AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) <= %d ORDER BY c.`level` DESC", 
+                    AND UNIX_TIMESTAMP(ce.`eventStartDate`) >= %d AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) <= %d ORDER BY c.`level` DESC)", 
+                        $rangeStart, 
+                        $rangeEnd
+                );
+                
+                $qryMembers = sprintf("(SELECT m.`email`, m.`lastName`, m.`firstName`, m.`gender`, m.`birthDate`, m.`address`, m.`address2`, 
+                    m.`city`, m.`province`, m.`postalCode`, m.`phone` AS phoneNumber 
+                    FROM `tblMembers` AS m 
+                    WHERE UNIX_TIMESTAMP(m.`sysDateLastMod`) >= %d AND UNIX_TIMESTAMP(m.`sysDateLastMod`) <= %d AND m.`membershipType` = 'foundation')",
                         $rangeStart, 
                         $rangeEnd
                 );
 
-                $res = $this->_db->query($qry);
+                $res = $this->_db->query($qryClasses." UNION ".$qryMembers);
                 if (is_object($res) && $res->num_rows > 0){
                     while ($row = $this->_db->fetch_assoc($res)){
                         $members[] = $row;

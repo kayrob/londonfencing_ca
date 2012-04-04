@@ -7,7 +7,7 @@ if (isset($_POST['submitFoundation']) && isset($_POST['foundationStart']) && iss
         && strtotime($_POST['foundationStart']) !== false && strtotime($_POST['foundationEnd']) !== false){
         
         $rpts = new RPT\reports($db);
-        $members = $rpts->getFoundationsClasses(strtotime($db->escape($_POST['foundationStart'], true)), strtotime($db->escape($_POST['foundationEnd'],true)));
+        $members = $rpts->getFoundationsMembers(strtotime($db->escape($_POST['foundationStart'], true)), strtotime($db->escape($_POST['foundationEnd'],true)));
         if (!empty($members)){
 $csv = "CFF Licence,Lastname,Firstname,Email,Gender,Club,Club - 2,Year of Birth,Address,City,Province,Postal Code,Country,Phone,Language,Fencer,Booster,CFF license ( please check -$18. will be added)\n";
         foreach($members as $mInfo){
@@ -27,5 +27,5 @@ echo $csv;
         }
 }
 else{
-    header('location:/admin/apps/reports/index?rpt=Foundation&e=1');
+   header('location:/admin/apps/reports/index?rpt=Foundation&e=1');
 }
