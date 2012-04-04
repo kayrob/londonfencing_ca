@@ -24,6 +24,7 @@ if (!empty($tourns)){
         $start = 10 * ($page - 1);
         $p = 0;
         $end = ($showAll === true)? count($tourns) : $start + 10;
+        $border = false;
         foreach ($tourns as $tourn){
             if ($tourn['tdate'] >= $filterStartDate && $tourn['tdate'] < $filterEndDate && $p >= $start){
                 //if eID link to cal ICS, else static ICS with specific data
@@ -35,7 +36,13 @@ if (!empty($tourns)){
                 $location = (preg_match('%[Ll]ocation\:(\s)?(.*)%', $description, $matches)) ? $matches[2] :'' ;
                 
                 $icsHREF = ($tourn["eID"] !== false) ? "/src/LondonFencing/calendar/assets/rss/icalEvents.php?event=".$tourn["eID"]:"/src/LondonFencing/StaticPage/ics.php?event=".urlencode($tourn["title"])."&start=".$tourn['tdate']."&end=".$tourn['tend'].'&location='.$location;
-                $h4Class = ($p > 0) ?' class="bordered"' : '';
+                $h4Class =  '';
+                if ($border == true){
+                    $h4Class = ' class="bordered"';
+                }
+                else{
+                    $border = true;
+                }
                 echo '<h4'.$h4Class.'>'.preg_replace('%\(.*\)%' , '', $tourn["title"]);
                 echo '<a href="'.$icsHREF.'"><img src="/themes/LondonFencing/img/plusCalendar_32.png" alt="add to calendar" title="Add to Calendar" width="32px; height="32px" /></a>';
                 if  (isset($tourn['link']) && $tourn['link'] !== false){
