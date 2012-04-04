@@ -38,6 +38,9 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
             OR by the Parent/Guardian listed on the form (if the participant is under the age of 18)</li>
         <li>Make cheques payable to <strong>The London Fencing Club</strong> for the value of $'.number_format($sessionNfo['fee'],2).'</li>
     </ol>';
+        $body .= '<p>&nbsp;</p><p>Come dressed to move! All fencers are required to wear:</p>';
+        $body .= '<ol><li>Athletic shoes with non-marking soles</li><li>Track pants (no shorts, jeans, khakis)</li></ol>';
+        $body .= '<p>All other fencing equipment will be provided by the Club</p>';
         }
         else{
             $body .= '<p>Thank you for your interest in the London Fencing Club. If a space becomes available, you will be notified by email. If not, we hope you try to register for the next session.</p>';
@@ -86,6 +89,10 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
             OR by the Parent/Guardian listed on the form (if the participant is under the age of 18)</li>
         <li>Make cheques payable to <strong>The London Fencing Club</strong> for the value of $<?php echo number_format($sessionNfo['fee'],2);?></li>
     </ol>
+    <h3>Come dressed to move! All fencers are required to wear:</h3>
+    <ol><li>Athletic shoes with non-marking soles</li><li>Track pants (no shorts, jeans, khakis)</li></ol>
+    <p>All other fencing equipment will be provided by the Club</p>
+    <p>&nbsp;</p>
     <p>You will receive an email at the address you provided along with the information you submitted and a link to the printable version of this form</p>
     <p><a href="/print-reg/<?php echo $sessionNfo["itemID"];?>/<?php echo $message;?>" class="btnStyle" target="_blank">Print Form</a></p>
 <?php

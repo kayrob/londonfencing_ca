@@ -19,7 +19,7 @@ if (isset($_GET['s']) && is_numeric($_GET['s']) && isset($_GET['r'])){
             div{width:640px;display:block;margin:0 0 5px 50px}
             label {line-height: 24px;display:inline-block;width: 230px; font-weight:bold;}
             div.sig{margin:40px 0 10px 50px}
-            #head{font-size: 18px;text-transform: uppercase;text-align:center;font-weight:bold}
+            #head, #printHead{font-size: 18px;text-transform: uppercase;text-align:center;font-weight:bold}
             #footer{margin-top:20px;text-align:center}
             .termsTitle, .termsForm{text-transform: uppercase; font-weight: bold; text-align: center}
             #aprint{text-align: center;
@@ -38,12 +38,14 @@ if (isset($_GET['s']) && is_numeric($_GET['s']) && isset($_GET['r'])){
                 margin-top: 10px;
                 line-height: normal; 
                 cursor:pointer}
+            #printHead{display:none}
         </style>
         <style type="text/css"media="print">
             #termsRefs{
-                page-break-before: always;
+                page-break-after: always;
             }
             #aprint{display:none;}
+            #printHead{display:block}
         </style>
         <!--[if lte IE7]>
         <style type="css">
@@ -54,8 +56,20 @@ if (isset($_GET['s']) && is_numeric($_GET['s']) && isset($_GET['r'])){
     <body>
         <a id="aprint" onclick="window.print()" class="btnStyle">Print</a>
         <div id="head">London Fencing Club Registration: <?php echo $regNfo['sessionName'];?></div>
-        <div class="terms">
-        </div>
+        <div id="termsRefs">
+    <?php
+    if ((date('U') - $regNfo["birthDate"])/(60*60*24*365) < 18 || trim($regNfo["parentName"]) != ''){
+        $terms = str_replace('%DATE%', date('F j, Y', $regNfo['eventStart']), file_get_contents(__DIR__.'/minorTerms.php'));
+        $terms = str_replace('%MINORNAME%', $regNfo['firstName'].' '.$regNfo['lastName'], $terms);
+        echo str_replace('%PARENTNAME%', $regNfo['parentName'], $terms);
+    }
+    else{
+        $terms = str_replace('%DATE%', date('F j, Y', $regNfo['eventStart']), file_get_contents(__DIR__.'/adultTerms.php'));
+        echo str_replace('%NAME%', $regNfo['firstName'].' '.$regNfo['lastName'], $terms);
+    }
+    ?>
+    </div>
+        <div id="printHead">London Fencing Club Registration: <?php echo $regNfo['sessionName'];?></div>
     <div>
         <label>First Name: </label><?php echo $regNfo["firstName"];?>
     </div>
@@ -109,18 +123,6 @@ if (isset($_GET['s']) && is_numeric($_GET['s']) && isset($_GET['r'])){
         <label>Fee: </label>$<?php echo number_format($regNfo['fee'],2);?><br /><br />Please make cheques payable to: London Fencing Club
     </div>
     <div id="footer"><img src="/src/LondonFencing/registration/assets/img/printLogo.png" /></div>
-    <div id="termsRefs">
-    <?php
-    if ((date('U') - $regNfo["birthDate"])/(60*60*24*365) < 18 || trim($regNfo["parentName"]) != ''){
-        $terms = str_replace('%DATE%', date('F j, Y', $regNfo['eventStart']), file_get_contents(__DIR__.'/minorTerms.php'));
-        $terms = str_replace('%MINORNAME%', $regNfo['firstName'].' '.$regNfo['lastName'], $terms);
-        echo str_replace('%PARENTNAME%', $regNfo['parentName'], $terms);
-    }
-    else{
-        $terms = str_replace('%DATE%', date('F j, Y', $regNfo['eventStart']), file_get_contents(__DIR__.'/adultTerms.php'));
-        echo str_replace('%NAME%', $regNfo['firstName'].' '.$regNfo['lastName'], $terms);
-    }
-    ?>
     </body>
 </html>
 <?php
