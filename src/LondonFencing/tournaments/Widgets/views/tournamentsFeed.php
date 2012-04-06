@@ -37,6 +37,9 @@ if (!empty($tourns)){
                 if ($location != ''){
                     echo '<span class="lowlight">Where:</span>&nbsp;&nbsp;'.$location.'<br />';
                 }
+                else{
+                    echo '&nbsp;<br />';
+                }
                 echo '</p>';
                 $p++;
                 if ($p == 2){
