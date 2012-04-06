@@ -235,14 +235,14 @@ td { vertical-align: top; }
 }
 
 body {
-    font-family: 'Century Gothic', Verdana, sans-serif;
+    font-family: Helvetica;
     font-size: 13px;
     line-height: 24px;
     position: relative;
 }
 
 #container {
-    width: 960px;
+    width: 960px; 
     margin: 0 auto;
     position: relative; 
     z-index: 3; 
@@ -265,9 +265,10 @@ body {
 }
 
 h1 { font-size: 28px; margin-top: 0; color:#fff }
-h2 { font-size: 24px; color: #555;text-transform: uppercase; }
-h3 { font-size: 18px; }
-h4 { font-size: 15px; color: #707070}
+header h1 { margin-top: 20px; padding-bottom: 10px; }
+h2 { font-size: 24px; color: #555;text-transform: uppercase; font-family: DroidSans; }
+h3 { font-size: 18px; font-family: DroidSans; }
+h4 { font-size: 15px; color: #707070; font-family: DroidSans;}
 h5 { font-size: 13px; }
 h6 { font-size: 11px; }
 
@@ -291,6 +292,21 @@ h1, h2, h3 {font-weight: bold}
 	margin: 0 0 10px;
 }
 .two-column #colC .blankMainHeader { text-align: left; }
+
+.two-column #colB .blankMainHeader { 
+	position: relative;
+	background: #CCC;
+	margin: 25px 0 30px;
+	width: 100%;
+	height: 10px;
+}
+.two-column #colB .blankMainHeader h2 {
+	float: left;
+	background: #FFF;
+	padding-right: 10px;
+	margin-top: -7px;
+}
+.two-column #colC h2 { font-size: 20px; }
 
 /*Paragraph------------------------------------------------------------------- */   
 
@@ -352,7 +368,7 @@ label {
    ========================================================================== */
 
 header { 
-    width: 100%; 
+    width: 958px; 
     position: relative; 
     text-align: center; 
     padding: 10px 0 0 0;
@@ -361,6 +377,8 @@ header {
     -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
+    border-left: 1px solid #DEDEDE;
+    border-right: 1px solid #DEDEDE;
 } 
 #headerBg {
 	position: absolute;
@@ -373,7 +391,8 @@ header {
 nav {
     width: 100%;
     clear: both;
-    background: rgba(0,0,0,0.83);
+    /*background: rgba(0,0,0,0.83);*/
+    background: #222;
     margin: 20px 0 0 0;
     font-family: DroidSans;
     text-transform: uppercase;
@@ -382,8 +401,8 @@ nav {
 }
 
 nav ul {
-    margin:4px 0;
-    padding: 10px 0;
+    margin: 0;
+    padding: 0;
     text-align: center;
     width: 100%;
 }
@@ -392,14 +411,19 @@ nav ul li {
     display: inline-block;
     zoom:1; *display: inline;
     margin: 0;
-    padding: 5px 19px;
+    padding: 14px 28px;
     color: #fff;
+    -moz-transition: all 0.5s linear;
+    -webkit-transition: all 0.5s linear;
+    -ms-transition: all 0.5s linear;
+    transition: all 0.5s linear;
 }
+nav ul li:hover { background: #333; color: #dedede; }
 
 nav ul li:first-child { background: none; }
 
 nav ul li a {
-    font-size: 14px;
+    font-size: 15px;
     text-decoration: none;
 }
 /* =============================================================================
@@ -412,7 +436,12 @@ nav ul li a {
 
 .two-column #colB { width: 600px; margin-right: 25px; }
 
-.four-column #colA, .two-column #colA { width: 100%; }
+.four-column #colA, .two-column #colA { 
+	width: 958px; 
+	border-left: 1px solid #dedede; 
+	border-right: 1px solid #dedede; 
+	border-bottom: 1px solid #dedede;
+}
 .four-column #colA{
     -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
@@ -421,20 +450,24 @@ nav ul li a {
  .two-column #colA{    background-color:#fff;     }
 .four-column #colB { width: 100%; }
 .four-column #colC {width: 440px}
-.two-column #colC { width: 290px; }
-.four-column #colD { width: 440px; margin-left: 35px; }
+.two-column #colC { 
+	width: 268px;
+	border-left: 1PX SOLID #DEDEDE;
+	padding-left: 20PX; 
+}
+.four-column #colD { width: 440px; margin-left: 34px; }
 .four-column #colE { width: 280px; }
 .four-column #colF { width: 100%; clear: both; }
 
-.four-column .main,  .two-column .main{ 
+.four-column .main,  .two-column .main { 
     clear: both; 
     float: left; 
     margin: 15px 0; 
-    padding: 0 22px 80px 22px;
+    padding: 10px 22px 80px 22px;
     background-color: #fff;
-
+    border: 1px solid #dedede;
 }
-.four-column .main{
+.four-column .main {
     -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
@@ -503,57 +536,84 @@ a.readMore {font-style: italic}
 /*PhotoGalleryWidget-------------------------------------------------------- */
 
 #colA ul {
-    list-style:none;
-    margin: 10px 0 0px 0;
-    padding: 0 0 10px 0;
-    background-color:#fff;
+    list-style: none;
+    margin: 20px 0 0px 0;
+    padding: 0 0 20px 24px;
+    background-color: #fff;
 }
-#colA ul li{
+#colA ul li {
     list-style:none;
     padding:10px 12px 10px 12px;
     display:inline;
 }
-#colA .homeThumb, #colA .homeThumbB{
+#colA ul li:last-child { padding: 10px 23px 10px 0; }
+#colA ul li:first-child { padding: 10px 0 10px 23px; }
+
+.banner li#arrow {
+	display: inline-block;
+	background: #444;
+	padding: 11px 13px !important;
+	width: 24px;
+	height: 28px;
+	border-radius: 25px;
+	-webkit-border-radius: 25px;
+	-moz-border-radius: 25px;
+	-moz-transition: all 0.5s linear;
+    -webkit-transition: all 0.5s linear;
+    -ms-transition: all 0.5s linear;
+    transition: all 0.5s linear;
+}
+.banner li#arrow:hover { background: #4a762b; }
+
+#colA .homeThumb, #colA .homeThumbB {
+	opacity: 0.7;
+  	filter: alpha(opacity=70);
     border: 5px solid #d5d5d5;
 }
 
-#colA .homeThumbB{/* border-color: #2e567f;*/ border-color: #333 }
+#colA .homeThumbB, #intermediate #colA .homeThumb:hover {
+	opacity: 1.0;
+  	filter: alpha(opacity=100);
+}
 
-#homeGallery{
+#homeGallery {
     width: 100%;
     float:left;
     clear:both;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
-#homeGallery .primeImg{
+#homeGallery .primeImg {
     /*width: 630px;*/
-    width: 960px;
+    width: 958px;
     height: 310px;
     margin: 0px;
     float: left;
     clear:left;
 }
-#homeGallery .imgTitle{
+#homeGallery .imgTitle {
     width: 330px;
     height: 310px;
     margin: 0 0 0 630px;
     clear:right;
     background-color:rgba(0,0,0,0.83);
 }
-.banner .next, .banner .prev{cursor: pointer}
+.banner .next, .banner .prev {cursor: pointer}
 
+#intermediate #colA li:first-child, #intermediate #colA li:last-child { display: none; }
+
+#intermediate #colA ul { padding-left: 70px; }
 
 /* Home callouts -------------------------------------------------------------*/
 
 
-.callout h2{
+.callout h2 {
     background: url('/themes/LondonFencing/img/title_bg.gif') 200px 50% no-repeat;
 }
     
-.callout img, .tournaments img{margin:0; padding:0; border:none; float: right;padding-left: 3px}
+.callout img, .tournaments img { margin:0; padding:0; border:none; float: right;padding-left: 3px; }
 .callout .bordered, .tournaments .bordered {
     border-top: 1px solid #E0E0E0;
-    padding-top: 5px;
+    padding-top: 20px;
     
 }
 #latestNews h3 {
@@ -568,17 +628,44 @@ a.readMore {font-style: italic}
     color: #909090;
 }
    
-#practiceWidget h4, #tourneyWidget h4{ text-transform: uppercase; margin-bottom: 0}
-#practiceWidget p{margin-bottom: 20px}
+#practiceWidget h4, #tourneyWidget h4{ text-transform: uppercase; margin: 0; display: block; padding-top: 20px; }
+#practiceWidget h2 { margin-bottom: 5px; }
+#practiceWidget p { margin-bottom: 20px; }
 
-#practiceWidget, #latestNews {margin-bottom: 50px}
+#practiceWidget, #latestNews { margin-bottom: 50px; }
 
-.moreTournaments{margin-top: 20px}
+.moreTournaments{ margin-top: 20px; }
 
-
+.icons {
+	float: right;
+	background: #444;
+	padding: 15px 15px !important;
+	width: 20px;
+	height: 20px;
+	border-radius: 25px;
+	-webkit-border-radius: 25px;
+	-moz-border-radius: 25px;
+    margin-left: 3px;
+}
+.green { 
+	background: #4a762b; 
+	-moz-transition: all 0.5s linear;
+    -webkit-transition: all 0.5s linear;
+    -ms-transition: all 0.5s linear;
+    transition: all 0.5s linear;
+}
+.blue { 
+	background: #2e567f;
+	-moz-transition: all 0.5s linear;
+    -webkit-transition: all 0.5s linear;
+    -ms-transition: all 0.5s linear;
+    transition: all 0.5s linear; 
+}
+.blue:hover { background: #4a762b; }
+.green:hover { background: #2e567f; }
 /* Media Gallery
 ------------------------------------------------------------------------------------ */
-.mediaGallery{list-style:none}
+.mediaGallery{ list-style:none; }
 .mediaGallery li {
     list-style: none;
     padding: 10px 12px 10px 12px;
@@ -588,7 +675,7 @@ a.readMore {font-style: italic}
 /* Registration
 -------------------------------------------------------------------------------------*/
 #regSideNav ul {list-style: none; padding: 0;}
-#regSideNav li {padding: 10px 0 10px 0; text-indent: 10px}
+#regSideNav li {padding: 0 0 10px 0; text-indent: 2px}
 
 #dvAConsent, #dvMConsent{
     background-color:#fff;
@@ -640,6 +727,7 @@ textarea { width:485px; }
 	padding: 10px 0;
 	border-bottom: 1px solid #dedede;
 }
+.news-archive ul li a { font-size: 16px; color: #4A762B; font-weight: bold; }
 
 
 /*Box Style----------------------------------------------------------------- */
@@ -663,7 +751,11 @@ textarea { width:485px; }
 .boxStyle img {
     border: 5px solid #f2f2f2;
 }
+/* =============================================================================
+  Widgets
+   ========================================================================== */
 
+.two-column #colC li { margin-top: 0; }
 
 /* =============================================================================
    Footer
@@ -675,7 +767,7 @@ footer {
     clear: both;
     width: 100%;
     line-height: normal;
-    background-color:#000;
+    background-color:#222;
     color: #fff;
     margin-top: -15px;
 }

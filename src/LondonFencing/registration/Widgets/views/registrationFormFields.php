@@ -31,7 +31,7 @@ if (isset($message) && $message != '') {
 $provs = array("AB","BC","MB","NB","NL","NS","NT","NU","ON","PE","QC","SK","YT");
 $gender = array("F" => "Female", "M" => "Male");
 ?>
-<h2>Please complete all fields marked with *</h2>
+<h3>Please complete all fields marked with *</h3>
 <p><strong>Parent/Guardian is required for fencers under the age of 18</strong><br />&nbsp;</p>
 <form action="<?php print $_SERVER['REQUEST_URI']; ?>" method="post" id="begIntRegForm">
     <div>

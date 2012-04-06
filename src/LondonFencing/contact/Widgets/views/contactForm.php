@@ -35,7 +35,7 @@ if (!empty($_POST) && isset($_POST["sub-contact-us"]) && validate_form($_POST)) 
 }
 $post = array(
    "RQvalALPHName"          => "",
-   "RQvalPHONPhone_Number"  => "",
+   "OPvalPHONPhone_Number"  => "",
    "RQvalMAILEmail_Address" => "",
    "RQvalALPHMessage"       => "",
 );
@@ -49,24 +49,25 @@ if($sent == 1){
 }
 
 ?>
+<h3>Please complete all fields marked with *</h3>
 <form action="<?php print $_SERVER['REQUEST_URI']; ?>" method="post">
 	<div>
-	   <label for="RQvalALPHName" class="req">Name</label></td>
+	   <label for="RQvalALPHName" class="req">Name*</label></td>
         <input type="text" name="RQvalALPHName" id="RQvalALPHName"  value = "<?php echo $post["RQvalALPHName"];?>" />
     </div>
 
 	<div>
-	   <label for="RQvalPHONPhone_Number" class="req">Phone Number</label>
-        <input type="text" name="RQvalPHONPhone_Number" id="RQvalPHONPhone_Number" value = "<?php echo $post["RQvalPHONPhone_Number"];?>"/>
+	   <label for="OPvalPHONPhone_Number" class="req">Phone Number</label>
+        <input type="text" name="OPvalPHONPhone_Number" id="OPvalPHONPhone_Number" value = "<?php echo $post["OPvalPHONPhone_Number"];?>"/>
     </div>
 
 	<div>
-        <label for="RQvalMAILEmail_Address" class="req">Email</label>
+        <label for="RQvalMAILEmail_Address" class="req">Email*</label>
         <input type="email" name="RQvalMAILEmail_Address" id="RQvalMAILEmail_Address" value = "<?php echo $post["RQvalMAILEmail_Address"];?>"/>
     </div>
 
 	<div>
-		<label for="RQvalALPHMessage" class="req">Message</label>
+		<label for="RQvalALPHMessage" class="req">Message*</label>
         <textarea name="RQvalALPHMessage" id="RQvalALPHMessage" cols="35" rows="10"><?php echo $post["RQvalALPHMessage"];?></textarea>
     </div>
 
