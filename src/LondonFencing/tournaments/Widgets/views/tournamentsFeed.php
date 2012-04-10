@@ -29,16 +29,16 @@ if (!empty($tourns)){
                 $h4Class = ($p > 0) ?' class="bordered"' : '';
                 echo '<h4'.$h4Class.'>'.preg_replace('%\(.*\)%' , '', $tourn["title"]).'</h4>';
                 echo '<p>';
-                echo '<a href="'.$icsHREF.'"><img src="/themes/LondonFencing/img/plusCalendar.png" alt="add to calendar" title="Add to Calendar" width="49px; height="49px" /></a>';
+                echo '<a href="'.$icsHREF.'" class="icons green"><img src="/themes/LondonFencing/img/plus.png" alt="add to calendar" title="Add to Calendar" width="20px; height="20px" /></a>';
                 if  (isset($tourn['link']) && $tourn['link'] !== false){
-                    echo '<a href="'.$tourn['link'].'" target="_blank"><img src="/themes/LondonFencing/img/extLink.png" alt="more info" width="49px; height="49px" title="More Info" /></a>';
+                    echo '<a href="'.$tourn['link'].'" target="_blank" class="icons blue"><img src="/themes/LondonFencing/img/extLink.png" alt="more info" width="20px; height="20px" title="More Info" /></a>';
                 }
                 echo'<span class="lowlight">Date:</span>&nbsp;&nbsp;&nbsp;&nbsp;'.$date.'<br />';
                 if ($location != ''){
                     echo '<span class="lowlight">Where:</span>&nbsp;&nbsp;'.$location.'<br />';
                 }
                 else{
-                    echo '&nbsp;<br />';
+                    echo '<span class="lowlight">&nbsp;</span>&nbsp;&nbsp;<br />';
                 }
                 echo '</p>';
                 $p++;
