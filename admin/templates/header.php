@@ -1,4 +1,7 @@
 <?php
+if ($user->id == 102){
+    $easterEgg = true;
+}
 $root = dirname(dirname(__DIR__));
 require_once(dirname(__DIR__).'/loadModule.php'); //this file sets applications
 

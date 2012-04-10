@@ -2,7 +2,14 @@
 </div> <!-- end of #inhalt -->
 </div> <!-- end of #container -->
 
-<footer><div id="footerTagline">quipp engine v.0.1</div></footer>
+<footer>
+    <?php
+    if (isset($easterEgg) && $easterEgg == true){
+        echo '<span id="eeStop" style="cursor:pointer;">&nbsp;</span>';
+    }
+    ?>
+    <div id="footerTagline">quipp engine v.0.1</div>
+</footer>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 <script>!window.jQuery && document.write(unescape('%3Cscript src="/js/jquery-1.6.4.min.js"%3E%3C/script%3E'))</script>
@@ -526,9 +533,29 @@ $(function () {
 <script type="text/javascript" src="/admin/js/growl/jquery.gritter.js"></script>
 
 <?php 
-	//end-user 'pretty' error reporting for in-app errors that we want the user to see (ask Brendan about this if you are confused), do not remove!
+//end-user 'pretty' error reporting for in-app errors that we want the user to see (ask Brendan about this if you are confused), do not remove!
     if (isset($feedback) && is_object($feedback)) {
         $feedback->display_messages(true);  
+    }
+    if (isset($easterEgg) && $easterEgg == true){
+?>
+<script type="text/javascript">
+var logoTimeout = setInterval(function(){
+    var adminImg = $('#structureControlTitle img').attr('src').replace('.png','');
+    var imgSrc = adminImg.split('_');
+    var imgSuf = "_1";
+    if (imgSrc[1]){
+        imgSuf = (imgSrc[1] == '3') ? "" : "_"+(parseInt(imgSrc[1],10) + 1);
+    }
+    var newImg = "adminLogo"+imgSuf;
+    $('#structureControlTitle img').attr('src', '/admin/img/layout/'+newImg+'.png');
+},250);
+    $('#eeStop').click(function(){
+        clearInterval(logoTimeout);
+        $('#structureControlTitle img').attr('src', '/admin/img/layout/adminLogo.png');
+    });
+</script>
+<?php
     }
 ?>
 </body>
