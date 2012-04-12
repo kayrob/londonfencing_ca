@@ -483,6 +483,18 @@ if ($hasPermission && $intID !== false) {
             break;
         default: //(list)
             //list table query:
+?>
+               <form action="<?php echo $_SERVER["REQUEST_URI"];?>">
+                      <select name="filter" >
+                      <option value="">Choose Filter</option>
+                      <option value="inactive"<?php echo ($filter == 'inactive' ? 'selected="selected"' : '');?>>Inactive Members<?php echo ($filter == 'inactive' ? '*' : '');?></option>
+                      <option value="all"<?php echo ($filter == 'all' ? 'selected="selected"' : '');?>>All Members<?php echo ($filter == 'all' ? '*' : '');?></option>
+                      </select>
+                      <input type="button" name="goFilter" value="Filter" class="btnStyle blue" style="float:none"/>
+                     <input type="button" name="rmFilter" value="Clear" class="btnStyle" onclick="javascript:window.location='<?php echo preg_replace('%\?filter=(inactive|all)?%','',$_SERVER["REQUEST_URI"]);?>'" style="float:none"/>
+                </form>
+                <p>&nbsp;</p>
+<?php
 
             $where = ($filter == 'active' || $filter == "inactive")? " AND cr.`sysStatus` = '".$filter."'" : "";
             $listqry = sprintf("SELECT cr.`itemID`, concat(cr.`lastName`, ', ' ,cr.`firstName`) AS name, cr.`email`, cr.`formDate`, 
@@ -508,18 +520,6 @@ if ($hasPermission && $intID !== false) {
                 while ($rs = $db->fetch_assoc($resqry)) {
                         $registered[] = $rs;
                 }
-?>
-               <form action="<?php echo $_SERVER["REQUEST_URI"];?>">
-                      <select name="filter" >
-                      <option value="">Choose Filter</option>
-                      <option value="inactive"<?php echo ($filter == 'inactive' ? 'selected="selected"' : '');?>>Inactive Members<?php echo ($filter == 'inactive' ? '*' : '');?></option>
-                      <option value="all"<?php echo ($filter == 'all' ? 'selected="selected"' : '');?>>All Members<?php echo ($filter == 'all' ? '*' : '');?></option>
-                      </select>
-                      <input type="button" name="goFilter" value="Filter" class="btnStyle blue" style="float:none"/>
-                     <input type="button" name="rmFilter" value="Clear" class="btnStyle" onclick="javascript:window.location='<?php echo preg_replace('%\?filter=(inactive|all)?%','',$_SERVER["REQUEST_URI"]);?>'" style="float:none"/>
-                </form>
-                <p>&nbsp;</p>
-<?php
                 echo '<form name="frmSendEmail" action="/admin/apps/notificationManager/emailer" method="post" enctype="multipart/form-data">';
                 echo '<table id="adminTableList_reg" class="adminTableList tablesorter" width="100%" cellpadding="5" cellspacing="0" border="1">';
                 echo '<thead><tr><th>' . $titles[0] . '</th><th>' . $titles[1] . '</th><th>' . $titles[2] . '</th><th>' . $titles[3] . '</th><th>' . $titles[4] . '</th><th>' . $titles[5] . '</th><th>Status</th>
