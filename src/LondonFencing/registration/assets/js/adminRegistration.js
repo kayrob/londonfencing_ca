@@ -43,6 +43,10 @@ jQuery(document).ready(function($){
                     $(this).attr('checked',false);
                 });
             }
-        })
+        });
+        
+        $(':input[name=goFilter]').click(function(){
+            $(this).parent().submit();
+        });
 });
 
