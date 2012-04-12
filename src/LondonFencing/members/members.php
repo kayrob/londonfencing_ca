@@ -70,13 +70,15 @@ class members {
         $qry = sprintf("SELECT DISTINCT cr.`itemID`, cr.`email`, concat(cr.`lastName`,', ',cr.`firstName`) as name, cr.`parentName`, cr.`sysStatus` , c.`level`
             FROM `tblClassesRegistration` AS cr 
             INNER JOIN `tblClasses` as c ON cr.`sessionID` = c.`itemID`
-            INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
-            WHERE c.`sysStatus` = 'active' AND c.`sysOpen` = '1'  AND cr.`sysOpen` = '1' 
-            AND c.`regOpen` <= UNIX_TIMESTAMP() AND c.`regClose` <= UNIX_TIMESTAMP() %s%s ORDER by c.`level` DESC", 
+            LEFT JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
+            WHERE (c.`sysOpen` = '1'  AND cr.`sysOpen` = '1' AND c.`regClose` <= UNIX_TIMESTAMP() AND c.`level` = 'beginner' %s%s)
+            OR (cr.`sysOpen` = '1' AND c.`level` = 'intermediate' %s) 
+            ORDER by c.`level` DESC", 
                 $sysActive, 
-                $sessionEnd
+                $sessionEnd,
+                $sysActive
         );
-
+        
         $res = $this->_db->query($qry);
         if (is_object($res) && $res->num_rows > 0) {
             while ($row = $this->_db->fetch_assoc($res)) {
