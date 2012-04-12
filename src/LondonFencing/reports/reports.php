@@ -30,9 +30,14 @@ class reports{
                     cr.`city`, cr.`province`, cr.`postalCode`, cr.`phoneNumber` 
                     FROM `tblClassesRegistration` AS cr 
                     INNER JOIN `tblClasses` as c ON cr.`sessionID` = c.`itemID`
-                    INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
-                    WHERE cr.`isRegistered` = '1' AND c.`sysStatus` = 'active' AND c.`sysOpen` = '1'  AND cr.`sysOpen` = '1' AND c.`regClose` <= UNIX_TIMESTAMP()
-                    AND UNIX_TIMESTAMP(ce.`eventStartDate`) >= %d AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) <= %d ORDER BY c.`level` DESC)", 
+                    LEFT JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
+                    WHERE (cr.`isRegistered` = '1' AND c.`sysStatus` = 'active' AND c.`sysOpen` = '1'  AND cr.`sysOpen` = '1' AND c.`regClose` <= UNIX_TIMESTAMP()
+                    AND UNIX_TIMESTAMP(ce.`eventStartDate`) >= %d AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) <= %d AND c.`level` = 'beginner')
+                    OR (cr.`isRegistered` = '1' AND cr.`sysStatus` = 'active' AND cr.`sysOpen` = '1' AND c.`level` = 'intermediate' 
+                    AND UNIX_TIMESTAMP(cr.`sysDateCreated`) >= %d AND UNIX_TIMESTAMP(cr.`sysDateCreated`) <= %d)
+                    ORDER BY c.`level` DESC)", 
+                        $rangeStart, 
+                        $rangeEnd,
                         $rangeStart, 
                         $rangeEnd
                 );

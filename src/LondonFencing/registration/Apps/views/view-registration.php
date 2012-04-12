@@ -178,7 +178,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
     $fields[] = array(
         'label'   => "Registration Status",
         'dbColName'  => "isRegistered",
-        'tooltip'   => "The name of the emergency contact phone number e.g 519-555-2323",
+        'tooltip'   => "If the participant is registered or on the wait list",
         'writeOnce'  => false,
         'widgetHTML' => "",
         'valCode'   => "RQvalNUMB",
@@ -531,7 +531,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
         $formBuffer .= "</td></tr>";
         $formBuffer .= "</table>";
         $formBuffer .= "<div class=\"clearfix\" style=\"margin-top: 10px; height:10px; border-top: 1px dotted #B1B1B1;\">&nbsp;</div>";
-        $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='" . $_SERVER['PHP_SELF'] . "?sid=".$_GET['sid']."';\" value=\"Cancel\" />
+        $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='/admin/apps/registration/view-registration?sid=".$_GET['sid']."';\" value=\"Cancel\" />
 		<input class='btnStyle green' type=\"submit\" name=\"submitUserForm\" id=\"submitUserForm\" value=\"Save Changes\" />";
         $formBuffer .= "</form>";
         //print the form

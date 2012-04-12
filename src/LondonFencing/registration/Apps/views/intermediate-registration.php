@@ -1,178 +1,212 @@
 <?php
-require_once dirname(dirname(dirname(__DIR__))) ."/calendar/calendar.php";
-require_once dirname(dirname(__DIR__))."/registration.php";
+require_once dirname(dirname(__DIR__)) . "/registration.php";
 
-use LondonFencing\calendar\Apps as aCal;
 use LondonFencing\registration\Apps as AReg;
 
 $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
 require $root . '/inc/init.php';
 require $root . '/admin/classes/Editor.php';
 
-$meta['title'] = 'Intermediate Registration Manager';
+$meta['title'] = 'Intermediate Registration';
 $meta['title_append'] = ' &bull; Quipp CMS';
 
 $hasPermission = false;
-if ($auth->has_permission("canEditReg")){
+if ($auth->has_permission("canEditReg")) {
     $hasPermission = true;
 }
 
-if ($hasPermission) {
-    
-    $cal = new aCal\adminCalendar($db);
-    $aReg = new AReg\AdminRegister($cal,$db);
-    
+$intID = $db->return_specific_item(false, "tblClasses", "itemID", false, "level='intermediate'");
+
+if ($hasPermission && $intID !== false) {
+    $aReg = new AReg\AdminRegister(false, $db);
     $quipp->js['footer'][] = "/src/LondonFencing/registration/assets/js/adminRegistration.js";
-    
-    $canApprove = $auth->has_permission('approvepage');
-    
-    if (!isset($_GET['id'])) { $_GET['id'] = null; }
+
     $te = new Editor();
-    
+
     //set the primary table name
-    $primaryTableName = "tblClasses";
+    $primaryTableName = "tblClassesRegistration";
+
+    $provs = array("AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT");
+    $gender = array("F" => "Female", "M" => "Male");
 
     //editable fields
     $fields[] = array(
-        'label'   => "Session Name",
-        'dbColName'  => "sessionName",
-        'tooltip'   => "A Unique Name for this Session ",
-        'writeOnce'  => false,
+        'label' => "First Name",
+        'dbColName' => "firstName",
+        'tooltip' => "Participant First Name",
+        'writeOnce' => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "RQvalALPH",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    
-    $fields[] = array(
-        'label'   => "Start Date",
-        'dbColName'  => 'startDate',
-        'tooltip'   => "Date of the first class in the session",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "RQvalDATE",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    $fields[] = array(
-        'label'   => "Start Time",
-        'dbColName'  => 'startTime',
-        'tooltip'   => "Time a single class starts",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "RQvalTIME",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    
-    $fields[] = array(
-        'label'   => "End Date",
-        'dbColName'  => 'endDate',
-        'tooltip'   => "Date of the last class in the session",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "RQvalDATE",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    $fields[] = array(
-        'label'   => "End Time",
-        'dbColName'  => 'endTime',
-        'tooltip'   => "Time a single class ends",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "RQvalTIME",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    
-    $fields[] = array(
-        'label'   => "Fee",
-        'dbColName'  => "fee",
-        'tooltip'   => "eg: 50",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"number\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "RQvalNUMB",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    
-    $fields[] = array(
-        'label'   => "Class Size Limit",
-        'dbColName'  => "regMax",
-        'tooltip'   => "The maximum number of students allowed",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"number\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" min=\"1\" />",
-        'valCode'   => "RQvalNUMB",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    $fields[] = array(
-        'label'   => "Minimum Age",
-        'dbColName'  => "ageMin",
-        'tooltip'   => false,
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"number\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" min=\"1\" />",
-        'valCode'   => "RQvalNUMB",
-        'dbValue'   => false,
-        'stripTags'  => true
+        'valCode' => "RQvalALPH",
+        'dbValue' => false,
+        'stripTags' => true
     );
 
     $fields[] = array(
-        'label'   => "Coach",
-        'dbColName'  => "coach",
-        'tooltip'   => "If empty will be displayed as 'TBA'",
-        'writeOnce'  => false,
+        'label' => "Last Name",
+        'dbColName' => 'lastName',
+        'tooltip' => "Participant Last Name",
+        'writeOnce' => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "OPvalALPH",
-        'dbValue'   => false,
-        'stripTags'  => true
+        'valCode' => "RQvalALPH",
+        'dbValue' => false,
+        'stripTags' => true
     );
-    
     $fields[] = array(
-        'label'   => "Location",
-        'dbColName'  => "location",
-        'tooltip'   => "Where the classes will be held",
-        'writeOnce'  => false,
+        'label' => "Birth Date",
+        'dbColName' => 'birthDate',
+        'tooltip' => "Participant's Date of Birth",
+        'writeOnce' => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "OPvalALPH",
-        'dbValue'   => false,
-        'stripTags'  => true
+        'valCode' => "RQvalDATE",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+    $fields[] = array(
+        'label' => "Gender",
+        'dbColName' => "gender",
+        'tooltip' => "",
+        'writeOnce' => false,
+        'widgetHTML' => "",
+        'valCode' => "RQvalALPH",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+    $fields[] = array(
+        'label' => "Address",
+        'dbColName' => 'address',
+        'tooltip' => "Participant's Home Address",
+        'writeOnce' => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode' => "RQvalALPH",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+    $fields[] = array(
+        'label' => "Apt/Unit",
+        'dbColName' => 'address2',
+        'tooltip' => "",
+        'writeOnce' => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode' => "OPvalALPH",
+        'dbValue' => false,
+        'stripTags' => true
     );
 
     $fields[] = array(
-        'label'   => "Registration Open",
-        'dbColName'  => "regOpen",
-        'tooltip'   => "The first date participants can register",
-        'writeOnce'  => false,
+        'label' => "City",
+        'dbColName' => "city",
+        'tooltip' => "",
+        'writeOnce' => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "RQvalDATE",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-   $fields[] = array(
-        'label'   => "Registration Close",
-        'dbColName'  => "regClose",
-        'tooltip'   => "The last date participants can register",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "RQvalDATE",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    
-    $fields[] = array(
-        'label'   => "Active",
-        'dbColName'  => "sysStatus",
-        'tooltip'   => 'Only active sessions that are open for registration will be available for sign-up',
-        'writeOnce'  => false,
-        'widgetHTML' => '<input type="checkbox" id="FIELD_ID" name="FIELD_ID" value="active" FIELD_VALUE />',
-        'valCode'   => "",
-        'dbValue'   => false,
-        'stripTags'  => true
+        'valCode' => "RQvalALPH",
+        'dbValue' => false,
+        'stripTags' => true
     );
 
-    //dbaction = database interactivity, these standard queries will do for most single table interactions, you may need to replace with your own
+    $fields[] = array(
+        'label' => "Province",
+        'dbColName' => "province",
+        'tooltip' => "",
+        'writeOnce' => false,
+        'widgetHTML' => "",
+        'valCode' => "RQvalALPH",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+    $fields[] = array(
+        'label' => "Postal Code",
+        'dbColName' => "postalCode",
+        'tooltip' => false,
+        'writeOnce' => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" min=\"1\" />",
+        'valCode' => "RQvalPOST",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+
+    $fields[] = array(
+        'label' => "Phone Number",
+        'dbColName' => "phoneNumber",
+        'tooltip' => "eg. 519-555-1212",
+        'writeOnce' => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode' => "RQvalPHON",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+
+    $fields[] = array(
+        'label' => "Parent/Guardian",
+        'dbColName' => "parentName",
+        'tooltip' => "Parent or Legal Guardian for participants under the age of 18",
+        'writeOnce' => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode' => "OPvalALPH",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+
+    $fields[] = array(
+        'label' => "Email Address",
+        'dbColName' => "email",
+        'tooltip' => "Contact email address e.g user@domain.com",
+        'writeOnce' => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode' => "RQvalMAIL",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+    $fields[] = array(
+        'label' => "Emergency Contact",
+        'dbColName' => "emergencyContact",
+        'tooltip' => "The name of the emergency contact person",
+        'writeOnce' => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode' => "RQvalALPH",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+    $fields[] = array(
+        'label' => "Emergency Phone",
+        'dbColName' => "emergencyPhone",
+        'tooltip' => "The name of the emergency contact phone number e.g 519-555-2323",
+        'writeOnce' => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode' => "RQvalPHON",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+    $fields[] = array(
+        'label' => "Payment Date",
+        'dbColName' => "paymentDate",
+        'tooltip' => "",
+        'writeOnce' => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode' => "OPvalDATE",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+    $fields[] = array(
+        'label' => "Form Submitted",
+        'dbColName' => "formDate",
+        'tooltip' => "",
+        'writeOnce' => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode' => "OPvalDATE",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+    $fields[] = array(
+        'label' => "Active",
+        'dbColName' => "sysStatus",
+        'tooltip' => "If the fencer is still attending classes",
+        'writeOnce' => false,
+        'widgetHTML' => "<input type=\"checkbox\" name=\"FIELD_ID\" id=\"FIELD_ID\" value=\"active\" FIELD_VALUE />",
+        'valCode' => "OPvalALPH",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+
     if (!isset($_POST['dbaction'])) {
         $_POST['dbaction'] = null;
 
@@ -180,32 +214,24 @@ if ($hasPermission) {
             $_POST['dbaction'] = $_GET['action'];
         }
     }
-    if (!empty($_POST) && validate_form($_POST)) {
+    if ((!empty($_POST) && validate_form($_POST)) || $_POST['dbaction'] == 'delete') {
 
         //yell($_POST);
 
         switch ($_POST['dbaction']) {
-        case "insert":
+            case "insert":
 
-            //this insert query will work for most single table interactions, you may need to cusomize your own
+                $countQry = $db->fetch_assoc($db->query("SELECT (COUNT(itemID) + 1) AS rk FROM tblClassesRegistration WHERE `sessionID` = " . $db->escape($intID)));
+                $newCount = (isset($countQry['rk'])) ? $countQry['rk'] : "1";
 
-            //the following loop populates 2 strings with name value pairs
-            //eg.  $fieldColNames = 'articleTitle','contentBody',
-            //eg.  $fieldColValues = 'Test Article Title', 'This is my test article body copy',
-            //yell($_GET);
-            //yell($fields);
-            $fieldColNames  = '';
-            $fieldColValues = '';
-            $eventStart = "";
-            $eventEnd = "";
-            $eventStartTime = '';
-            $eventEndTime = '';
-            $calendarID = $db->escape($_POST["calendarID"]);
-            foreach ($fields as $dbField) {
-                if ($dbField['dbColName'] != false){
-                    $requestFieldID = $dbField['valCode'] . str_replace(" ", "_", $dbField['label']);
-                    if (strstr($dbField['dbColName'],'start') === false && strstr($dbField['dbColName'],'end') === false) {
+                //this insert query will work for most single table interactions, you may need to cusomize your own
 
+                $fieldColNames = '';
+                $fieldColValues = '';
+
+                foreach ($fields as $dbField) {
+                    if ($dbField['dbColName'] != false) {
+                        $requestFieldID = $dbField['valCode'] . str_replace(" ", "_", $dbField['label']);
                         if ($dbField['dbColName'] == 'sysStatus') {
 
                             if (isset($_POST[$requestFieldID])) {
@@ -213,346 +239,309 @@ if ($hasPermission) {
                             } else {
                                 $fieldColValues .= "'inactive',";
                             }
-                            $fieldColNames .= "" . $dbField['dbColName'] .",";
-                        }
-                        else if ($dbField['dbColName'] == 'regOpen' || $dbField['dbColName'] == 'regClose'){
-                            $fieldColNames .= "" . $dbField['dbColName'] .",";
-                            $fieldColValues .= strtotime($_POST[$requestFieldID]).",";
-                        }
-                        else if (isset($_POST[$requestFieldID])){
-                                $fieldColValues .= "'" . $db->escape($_POST[$requestFieldID], $dbField['stripTags']) . "',";
+                            $fieldColNames .= "" . $dbField['dbColName'] . ",";
+                        } else if ($dbField['dbColName'] == 'birthDate') {
+                            $fieldColValues .= strtotime($_POST[$requestFieldID]) . ",";
+                            $fieldColNames .= "" . $dbField['dbColName'] . ", ";
+                        } else if ($dbField['dbColName'] == 'paymentDate' || $dbField['dbColName'] == 'formDate') {
+                            if (trim($_POST[$requestFieldID]) != "") {
+                                $fieldColValues .= strtotime(trim($_POST[$requestFieldID])) . ",";
                                 $fieldColNames .= "" . $dbField['dbColName'] . ",";
+                            }
+                        } else if (isset($_POST[$requestFieldID])) {
+                            $fieldColValues .= "'" . $db->escape($_POST[$requestFieldID], $dbField['stripTags']) . "',";
+                            $fieldColNames .= "" . $dbField['dbColName'] . ",";
                         }
                     }
-                    else if ($dbField['dbColName'] == 'startDate'){
-                            $eventStart = $db->escape($_POST[$requestFieldID], $dbField['stripTags']);
-                    }
-                   else if ($dbField['dbColName'] == "startTime"){
-                            $eventStartTime = $db->escape($_POST[$requestFieldID], $dbField['stripTags']);
-                    }
-                    else if ($dbField['dbColName'] == 'endDate'){
-                            $eventEnd = $db->escape($_POST[$requestFieldID], $dbField['stripTags']);
-                    }
-                    else if ($dbField['dbColName'] == 'endTime'){
-                            $eventEndTime = $db->escape($_POST[$requestFieldID], $dbField['stripTags']);
-                    }   
-              }
-          }
+                }
 
-            //trim the extra comma off the end of both of the above vars
-            $fieldColNames = rtrim($fieldColNames,",");
-            $fieldColValues = rtrim($fieldColValues,",");
-            
-            if ($eventStart != "" && $eventEnd != "" && isset($_POST["calendarID"])){
-                $eventID = $aReg->create_new_session_event($calendarID, $eventStart, $eventEnd, $eventStartTime, $eventEndTime, $_POST['RQvalALPHSession_Name'],$_POST['OPvalALPHLocation']);
-            }
-            
-            if ($eventID !== false){
-                $fieldColNames .= ",eventID";
-                $fieldColValues .= ','.$eventID;
-                $qry = sprintf("INSERT INTO %s (%s, sysDateCreated, sysOpen, level) VALUES (%s, NOW(),  '1', 'intermediate')",
-                    (string) $primaryTableName,
-                    (string) $fieldColNames,
-                    (string) $fieldColValues
+                //trim the extra comma off the end of both of the above vars
+                $fieldColNames = rtrim($fieldColNames, ",");
+                $fieldColValues = rtrim($fieldColValues, ",");
+
+                $regKey = strtoupper(substr(str_replace("'", "", $_POST["RQvalALPHLast_Name"]), 0, 2)) . "-" . str_pad($db->escape($intID, true), 4, '0', STR_PAD_LEFT) . "-" . $newCount;
+                $qry = sprintf("INSERT INTO %s (%s, sysDateCreated, sysOpen, membershipType, registrationKey, sessionID, isRegistered, waitlist) VALUES (%s, NOW(),  '1', 'foundation','%s', '%d', 1, 0)", (string) $primaryTableName, (string) $fieldColNames, (string) $fieldColValues, $regKey, $db->escape($intID, true)
                 );
                 $res = $db->query($qry);
-            
-                if ($db->affected_rows($res) == 1){
-                    header('Location:/admin/apps/registration/intermediate-registration?Insert=true'); 
-                }
-                else{
+
+                if ($db->affected_rows($res) == 1) {
+                    header('Location:/admin/apps/registration/intermediate-registration?Insert=true');
+                } else {
                     echo "Insert did not work";
                 }
-            }
-            else{
-                echo 'Inset did not work: could not add dates';
-            }
-            
-            break;
+
+                break;
 
 
-        case "update":
+            case "update":
 
+                //this default update query will work for most single table interactions, you may need to cusomize your own
+                $fieldColNames = '';
+                $fieldColValues = '';
 
-            //this default update query will work for most single table interactions, you may need to cusomize your own
-            $fieldColNames  = '';
-            $fieldColValues = '';
-            $eventStart = "";
-            $eventEnd = "";
-            $eventStartTime = '';
-            $eventEndTime = '';
-            $calendarID = $db->escape($_POST["calendarID"]);
-            $eventID = $db->escape($_POST["eventID"]);
-            foreach ($fields as $dbField) {
-                if ($dbField['dbColName'] != false) {
-                    $requestFieldID = $dbField['valCode'] . str_replace(" ", "_", $dbField['label']);
-                    if (strstr($dbField['dbColName'],'start') === false && strstr($dbField['dbColName'],'end') === false) {
+                foreach ($fields as $dbField) {
+                    if ($dbField['dbColName'] != false) {
+
+                        $requestFieldID = $dbField['valCode'] . str_replace(" ", "_", $dbField['label']);
+
                         if ($dbField['dbColName'] == 'sysStatus') {
 
                             if (isset($_POST[$requestFieldID])) {
-                                    $fieldColValue = "'active',";
+                                $fieldColValue = "'active',";
                             } else {
-                                    $fieldColValue = "'inactive',";
+                                $fieldColValue = "'inactive',";
                             }
 
                             $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
+                        } else if ($dbField['dbColName'] == 'birthDate') {
+                            $fieldColValue = strtotime($_POST[$requestFieldID]) . ",";
+                            $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
+                        } else if ($dbField['dbColName'] == 'paymentDate' && trim($_POST[$requestFieldID]) != "") {
+                            $fieldColValue = strtotime(trim($_POST[$requestFieldID])) . ",";
+                            $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
+                        } else if ($dbField['dbColName'] == 'formDate' && trim($_POST[$requestFieldID]) != "") {
+                            $fieldColValue = strtotime(trim($_POST[$requestFieldID])) . ",";
+                            $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
+                        } else if ($dbField['dbColName'] == 'province') {
+                            $fieldColValue = "'" . $_POST[$requestFieldID] . "',";
+                            $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
+                        } else if (isset($_POST[$requestFieldID])) {
+                            $fieldColValue = "'" . $db->escape($_POST[$requestFieldID], $dbField['stripTags']) . "',";
+                            $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
                         }
-                        else if ($dbField['dbColName'] == 'regOpen' || $dbField['dbColName'] == 'regClose'){
-                                $fieldColValue = strtotime($_POST[$requestFieldID]).",";
-                                $fieldColNames .= "" . $dbField['dbColName'] ." = ". $fieldColValue;
-                        }
-                        else if (isset($_POST[$requestFieldID])){
-                                $fieldColValue = "'" . $db->escape($_POST[$requestFieldID], $dbField['stripTags']) . "',";
-                                $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
-                        }
-                    }
-                    else if ($dbField['dbColName'] == 'startDate'){
-                            $eventStart = $db->escape($_POST[$requestFieldID], $dbField['stripTags']);
-                    }
-                   else if ($dbField['dbColName'] == "startTime"){
-                            $eventStartTime = $db->escape($_POST[$requestFieldID], $dbField['stripTags']);
-                    }
-                    else if ($dbField['dbColName'] == 'endDate'){
-                            $eventEnd = $db->escape($_POST[$requestFieldID], $dbField['stripTags']);
-                    }
-                    else if ($dbField['dbColName'] == 'endTime'){
-                            $eventEndTime = $db->escape($_POST[$requestFieldID], $dbField['stripTags']);
                     }
                 }
-            }
-            
-            if ($aReg->update_session_event($calendarID, $eventStart, $eventEnd, $eventStartTime, $eventEndTime, $_POST['RQvalALPHSession_Name'],$_POST['OPvalALPHLocation'],$eventID) == 'true'){
-            //trim the extra comma off the end of the above var
-            $fieldColNames = substr($fieldColNames, 0, strlen($fieldColNames) - 1);
 
-                $qry = sprintf("UPDATE %s SET %s WHERE itemID = '%s'", 
-                (string) $primaryTableName, 
-                (string) $fieldColNames,
-                (int)$_POST['id']);
+                //trim the extra comma off the end of the above var
+                $fieldColNames = substr($fieldColNames, 0, strlen($fieldColNames) - 1);
+
+                $qry = sprintf("UPDATE %s SET %s WHERE itemID = '%s'", (string) $primaryTableName, (string) $fieldColNames, (int) $_POST['id']);
 
                 $res = $db->query($qry);
-                if ($db->affected_rows($res) == 1){
-                    header('Location:/admin/apps/registration/intermediate-registration?Update=true'); 
-                }
-                else{
+
+                if ($db->affected_rows($res) == 1 || $db->error() === false) {
+                    header('Location:/admin/apps/registration/intermediate-registration?Update=true');
+                } else {
                     echo "Update did not work";
                 }
-            }
-            else{
-                echo 'Event data could not be updated';
-            }
-            break;
 
-        case "delete":
+                break;
 
-            //this delete query will work for most single table interactions, you may need to cusomize your own
-            //need to delete calendar events
-            $aReg->delete_session((int)$_GET['id']);
-            
-            header('Location:/admin/apps/registration/intermediate-registration');
-            break;
+            case "delete":
+
+                //this delete query will work for most single table interactions, you may need to cusomize your own
+
+                $db->query(sprintf("UPDATE %s SET `sysStatus` = 'inactive', `sysOpen` = '0' WHERE itemID = %d", (string) $primaryTableName, (int) $db->escape($_GET['id'], true)
+                        ));
+
+                header('Location:/admin/apps/registration/intermediate-registration');
+                break;
         }
     } else {
         $_GET['view'] = 'edit';
     }
 
-include $root. "/admin/templates/header.php";
+    include $root . "/admin/templates/header.php";
+    ?>
+    <h1>Intermediate Registration</h1>
+    <p>This allows the ability to register/edit fencers for the intermediate class.</p>
 
-?>
-<h1>Intermediate Registration Manager</h1>
-<p>This allows the ability to setup intermediate sessions, review submissions and contact registrants.</p>
-
-<div class="boxStyle">
-	<div class="boxStyleContent">
-		<div class="boxStyleHeading">
-			<h2>Edit</h2>
-			<div class="boxStyleHeadingRight">
-				<?php print "<input class='btnStyle blue' type=\"button\" name=\"newItem\" id=\"newItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration?view=edit';\" value=\"New\" />"; ?>
-			</div>
-		</div>
-		<div class="clearfix">&nbsp;</div>
-		<div id="template">
-<?php
+    <div class="boxStyle">
+        <div class="boxStyleContent">
+            <div class="boxStyleHeading">
+                <h2>Edit</h2>
+                <div class="boxStyleHeadingRight">
+    <?php print "<input class='btnStyle blue' type=\"button\" name=\"newItem\" id=\"newItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration?view=edit';\" value=\"New\" />"; ?>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+            <div id="template">
+    <?php
     //display logic
-
     //view = view state, these standard views will do for most single table interactions, you may need to replace with your own
-    if (!isset($_GET['view'])) { $_GET['view'] = null; }
-
-    switch ($_GET['view']) {
-    case "edit": //show an editor for a row (existing or new)
-
-        //determine if we are editing an existing record, otherwise this will be a 'new'
-
-        $dbaction = "insert";
-
-        $_GET['id'] = intval($_GET['id'], 10);
-        
-        $eventID = null;
-
-        if (is_numeric($_GET['id'])) { //if an ID is provided, we assume this is an edit and try to fetch that row from the single table
-
-
-            $qry = sprintf("SELECT tp.*, UNIX_TIMESTAMP(ce.`eventStartDate`) as startDate, UNIX_TIMESTAMP(ce.`recurrenceEnd`) as endDate, 
-                    UNIX_TIMESTAMP(ce.`eventStartDate`) as startTime, UNIX_TIMESTAMP(ce.`eventEndDate`) as endTime
-                    FROM $primaryTableName AS tp INNER JOIN `tblCalendarEvents` AS ce ON tp.`eventID` = ce.`itemID`
-                    WHERE tp.`itemID` = '%d' AND tp.`sysOpen` = '1'",
-	(int)$_GET['id']
-            );
-            $res = $db->query($qry);
-
-            if ($db->valid($res)) {
-                $fieldValue = $db->fetch_assoc($res);
-                foreach ($fields as &$itemField) {
-                    //if (is_string($itemField['dbColName'])) {
-                        $itemField['dbValue'] = $fieldValue[$itemField['dbColName']];
-                    //}
-                }
-
-                $dbaction = "update";
-                $eventID = $fieldValue['eventID'];
-            }
-
-
-        } else {
-            //yell($_GET);
-        }
-
-
-        if ($message != '') {
-            print $message;
-        }
-
-        $formBuffer = "<form enctype=\"multipart/form-data\" name=\"tableEditorForm\" id=\"tableEditorForm\" method=\"post\" action=\"/admin/apps/registration/intermediate-registration?" . $_SERVER['QUERY_STRING'] .  "\">
-            <table>";
-
-        //print the base fields
-        $f=0;
-
-        foreach ($fields as $field) {
-
-            $formBuffer .= "<tr>";
-            //prepare an ID and Name string with a validation string in it
-
-            if ($field['dbColName'] != false) {
-
-                $newFieldIDSeed = str_replace(" ", "_", $field['label']);
-                $newFieldID = $field['valCode'] . $newFieldIDSeed;
-
-                $field['widgetHTML'] = str_replace("FIELD_ID", $newFieldID, $field['widgetHTML']);
-
-                //set value if one exists
-                if ($field['dbColName'] == 'sysStatus') {
-                    if ($field['dbValue'] == 'active') {
-                        $field['widgetHTML'] = str_replace("FIELD_VALUE", 'checked="checked"', $field['widgetHTML']);
-                    } else {
-                        $field['widgetHTML'] = str_replace("FIELD_VALUE", '', $field['widgetHTML']);
-                    }
-                } 
-                else if ($field['dbColName'] == 'endDate' || $field['dbColName'] == 'startDate' || $field['dbColName'] == 'regOpen' || $field['dbColName'] == 'regClose'){
-                    if (isset($_POST[$newFieldID]) && $message != '') {
-                        $field['dbValue'] = $_POST[$newFieldID];
-                    }
-                    $val = ((int)$field['dbValue'] > 0)?date('Y-m-d',$field['dbValue']):'';
-                    $field['widgetHTML'] = str_replace("FIELD_VALUE", $val, $field['widgetHTML']);
-                }
-                else if ($field['dbColName'] == 'endTime' || $field['dbColName'] == 'startTime'){
-                    if (isset($_POST[$newFieldID]) && $message != '') {
-                        $field['dbValue'] = $_POST[$newFieldID];
-                    }
-                    $val = ((int)$field['dbValue'] > 0)?date('h:i A',$field['dbValue']):'';
-                    $field['widgetHTML'] = str_replace("FIELD_VALUE", $val, $field['widgetHTML']);
-                }
-                else {
-                    if (isset($_POST[$newFieldID]) && $message != '') {
-                        $field['dbValue'] = $_POST[$newFieldID];
-                    }
-                    $field['widgetHTML'] = str_replace("FIELD_VALUE", $field['dbValue'], $field['widgetHTML']);
-
-                }
-
-            }
-            
-            //write in the html
-            $formBuffer .= "<td valign=\"top\"><label for=\"".$newFieldID."\">" . $field['label'] . "</label></td><td>" . $field['widgetHTML'] . " <p>" . $field['tooltip'] . "</p></td>";
-            $formBuffer .= "</tr>";
-        }
-
-        //temp
-        $id = null;
-        $formAction = null;
-        //end temp
-
-        $formBuffer .= "<tr><td colspan='2'>
-            <input type=\"hidden\" name=\"nonce\" value=\"".Quipp()->config('security.nonce')."\" />
-                <input type=\"hidden\" name=\"dbaction\" id=\"dbaction\" value=\"$dbaction\" />";
-        $formBuffer .= "<input type=\"hidden\" name=\"calendarID\" id=\"calendarID\" value=\"3\" />";
-
-        if ($dbaction == "update") { //add in the id to pass back for queries if this is an edit/update form
-            $formBuffer .= "<input type=\"hidden\" name=\"id\" id=\"id\" value=\"".$_GET['id']."\" />";
-            $formBuffer .= "<input type=\"hidden\" name=\"eventID\" id=\"eventID\" value=\"".$eventID."\" />";
-        }
-
-        $formBuffer .= "</td></tr>";
-        $formBuffer .= "</table>";
-        $formBuffer .= "<div class=\"clearfix\" style=\"margin-top: 10px; height:10px; border-top: 1px dotted #B1B1B1;\">&nbsp;</div>";
-        $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='" . $_SERVER['PHP_SELF'] . "';\" value=\"Cancel\" />
-		<input class='btnStyle green' type=\"submit\" name=\"submitUserForm\" id=\"submitUserForm\" value=\"Save Changes\" />";
-        $formBuffer .= "</form>";
-        //print the form
-        print $formBuffer;
-        break;
-    default: //(list)
-       
-        //list table query:
-        
-        $listqry = sprintf("SELECT cl.`itemID`, cl.`sessionName`, cl.`regOpen`, cl.`regClose` , (SELECT count(cr.`itemID`) FROM `tblClassesRegistration` AS cr WHERE cr.`sessionID` = cl.`itemID`) AS `submissions` 
-                FROM $primaryTableName AS cl WHERE cast(sysOpen as UNSIGNED) > 0 AND `level` = 'intermediate'");
-        
-        $resqry = $db->query($listqry);
-        if (is_object($resqry) && $resqry->num_rows > 0){
-            //list table field titles
-            $titles[0] = "Session";
-            $titles[1] = "Registration Open";
-            $titles[2] = "Registration Closed";
-
-            echo '<table id="adminTableList" class="adminTableList tablesorter" width="100%" cellpadding="5" cellspacing="0" border="1">';
-            echo '<thead><tr><th>Session Name</th><th>Registration Open</th><th>Registration Close</th><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr></thead>';
-            echo '<tbody>';
-            while ($rs = $db->fetch_assoc($resqry)){
-                $subs = 'No Registrations';
-                if ((int)$rs['submissions'] > 0){
-                    $subs = '<input class="btnStyle green noPad" id="btnReg_'.$rs['itemID'].'" type="button" onclick="javascript:window.location=\'/admin/apps/registration/view-registration?sid='.$rs['itemID'].'\';" value="Registrations">';
-                }
-                echo '<tr><td>'.$rs['sessionName'].'</td><td>'.date('Y-m-d',$rs['regOpen']).'</td><td>'.date('Y-m-d',$rs['regClose']).'</td>';
-                echo '<td style="width:125px;">'.$subs.'</td>';
-                echo '<td style="width:50px;"><input class="btnStyle red noPad" id="btnDelete_'.$rs['itemID'].'" type="button" onclick="javascript:confirmDelete(\'?action=delete&amp;id='.$rs['itemID'].'\');" value="Delete"></td>';
-                echo '<td style="width:50px;"><input class="btnStyle blue noPad" id="btnEdit_'.$rs['itemID'].'" type="button" onclick="javascript:window.location=\'?view=edit&amp;id='.$rs['itemID'].'\';" value="Edit"></td></tr>';
-            }
-            echo '</tbody></table>';
-        }
-        else{
-            echo 'no data present';
-        }
-        //to pass more advanced controls, you'll need to create your own $fields array and pass it directly to $te->display_editor_list($fields);
-        break;
+    if (!isset($_GET['view'])) {
+        $_GET['view'] = null;
     }
 
+    switch ($_GET['view']) {
+        case "edit": //show an editor for a row (existing or new)
+            //determine if we are editing an existing record, otherwise this will be a 'new'
 
-?>
-    </div><!-- end template -->
-    <div class="clearfix">&nbsp;</div>
+            $dbaction = "insert";
 
-</div><!-- boxStyleContent -->
-</div><!-- boxStyle -->
-<?php
+            $_GET['id'] = intval($_GET['id'], 10);
 
+            if (is_numeric($_GET['id'])) { //if an ID is provided, we assume this is an edit and try to fetch that row from the single table
+                $qry = sprintf("SELECT tp.* FROM $primaryTableName AS tp WHERE tp.`itemID` = '%d' AND tp.`sessionID` = '%d' AND tp.`sysOpen` = '1'", (int) $_GET['id'], $intID
+                );
+                $res = $db->query($qry);
+
+                if ($db->valid($res)) {
+                    $fieldValue = $db->fetch_assoc($res);
+                    foreach ($fields as &$itemField) {
+                        //if (is_string($itemField['dbColName'])) {
+                        $itemField['dbValue'] = $fieldValue[$itemField['dbColName']];
+                        //}
+                    }
+
+                    $dbaction = "update";
+                }
+            } else {
+                //yell($_GET);
+            }
+
+
+            if ($message != '') {
+                print $message;
+            }
+
+            $formBuffer = "<form enctype=\"multipart/form-data\" name=\"tableEditorForm\" id=\"tableEditorForm\" method=\"post\" action=\"/admin/apps/registration/intermediate-registration?" . $_SERVER['QUERY_STRING'] . "\">
+            <table>";
+
+            //print the base fields
+            $f = 0;
+
+            foreach ($fields as $field) {
+
+                $formBuffer .= "<tr>";
+                //prepare an ID and Name string with a validation string in it
+
+                if ($field['dbColName'] != false) {
+
+                    $newFieldIDSeed = str_replace(" ", "_", $field['label']);
+                    $newFieldID = $field['valCode'] . $newFieldIDSeed;
+
+                    $field['widgetHTML'] = str_replace("FIELD_ID", $newFieldID, $field['widgetHTML']);
+
+                    //set value if one exists
+                    if ($field['dbColName'] == 'sysStatus') {
+                        if ($field['dbValue'] == 'active') {
+                            $field['widgetHTML'] = str_replace("FIELD_VALUE", 'checked="checked"', $field['widgetHTML']);
+                        } else {
+                            $field['widgetHTML'] = str_replace("FIELD_VALUE", '', $field['widgetHTML']);
+                        }
+                    } else if ($field['dbColName'] == "province") {
+                        $field['dbValue'] = (isset($_POST[$newFieldID]) && $message != '') ? $_POST[$newFieldID] : 'ON';
+                        $field['widgetHTML'] = '<select name="' . $newFieldID . '" id="' . $newFieldID . '">';
+                        foreach ($provs as $prov) {
+                            $field['widgetHTML'] .= '<option value="' . $prov . '"' . ($field['dbValue'] == $prov ? 'selected="selected"' : '') . '>' . $prov . ($field['dbValue'] == $prov ? '*' : '') . '</option>';
+                        }
+                        $field['widgetHTML'] .= '</select>';
+                    } else if ($field['dbColName'] == "gender") {
+                        $field['dbValue'] = (isset($_POST[$newFieldID]) && $message != '') ? $_POST[$newFieldID] : $field['dbValue'];
+                        $field['widgetHTML'] = '<select name="' . $newFieldID . '" id="' . $newFieldID . '">';
+                        foreach ($gender as $gAbbr => $sex) {
+                            $field['widgetHTML'] .= '<option value="' . $gAbbr . '"' . ($field['dbValue'] == $gAbbr ? 'selected="selected"' : '') . '>' . $sex . ($field['dbValue'] == $gAbbr ? '*' : '') . '</option>';
+                        }
+                        $field['widgetHTML'] .= '</select>';
+                    } else if (stristr($field['dbColName'], "date") !== false) {
+                        if (isset($_POST[$newFieldID]) && $message != '') {
+                            $field['dbValue'] = $_POST[$newFieldID];
+                        }
+                        $field['dbValue'] = ($field['dbValue'] != "" && $field['dbValue'] != 0) ? date('Y-m-d', $field['dbValue']) : '';
+                        $field['widgetHTML'] = str_replace("FIELD_VALUE", $field['dbValue'], $field['widgetHTML']);
+                    } else {
+                        if (isset($_POST[$newFieldID]) && $message != '') {
+                            $field['dbValue'] = $_POST[$newFieldID];
+                        }
+                        $field['widgetHTML'] = str_replace("FIELD_VALUE", $field['dbValue'], $field['widgetHTML']);
+                    }
+                }
+
+                //write in the html
+                $formBuffer .= "<td valign=\"top\"><label for=\"" . $newFieldID . "\">" . $field['label'] . "</label></td><td>" . $field['widgetHTML'] . " <p>" . $field['tooltip'] . "</p></td>";
+                $formBuffer .= "</tr>";
+            }
+
+            //temp
+            $id = null;
+            $formAction = null;
+            //end temp
+
+            $formBuffer .= "<tr><td colspan='2'>
+            <input type=\"hidden\" name=\"nonce\" value=\"" . Quipp()->config('security.nonce') . "\" />
+                <input type=\"hidden\" name=\"dbaction\" id=\"dbaction\" value=\"$dbaction\" />";
+
+            if ($dbaction == "update") { //add in the id to pass back for queries if this is an edit/update form
+                $formBuffer .= "<input type=\"hidden\" name=\"id\" id=\"id\" value=\"" . $_GET['id'] . "\" />";
+            }
+
+            $formBuffer .= "</td></tr>";
+            $formBuffer .= "</table>";
+            $formBuffer .= "<div class=\"clearfix\" style=\"margin-top: 10px; height:10px; border-top: 1px dotted #B1B1B1;\">&nbsp;</div>";
+            $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration\" value=\"Cancel\" />
+		<input class='btnStyle green' type=\"submit\" name=\"submitUserForm\" id=\"submitUserForm\" value=\"Save Changes\" />";
+            $formBuffer .= "</form>";
+            //print the form
+            print $formBuffer;
+            break;
+        default: //(list)
+            //list table query:
+
+            $listqry = sprintf("SELECT cr.`itemID`, concat(cr.`lastName`, ', ' ,cr.`firstName`) AS name, cr.`email`, cr.`formDate`, 
+                UNIX_TIMESTAMP(cr.`sysDateCreated`) as dateReg, cr.`paymentDate`, cr.`registrationKey`, cr.`sysStatus` 
+                FROM $primaryTableName AS cr 
+                WHERE cr.`sessionID` = %d
+                AND cr.`sysOpen` = '1'
+                ORDER BY cr.`sysStatus`, cr.`itemID` ASC", 
+                    (int) $db->escape($intID, true)
+            );
+
+            $resqry = $db->query($listqry);
+            if (is_object($resqry) && $resqry->num_rows > 0) {
+                //list table field titles
+                $titles[0] = "Name";
+                $titles[1] = "Registration Number";
+                $titles[2] = "Email Address";
+                $titles[3] = "Date Registered";
+                $titles[4] = "Payment Date";
+                $titles[5] = "Form Submitted";
+
+                while ($rs = $db->fetch_assoc($resqry)) {
+                        $registered[] = $rs;
+                }
+                echo '<form name="frmSendEmail" action="/admin/apps/notificationManager/emailer" method="post" enctype="multipart/form-data">';
+                echo '<table id="adminTableList_reg" class="adminTableList tablesorter" width="100%" cellpadding="5" cellspacing="0" border="1">';
+                echo '<thead><tr><th>' . $titles[0] . '</th><th>' . $titles[1] . '</th><th>' . $titles[2] . '</th><th>' . $titles[3] . '</th><th>' . $titles[4] . '</th><th>' . $titles[5] . '</th><th>Status</th>
+                <th>Email<input type="checkbox" id="emailAll" name="emailAll" value="all" /></th><th>&nbsp;</th><th>&nbsp;</th></tr></thead>';
+                echo '<tbody>';
+                foreach ($registered as $dt) {
+                    $paymentDate = (trim($dt["paymentDate"]) != '' && $dt["paymentDate"] > 0) ? date('Y-m-d', $dt["paymentDate"]) : "Due";
+                    $formDate = (trim($dt["formDate"]) != '' && $dt["formDate"] > 0) ? date('Y-m-d', $dt["formDate"]) : "Due";
+                    echo '<tr><td>' . $dt['name'] . '</td><td>' . $dt["registrationKey"] . '</td><td>' . $dt["email"] . '</td><td>' . date('Y-m-d', $dt["dateReg"]) . '</td><td>' . $paymentDate . '</td><td>' . $formDate . '</td><td>'.$dt["sysStatus"].'</td>';
+                    echo '<td style="width:70px;"><input type="checkbox" name="eList[]" id="eList_' . trim($dt['itemID']) . '" value="' . trim($dt['itemID']) . '" /></td>';
+                    echo '<td style="width:40px;"><input class="btnStyle red noPad" id="btnDelete_' . $dt['itemID'] . '" type="button" onclick="javascript:confirmDelete(\'?action=delete&amp;id=' . $dt['itemID'] . '\');" value="Delete"></td>';
+                    echo '<td style="width:40px;"><input class="btnStyle blue noPad" id="btnEdit_' . $dt['itemID'] . '" type="button" onclick="javascript:window.location=\'?view=edit&amp;id=' . $dt['itemID'] . '\';" value="Edit"></td></tr>';
+                }
+                echo '</tbody>
+            <tbody>
+            <tr><td colspan="10">
+            <input  style="float:right" class="btnStyle green noPad" id="btnPrint" type="button" onclick="javascript:window.open(\'/admin/apps/registration/print-reg-list?sid=' . $intID . '\');" value="Print">
+            <input  style="float:right" class="btnStyle blue noPad" id="btnSelect" type="submit" value="Send Email">
+            <input type="hidden" name="nonce" value="' . Quipp()->config('security.nonce') . '" />
+            <input type="hidden" name="etype" value="class-reg" />
+            </td>
+                </tr>
+            </tbody>
+            </table>';
+                echo '</form>';
+            } else {
+                echo 'no data present';
+            }
+            //to pass more advanced controls, you'll need to create your own $fields array and pass it directly to $te->display_editor_list($fields);
+            break;
+    }
+    ?>
+            </div><!-- end template -->
+            <div class="clearfix">&nbsp;</div>
+
+        </div><!-- boxStyleContent -->
+    </div><!-- boxStyle -->
+                <?php
 //end of display logic
 
 
-include $root. "/admin/templates/footer.php";
-
-}
-else{
-   $auth->boot_em_out(1);
-
+include $root . "/admin/templates/footer.php";
+} else {
+$auth->boot_em_out();
 }
