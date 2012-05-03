@@ -325,12 +325,12 @@ a {
 body, a:hover { color: #555; }
 
 nav a, #bannerContent h2, .boxStyle h2 { color: #fff; }
-a { color: #4A762B; text-decoration: none; }
-nav a:hover, nav .current a, footer a:hover { color: #ccc; text-decoration: none; }
+a { color: #4A762B; text-decoration: none; border-bottom: 1px dashed #4A762B}
+nav a:hover, nav .current a, footer a:hover { color: #ccc; text-decoration: none; border:none}
 
-footer, footer a, #bannerTestimonials h2 { color: #4c4c4c; }
+footer, footer a, #bannerTestimonials h2 { color: #4c4c4c; border:none}
 
-
+header a{ border: none;}
 blockquote:before, blockquote:after { color: rgba(0,0,0,0.04); }
 
 .boxStyle h2 {
@@ -421,6 +421,7 @@ nav ul li:first-child { background: none; }
 nav ul li a {
     font-size: 15px;
     text-decoration: none;
+    border:none;
 }
 /* =============================================================================
    Templates
@@ -508,7 +509,6 @@ a:active.btnStyle {
     position: relative;
     top: 1px;
 }
-a.readMore {font-style: italic}
 
 /*Address Box--------------------------------------------------------------- */
 
@@ -697,6 +697,7 @@ a.readMore {font-style: italic}
 
 .tourneysNav a{
     color: #777;
+    border:none;
 }
 .tourneysNav a:hover{
     font-style: italic;
@@ -784,8 +785,8 @@ textarea { width:485px; }
     list-style: none;
 }
 
-.news-archive ul li a {color: #4A762B; font-weight: bold; font-size: 16px}
-
+.news-archive ul li a {color: #4A762B; font-weight: bold; font-size: 16px;border:none;}
+.news-archive ul li a:hover{ color: #777;}
 
 /*Pagination-------------------------------------------------------------- */
 
@@ -951,7 +952,7 @@ footer div{ display: inline; margin: 10px 20px 10px 10px; float:right;}
 	color:#666666;
 }
 
-.alertBoxFunctionGood a, .alertBoxFunctionBad a, .alertBoxFunctionWarn a, .alertBoxFunctionEmpty a { color:#0000FF; }
+.alertBoxFunctionGood a, .alertBoxFunctionBad a, .alertBoxFunctionWarn a, .alertBoxFunctionEmpty a { color:#0000FF; border:none;}
 .alertBoxFunctionGood a:hover, .alertBoxFunctionBad a:hover, .alertBoxFunctionWarn a:hover, .alertBoxFunctionEmpty a:hover { color:#0000FF; }
 
 

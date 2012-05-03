@@ -40,7 +40,7 @@
 
             <h1><a class="logo" href="/"><img src="/themes/LondonFencing/img/logo.png" alt="London Fencing Club" /></a>London Fencing Club</h1>
 
-    		<nav><?php print $nav->build_nav($nav->get_nav_items_under_bucket('primary'), $slug, true, false);  ?><div class="clearfix"></div></nav>
+    		<nav><?php print str_replace("main","",$nav->build_nav($nav->get_nav_items_under_bucket('primary'), $slug, true, false));  ?><div class="clearfix"></div></nav>
     
 			<div class="clearfix"></div>	
 	</header>
