@@ -17,7 +17,9 @@ $filterEndDate = (isset($_GET['filter'])) ? strtotime('next month', $_GET['filte
 ?>
 
 <section class="tournaments">
-    <h2>Tournaments <?php echo (isset($_GET['filter']) ? ' - '.date('F Y', $_GET['filter']): ''); ?></h2>
+   	<div class="blankMainHeader">
+    	<h2>Tournaments <?php echo (isset($_GET['filter']) ? ' - '.date('F Y', $_GET['filter']): ''); ?></h2>
+    </div>
 <?php
 if (!empty($tourns)){
 
@@ -44,9 +46,9 @@ if (!empty($tourns)){
                     $border = true;
                 }
                 echo '<h4'.$h4Class.'>'.preg_replace('%\(.*\)%' , '', $tourn["title"]);
-                echo '<a href="'.$icsHREF.'"><img src="/themes/LondonFencing/img/plusCalendar_32.png" alt="add to calendar" title="Add to Calendar" width="32px; height="32px" /></a>';
+                echo '<a href="'.$icsHREF.'" class="iconsM green"><img src="/themes/LondonFencing/img/plus.png" alt="add to calendar" title="Add to Calendar" width="12px; height="12px" /></a>';
                 if  (isset($tourn['link']) && $tourn['link'] !== false){
-                    echo '<a href="'.$tourn['link'].'" target="_blank"><img src="/themes/LondonFencing/img/extLink_32.png" alt="more info" width="32px; height="32px" title="More Info" /></a>';
+                    echo '<a href="'.$tourn['link'].'" target="_blank" class="iconsM blue"><img src="/themes/LondonFencing/img/extLink.png" alt="more info" width="12px; height="12px" title="More Info" /></a>';
                 }           
                 echo '</h4>';
                 echo '<p>';

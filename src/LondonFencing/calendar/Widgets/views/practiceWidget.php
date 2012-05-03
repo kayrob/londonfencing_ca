@@ -41,8 +41,8 @@ if ($this instanceof Page && isset($db)){
            $h4Class = ($p > 0) ?' class="bordered"' : '';
            echo '<h4'.$h4Class.'>' .$pData['type'].'</h4>';
            echo '<p>';
-           echo '<a href="/src/LondonFencing/calendar/assets/rss/icalEvents.php?event='.$pData["eID"].'"><img src="/themes/LondonFencing/img/plusCalendar.png" alt="add to calendar" title="Add to Calendar" width="49px; height="49px" /></a>';
-           echo '<a href="#mapit_'.$pData["eID"].'" class="fbMap"><img src="/themes/LondonFencing/img/map.png" alt="view map" width="49p9x; height="px" title="View Map" /></a>';    
+           echo '<a href="/src/LondonFencing/calendar/assets/rss/icalEvents.php?event='.$pData["eID"].'" class="icons green"><img src="/themes/LondonFencing/img/plus.png" alt="add to calendar" title="Add to Calendar" width="20px; height="20px" /></a>';
+           echo '<a href="#mapit_'.$pData["eID"].'" class="fbMap icons blue"><img src="/themes/LondonFencing/img/map.png" alt="view map" width="20px; height="20px" title="View Map" /></a>';    
            echo'<span class="lowlight">Time:</span>&nbsp;&nbsp;'.date('g:i a',$pData['start']).' to  '.date('g:i a',$pData['end']).'<br />';
            echo '<span class="lowlight">Date:</span>&nbsp;&nbsp;&nbsp;'.date('D M j, Y',$pData['start']).'<br />';
            echo '<span class="lowlight">Where:</span>&nbsp;'.stripslashes($pData['location']).'</p>';

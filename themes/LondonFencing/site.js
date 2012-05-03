@@ -11,6 +11,7 @@ jQuery(document).ready(function($) {
         out: dropdownMouseout
     }
     $('.dropdown').hoverIntent(config);
+    
     $('.fbMap').fancybox();
     if ($('.primeImg').length == 1){
         $('.primeImg').cycle({
@@ -20,6 +21,15 @@ jQuery(document).ready(function($) {
         before: afterCycle
     });
     }
+    var colBHeight = $('#colB').height();
+    var colCElementsHeight = 0;
+    $('#colC div').each(function() {
+    	colCElementsHeight += $(this).height();	
+    });
+    
+    if(colCElementsHeight > colBHeight) {
+    	$('#colC div').addClass('tooLong');
+    }
     function afterCycle(){
         $('.banner img').each(function(imgIndex){
             if (imgIndex > 0 && imgIndex < 7){
@@ -28,4 +38,5 @@ jQuery(document).ready(function($) {
         });
         $('.banner img:eq('+($(this).index() +1)+')').removeClass('homeThumb').addClass('homeThumbB');
     }
+    
 });

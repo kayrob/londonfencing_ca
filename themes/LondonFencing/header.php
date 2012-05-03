@@ -6,7 +6,7 @@
     <meta name="description" content="<?php print $meta['description']; ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/plain" rel="author" href="/humans.txt" />
-    
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/min/?f=themes/LondonFencing/default.css,js/fancybox/jquery.fancybox-1.3.4.css,js/jquery-ui/jquery-ui-1.8.18.custom.css">
     <link rel="alternate" type="application/rss+xml" href="/feed/blog">
     <?php

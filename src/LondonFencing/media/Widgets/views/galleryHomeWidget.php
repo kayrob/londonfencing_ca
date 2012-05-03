@@ -27,7 +27,7 @@ if ($this instanceof Page && isset($props[0])){
     </div>
 <div class="clearFix"></div>
 <ul style="margin-top: 310px" class="banner">
-        <li><img src="/themes/LondonFencing/img/leftArrow.png" class="prev" width="50px" height="50px"/></li>
+        <li id="arrow" class="prev"><img src="/themes/LondonFencing/img/arrowL.png" alt="arrowL" width="24px" height="28px" /></li>
 <?php
         foreach($photos as $tagID => $album){
             $limit = (count($album) <= 6)? count($album): 6;
@@ -37,7 +37,7 @@ if ($this instanceof Page && isset($props[0])){
             break;
         }
 ?>
-        <li><img src="/themes/LondonFencing/img/rightArrow.png" class="next" width="50px" height="50px"/></li>
+        <li id="arrow" class="next"><img src="/themes/LondonFencing/img/arrowR.png" alt="arrowR" width="24px" height="28px" /></li>
     </ul>
 <?php
     global $quipp;

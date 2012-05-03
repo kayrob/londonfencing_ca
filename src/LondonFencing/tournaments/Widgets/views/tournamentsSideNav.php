@@ -12,7 +12,7 @@ $tourns = multi_array_subval_sort($tournaments,'tdate');
 ?>
 
 <section class="tourneysNav">
-    <h2>Filter</h2>
+    <div class="blankMainHeader"><h2>Filter</h2></div>
 <?php
 if (!empty($tourns)){
         
@@ -20,12 +20,16 @@ if (!empty($tourns)){
         echo '<ul>';
         foreach ($tourns as $tourn){
             if ($tourn['tdate'] >= date('U') && $monthYr != date('Y-m', $tourn['tdate'])){
-                echo '<li><a href="/'.$_GET['p'].'&filter='.mktime(0,0,0, date('m',$tourn['tdate']),1, date('Y',$tourn['tdate'])).'">'.date('F Y', $tourn['tdate']).'</a></li>';
+                echo '<li>
+                    <a href="/'.$_GET['p'].'&filter='.mktime(0,0,0, date('m',$tourn['tdate']),1, date('Y',$tourn['tdate'])).'">'.date('F Y', $tourn['tdate']).'</a>
+                    <a class="iconsM gray" href="/'.$_GET['p'].'&filter='.mktime(0,0,0, date('m',$tourn['tdate']),1, date('Y',$tourn['tdate'])).'">
+                        <img src="/themes/LondonFencing/img/arrowR.png" alt="" width="15px" height="15px" /></a>
+                        </li>';
                 $monthYr = date('Y-m', $tourn['tdate']);
             }
         }
         if (isset($_GET['filter'])){
-            echo '<li class="clearFilter"><a href="/'.$_GET['p'].'">Clear Filter</li>';
+            echo '<li ><a href="/'.$_GET['p'].'">Clear Filter</a><a href="/'.$_GET['p'].'" class="iconsM gray"><img src="/themes/LondonFencing/img/arrowL.png" alt="" width="15px" height="15px" /></a></li>';
         }
         echo '</ul>';
 }

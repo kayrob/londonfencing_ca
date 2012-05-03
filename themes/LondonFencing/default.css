@@ -35,7 +35,7 @@ html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-
 
 body { margin: 0; font-size: 1em; line-height: 1.4; background-image:url('/themes/LondonFencing/img/pattern.jpg');}
 
-body, button, input, select, textarea { font-family: Georgia, sans-serif; color: #222; }
+body, button, input, select, textarea { font-family: 'Droid Sans', sans-serif; color: #222; }
 
 /*
  * Remove text-shadow in selection highlight: h5bp.com/i
@@ -228,14 +228,8 @@ td { vertical-align: top; }
    Author: Resolution Interactive Media
    ========================================================================== */
 
-@font-face {
-    font-family: DroidSans;
-    src: url('fonts/DroidSans.ttf');    
-    src: local('?'), url('fonts/DroidSans-Bold.ttf') format('truetype'), url('fonts/DroidSans.ttf') format('truetype');
-}
-
 body {
-    font-family: Helvetica;
+    font-family: 'Droid Sans', 'Arial', sans-serif;
     font-size: 13px;
     line-height: 24px;
     position: relative;
@@ -266,9 +260,9 @@ body {
 
 h1 { font-size: 28px; margin-top: 0; color:#fff }
 header h1 { margin-top: 20px; padding-bottom: 10px; }
-h2 { font-size: 24px; color: #555;text-transform: uppercase; font-family: DroidSans; }
-h3 { font-size: 18px; font-family: DroidSans; }
-h4 { font-size: 15px; color: #707070; font-family: DroidSans;}
+h2 { font-size: 24px; color: #555;text-transform: uppercase; }
+h3 { font-size: 18px; }
+h4 { font-size: 15px; color: #707070; }
 h5 { font-size: 13px; }
 h6 { font-size: 11px; }
 
@@ -282,31 +276,33 @@ h1, h2, h3 {font-weight: bold}
 
 /*h2 page title---------------------------------------------------------------- */  
  
-.four-column #colC .blankMainHeader,
-.four-column #colD .blankMainHeader,
-.four-column #colE .blankMainHeader,
-.two-column #colC .blankMainHeader {
-	display: block;
-	width: 280px;
-	text-align: center;
-	margin: 0 0 10px;
-}
 .two-column #colC .blankMainHeader { text-align: left; }
 
-.two-column #colB .blankMainHeader { 
+.two-column #colC .blankMainHeader{ 
 	position: relative;
 	background: #CCC;
-	margin: 25px 0 30px;
+	margin: 28px 0 14px;
 	width: 100%;
 	height: 10px;
 }
-.two-column #colB .blankMainHeader h2 {
+.two-column #colC .blankMainHeader h2 {
 	float: left;
 	background: #FFF;
 	padding-right: 10px;
 	margin-top: -7px;
 }
-.two-column #colC h2 { font-size: 20px; }
+.four-column #colC .blankMainHeader,
+.four-column #colD .blankMainHeader,
+.four-column #colE .blankMainHeader, {
+	display: block;
+	width: 280px;
+	margin: 0 0 10px;
+}
+.two-column #colC h2 { 
+    font-size: 20px; 
+     background: #FFF;
+    padding-right: 10px;
+}
 
 /*Paragraph------------------------------------------------------------------- */   
 
@@ -329,7 +325,8 @@ a {
 body, a:hover { color: #555; }
 
 nav a, #bannerContent h2, .boxStyle h2 { color: #fff; }
-a, nav a:hover, nav .current a, footer a:hover { color: #ccc; text-decoration: none; }
+a { color: #4A762B; text-decoration: none; }
+nav a:hover, nav .current a, footer a:hover { color: #ccc; text-decoration: none; }
 
 footer, footer a, #bannerTestimonials h2 { color: #4c4c4c; }
 
@@ -394,7 +391,6 @@ nav {
     /*background: rgba(0,0,0,0.83);*/
     background: #222;
     margin: 20px 0 0 0;
-    font-family: DroidSans;
     text-transform: uppercase;
     font-weight: 300;
     color: #fff;
@@ -452,8 +448,8 @@ nav ul li a {
 .four-column #colC {width: 440px}
 .two-column #colC { 
 	width: 268px;
-	border-left: 1PX SOLID #DEDEDE;
-	padding-left: 20PX; 
+	background:url(img/tileColC.png) repeat-y;
+	padding-left: 20px; 
 }
 .four-column #colD { width: 440px; margin-left: 34px; }
 .four-column #colE { width: 280px; }
@@ -461,7 +457,8 @@ nav ul li a {
 
 .four-column .main,  .two-column .main { 
     clear: both; 
-    float: left; 
+    float: left;
+    display: block; 
     margin: 15px 0; 
     padding: 10px 22px 80px 22px;
     background-color: #fff;
@@ -472,7 +469,8 @@ nav ul li a {
     -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
 }
- .two-column .main {margin-top: 0px;}
+ .two-column .main { margin-top: 0px; background: url(img/tileColC.png) repeat-y #FFF; background-position-x: 647px; }
+ .two-column #colC .tooLong { position: relative; }
 /* section { margin-top: 30px; } */
    
 /* =============================================================================
@@ -611,6 +609,7 @@ a.readMore {font-style: italic}
 }
     
 .callout img, .tournaments img { margin:0; padding:0; border:none; float: right;padding-left: 3px; }
+.tournaments img{padding: 4px 3px 0 0}
 .callout .bordered, .tournaments .bordered {
     border-top: 1px solid #E0E0E0;
     padding-top: 20px;
@@ -624,6 +623,7 @@ a.readMore {font-style: italic}
 #latestNews h4, .news-article h4{
     font-style: italic;
 }
+
 .lowlight{
     color: #909090;
 }
@@ -636,33 +636,96 @@ a.readMore {font-style: italic}
 
 .moreTournaments{ margin-top: 20px; }
 
-.icons {
-	float: right;
-	background: #444;
-	padding: 15px 15px !important;
-	width: 20px;
-	height: 20px;
-	border-radius: 25px;
-	-webkit-border-radius: 25px;
-	-moz-border-radius: 25px;
+.icons , .iconsM{
+    float: right;
+    background: #444;
+    width: 20px;
+    height: 20px;
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
     margin-left: 3px;
 }
-.green { 
-	background: #4a762b; 
-	-moz-transition: all 0.5s linear;
+.icons{
+      padding: 15px 15px !important;
+}
+.iconsM {
+    padding: 5px 5px !important;
+}
+.green, .blue, .gray{
+    -moz-transition: all 0.5s linear;
     -webkit-transition: all 0.5s linear;
     -ms-transition: all 0.5s linear;
     transition: all 0.5s linear;
 }
-.blue { 
-	background: #2e567f;
-	-moz-transition: all 0.5s linear;
-    -webkit-transition: all 0.5s linear;
-    -ms-transition: all 0.5s linear;
-    transition: all 0.5s linear; 
+.green { 
+    background: #4a762b; 
 }
-.blue:hover { background: #4a762b; }
+.blue { 
+    background: #2e567f;
+}
+.gray { 
+    background: #444;
+	 
+}
+.blue:hover, .gray:hover { background: #4a762b; }
 .green:hover { background: #2e567f; }
+
+.tourneysNav ul{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+/*.tourneysNav ul li:before {
+    content:'\2192';
+    color:#4A762B;
+    font-size:20px;
+    font-weight: bold;
+}
+.tourneysNav .clearFilter:before {
+    content:'\21B5';
+    font-weight: normal;
+}*/
+.tourneysNav ul li{
+    margin: 0;
+    padding: 10px 0 10px 5px;
+    border-bottom: 1px solid #ddd;
+}
+.tourneysNav ul li:last-child{
+    border: none;
+}
+
+.tourneysNav a{
+    color: #777;
+}
+.tourneysNav a:hover{
+    font-style: italic;
+}
+.tourneysNav img{
+    padding-left: 4px;
+    margin-top: -5px;
+}
+/* Col C Widget Lists
+----------------------------------------------------------------------------------- */
+#colC .blankBodyMainCap ul, #regSideNav ul, .news-archive ul  {
+    list-style: none; 
+    padding: 0; 
+    margin: 0;
+}
+#colC .blankBodyMainCap ul li, #regSideNav ul li, .news-archive ul li  {
+    margin: 0;
+    padding: 10px 0 10px 5px;
+    border-bottom: 1px solid #ddd;
+}
+#colC .blankBodyMainCap ul li:last-child, #regSideNav ul li:last-child, .news-archive ul li:last-child  {
+    border:none;
+}
+#colC .blankBodyMainCap span:nth-child(odd), #regSideNav span:nth-child(odd){
+    color: #4A762B; 
+    font-weight: bold;
+}
+
+
 /* Media Gallery
 ------------------------------------------------------------------------------------ */
 .mediaGallery{ list-style:none; }
@@ -674,9 +737,6 @@ a.readMore {font-style: italic}
 
 /* Registration
 -------------------------------------------------------------------------------------*/
-#regSideNav ul {list-style: none; padding: 0;}
-#regSideNav li {padding: 0 0 10px 0; text-indent: 2px}
-
 #dvAConsent, #dvMConsent{
     background-color:#fff;
     width: 840px;
@@ -719,17 +779,37 @@ textarea { width:485px; }
 /*Blog---------------------------------------------------------------------- */
 
 .archive-widget ul {
-	padding: 0;
-	margin: 0;
-	list-style: none;
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }
-.archive-widget ul li {
-	padding: 10px 0;
-	border-bottom: 1px solid #dedede;
-}
-.news-archive ul li a { font-size: 16px; color: #4A762B; font-weight: bold; }
+
+.news-archive ul li a {color: #4A762B; font-weight: bold; font-size: 16px}
 
 
+/*Pagination-------------------------------------------------------------- */
+
+.pagination {
+    display: block;
+    height: 100px;
+    margin-top: 50px;
+}
+.pagination a, .pagination .previous, .pagination .next{
+    padding: 10px;
+    background-color: #f3f3f3;
+    color: #777;
+    border: 1px solid #ddd;
+}
+.pagination a.current{
+    color: #4a762b;
+    border: 1px solid #4a762b;
+}
+.pagination .disabled{
+    color: #ddd;
+}
+.pagination a:hover{
+    font-style: italic;
+}
 /*Box Style----------------------------------------------------------------- */
 
 .boxStyle {

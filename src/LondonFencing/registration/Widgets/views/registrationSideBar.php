@@ -13,16 +13,16 @@ if (isset($_GET['p']) && preg_match('%(intermediate|beginner)%', $_GET['p'],$mat
         $navTitle = ($sessionNfo['isOpen'] == 1) ? "Session Details" : "Next Session";
 ?>
 <div id="regSideNav">
-    <h2><?php echo $navTitle; ?></h2>
+    <div class="blankMainHeader"><h2><?php echo $navTitle; ?></h2></div>
     <ul>
-    <li class="striped">Start Date: <span><?php echo date('l M j, Y',$sessionNfo['eventStart']); ?></span></li>
-    <li>End Date: <span><?php echo date('l M j, Y',$sessionNfo['endDate']); ?></span></li>
-    <li class="striped">Time: <span><?php echo date('g:i a',$sessionNfo['eventStart']); ?> - <?php echo date('g:i a',$sessionNfo['eventEnd']); ?></span></li>
-    <li>Location: <span><?php echo $sessionNfo['location']; ?></span></li>
-    <li class="striped">Coach: <span><?php echo (trim($sessionNfo['coach']) == '' ? 'TBA' : $sessionNfo['coach']); ?></span></li>
-    <li>Fee: <span><?php echo sprintf('$%001.2f',trim($sessionNfo['fee'])); ?></span></li>
-    <li class="striped"><?php echo ($sessionNfo['isOpen'] == 1 ? "Register By: ": "Registration:" );?> 
-        <span><?php echo ($sessionNfo['isOpen'] == 1 ? date('M j, Y',$sessionNfo['regClose']): date('M j, Y',$sessionNfo['regOpen']) );?></span></li>
+    <li><span>Start Date</span><br /><?php echo date('l M j, Y',$sessionNfo['eventStart']); ?></li>
+    <li><span>End Date</span><br /><?php echo date('l M j, Y',$sessionNfo['endDate']); ?></li>
+    <li><span>Time</span><br /><?php echo date('g:i a',$sessionNfo['eventStart']); ?> - <?php echo date('g:i a',$sessionNfo['eventEnd']); ?></li>
+    <li><span>Location</span><br /><?php echo $sessionNfo['location']; ?></li>
+    <li><span>Coach</span><br /><?php echo (trim($sessionNfo['coach']) == '' ? 'TBA' : $sessionNfo['coach']); ?></li>
+    <li><span>Fee</span><br /><?php echo sprintf('$%001.2f',trim($sessionNfo['fee'])); ?></li>
+    <li><span><?php echo ($sessionNfo['isOpen'] == 1 ? "Register By ": "Registration" );?></span>
+        <br /><?php echo ($sessionNfo['isOpen'] == 1 ? date('M j, Y',$sessionNfo['regClose']): date('M j, Y',$sessionNfo['regOpen']) );?></li>
     </ul>
 </div>
 <?php
