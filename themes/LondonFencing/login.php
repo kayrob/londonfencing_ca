@@ -46,8 +46,6 @@
                         <div id="loginBoxButtons">
                             <label>&nbsp;</label><input type="submit"  value="Sign-in" class="btnStyle" />
                         </div>
-                        
-                        <div class="loginTips"><a href="/forgot-password">Password Recovery</a></div>
 
             </form>
         </div>
