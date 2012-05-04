@@ -31,8 +31,8 @@ if (!empty($tourns)){
             if ($tourn['tdate'] >= $filterStartDate && $tourn['tdate'] < $filterEndDate && $p >= $start){
                 //if eID link to cal ICS, else static ICS with specific data
                 $description = ltrim($tourn['description'],"<br />");
-                $date = date('M d, Y g:i a',$tourn['tdate']);
-                $date .= (date('Y-m-d', $tourn['tdate']) == date('Y-m-d', $tourn['tend']))? ' to '.date('g:i a',$tourn['tend']): ' - '.date('M d, Y g:i a', $tourn['tend']);
+                $date = date('M j, Y g:i a',$tourn['tdate']);
+                $date .= (date('Y-m-d', $tourn['tdate']) == date('Y-m-d', $tourn['tend']))? ' to '.date('g:i a',$tourn['tend']): ' - '.date('M j, Y g:i a', $tourn['tend']);
                 $date = str_ireplace('12:00 am','',$date);
                 
                 $location = (preg_match('%[Ll]ocation\:(\s)?(.*)%', $description, $matches)) ? $matches[2] :'' ;

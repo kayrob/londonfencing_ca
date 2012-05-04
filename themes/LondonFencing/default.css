@@ -325,7 +325,8 @@ a {
 body, a:hover { color: #555; }
 
 nav a, #bannerContent h2, .boxStyle h2 { color: #fff; }
-a { color: #4A762B; text-decoration: none; border-bottom: 1px dashed #4A762B}
+a { color: #4A762B; text-decoration: none; border-bottom: 1px dashed #4A762B;}
+.main #colC .news-archive a, .main #colC .tourneysNav a, .pagination a, #colA a{border:none;}
 nav a:hover, nav .current a, footer a:hover { color: #ccc; text-decoration: none; border:none}
 
 footer, footer a, #bannerTestimonials h2 { color: #4c4c4c; border:none}
