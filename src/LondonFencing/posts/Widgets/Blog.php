@@ -8,6 +8,7 @@ class Blog extends Posts\posts{
     
     protected $_siteID;
     protected $_status;
+    public $type = "blog";
     
     public function __construct($db, $siteID, $status){
         if (is_object($db)){
@@ -25,9 +26,10 @@ class Blog extends Posts\posts{
         
         $limit = "LIMIT ".$offset.",".$max;
         
-        $qry = sprintf("SELECT `title`, `lead_in`, `displayDate`, `slug` FROM `tblNews` WHERE `approvalStatus` = '1' AND `sysOpen` = '1' AND `sysStatus` = '%s' AND `type` = 'blog' AND `siteID` = %d ORDER BY 
+        $qry = sprintf("SELECT `title`, `lead_in`, `displayDate`, `slug` FROM `tblNews` WHERE `approvalStatus` = '1' AND `sysOpen` = '1' AND `sysStatus` = '%s' AND `type` = '%s' AND `siteID` = %d ORDER BY 
         UNIX_TIMESTAMP(`displayDate`) DESC %s",
             $this->_status,
+            $this->type,
             (int)$this->_siteID,
             $limit
         );
@@ -47,7 +49,8 @@ class Blog extends Posts\posts{
     
         $condition = ($slug == "latest")?"ORDER BY UNIX_TIMESTAMP(`displayDate`) DESC":"AND `slug` = '".$this->_db->escape($slug)."'";
         
-        $qry = sprintf("SELECT * FROM `tblNews` WHERE `sysOpen` = '1' AND `type` = 'blog' AND `sysStatus` = '%s' AND `approvalStatus` = '1' AND `siteID` = %d %s LIMIT 0,1",
+        $qry = sprintf("SELECT * FROM `tblNews` WHERE `sysOpen` = '1' AND `type` = '%s' AND `sysStatus` = '%s' AND `approvalStatus` = '1' AND `siteID` = %d %s LIMIT 0,1",
+            $this->type,
             $this->_status,
             $this->_siteID,
             $condition
@@ -65,7 +68,8 @@ class Blog extends Posts\posts{
     
         $condition = (is_numeric($offset) && is_numeric($limit))?sprintf("LIMIT %d,%d",(int)$offset,(int)$limit):"";
             
-        $qry = sprintf("SELECT `title`, UNIX_TIMESTAMP(`displayDate`) as `displayDate`, `slug` FROM `tblNews` WHERE `sysOpen` = '1' AND `type` = 'blog' AND `sysStatus` = '%s' AND `approvalStatus` = '1' AND `siteID` = %d AND UNIX_TIMESTAMP(`displayDate`) >= %d ORDER BY UNIX_TIMESTAMP(`displayDate`) DESC %s",
+        $qry = sprintf("SELECT `title`, UNIX_TIMESTAMP(`displayDate`) as `displayDate`, `slug` FROM `tblNews` WHERE `sysOpen` = '1' AND `type` = '%s' AND `sysStatus` = '%s' AND `approvalStatus` = '1' AND `siteID` = %d AND UNIX_TIMESTAMP(`displayDate`) >= %d ORDER BY UNIX_TIMESTAMP(`displayDate`) DESC %s",
+            $this->type,
             $this->_status,
             $this->_siteID,
             strtotime("1 month ago"),
@@ -85,7 +89,8 @@ class Blog extends Posts\posts{
         return false;
     }
     public function getPostArchive(){
-        $qry = sprintf("SELECT `title`, UNIX_TIMESTAMP(`displayDate`) as `displayDate`, `slug`, `category` FROM `tblNews` WHERE `sysOpen` = '1' AND `type` = 'blog' AND `sysStatus` = '%s' AND `approvalStatus` = '1' AND `siteID` = %d AND UNIX_TIMESTAMP(`displayDate`) < %d ORDER BY UNIX_TIMESTAMP(`displayDate`) DESC",
+        $qry = sprintf("SELECT `title`, UNIX_TIMESTAMP(`displayDate`) as `displayDate`, `slug`, `category` FROM `tblNews` WHERE `sysOpen` = '1' AND `type` = '%s' AND `sysStatus` = '%s' AND `approvalStatus` = '1' AND `siteID` = %d AND UNIX_TIMESTAMP(`displayDate`) < %d ORDER BY UNIX_TIMESTAMP(`displayDate`) DESC",
+            $this->type,
             $this->_status,
             $this->_siteID,
             strtotime("1 month ago")
@@ -106,7 +111,8 @@ class Blog extends Posts\posts{
     public function getArchiveByCategory($category){
         $condition = ($category == "recent")?"UNIX_TIMESTAMP(`displayDate`) >= ".strtotime("1 month ago"):" `category` = '".$this->_db->escape($category)."'";
         
-        $qry = sprintf("SELECT `title`, UNIX_TIMESTAMP(`displayDate`) as `displayDate`, `slug`, `category`,`author`, `lead_in` FROM `tblNews` WHERE `sysOpen` = '1' AND `type` = 'blog' AND `sysStatus` = '%s' AND `approvalStatus` = '1' AND `siteID` = %d AND %s ORDER BY UNIX_TIMESTAMP(`displayDate`) DESC",
+        $qry = sprintf("SELECT `title`, UNIX_TIMESTAMP(`displayDate`) as `displayDate`, `slug`, `category`,`author`, `lead_in` FROM `tblNews` WHERE `sysOpen` = '1' AND `type` = '%s' AND `sysStatus` = '%s' AND `approvalStatus` = '1' AND `siteID` = %d AND %s ORDER BY UNIX_TIMESTAMP(`displayDate`) DESC",
+            $this->type,
             $this->_status,
             $this->_siteID,
             $condition
@@ -124,7 +130,8 @@ class Blog extends Posts\posts{
     }
     public function getArchiveByDate($dateTime){
         if (preg_match("%^[0-9]{5,}$%",$dateTime,$matches)){
-            $qry = sprintf("SELECT `title`, UNIX_TIMESTAMP(`displayDate`) as `displayDate`, `slug`, `lead_in`, `author` FROM `tblNews` WHERE `sysOpen` = '1' AND `type` = 'blog' AND `sysStatus` = '%s' AND `approvalStatus` = '1' AND `siteID` = %d AND UNIX_TIMESTAMP(`displayDate`) >= %d AND  UNIX_TIMESTAMP(`displayDate`) < %d ORDER BY UNIX_TIMESTAMP(`displayDate`) DESC",
+            $qry = sprintf("SELECT `title`, UNIX_TIMESTAMP(`displayDate`) as `displayDate`, `slug`, `lead_in`, `author` FROM `tblNews` WHERE `sysOpen` = '1' AND `type` = '%s' AND `sysStatus` = '%s' AND `approvalStatus` = '1' AND `siteID` = %d AND UNIX_TIMESTAMP(`displayDate`) >= %d AND  UNIX_TIMESTAMP(`displayDate`) < %d ORDER BY UNIX_TIMESTAMP(`displayDate`) DESC",
+                $this->type,
                 $this->_status,
                 $this->_siteID,
                 $dateTime,

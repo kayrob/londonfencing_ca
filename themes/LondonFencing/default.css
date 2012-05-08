@@ -303,6 +303,10 @@ h1, h2, h3 {font-weight: bold}
      background: #FFF;
     padding-right: 10px;
 }
+.two-column #colC h3 { 
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
 
 /*Paragraph------------------------------------------------------------------- */   
 
@@ -565,9 +569,10 @@ a:active.btnStyle {
 .banner li#arrow:hover { background: #4a762b; }
 
 #colA .homeThumb, #colA .homeThumbB {
-	opacity: 0.7;
-  	filter: alpha(opacity=70);
+    opacity: 0.7;
+    filter: alpha(opacity=70);
     border: 5px solid #d5d5d5;
+    cursor:pointer
 }
 
 #colA .homeThumbB, #intermediate #colA .homeThumb:hover {
@@ -714,12 +719,12 @@ a:active.btnStyle {
     padding: 0; 
     margin: 0;
 }
-#colC .blankBodyMainCap ul li, #regSideNav ul li, .news-archive ul li  {
+#colC .blankBodyMainCap ul li, #regSideNav ul li, .news-archive li {
     margin: 0;
     padding: 10px 0 10px 5px;
     border-bottom: 1px solid #ddd;
 }
-#colC .blankBodyMainCap ul li:last-child, #regSideNav ul li:last-child, .news-archive ul li:last-child  {
+#colC .blankBodyMainCap ul li:last-child, #regSideNav ul li:last-child, .news-archive li:last-child  {
     border:none;
 }
 #colC .blankBodyMainCap span:nth-child(odd), #regSideNav span:nth-child(odd){

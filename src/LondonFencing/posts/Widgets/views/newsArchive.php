@@ -1,47 +1,68 @@
-<div class="blankMainHeader"><h2>Recent News Posts:</h2></div>
 <?php
 require_once dirname(dirname(__DIR__))."/posts.php";
+use LondonFencing\posts\Widgets as News;
 
-use LondonFencing\posts\Widgets as news;
+if (isset($db) && $this INSTANCEOF Quipp){
 
-if (!isset($news)) {
+    if (!isset($news)){
+	   
+        $news = new News\Blog($db, $this->siteID, "active");
+    }    
+    $news->type = "news";
     
-    $news = new news\News($db);
-}
-
-$itemsPerPage = 4;
-$page         = 1;
-$offset       = 0;
-
-$slug = 'latest';
-if (isset($_GET['slug'])) {
-    $slug = $_GET['slug'];
-} 
-
-
-if (isset($_GET['page']) && (int) $_GET['page'] > 0 ) {
-    $page   = (int) $_GET['page'];
-    $offset = ($page - 1) * $itemsPerPage;
-}
-   
-   
+    $recent = $news->getRecentPosts(0,4);
+    $archive = $news->getPostArchive();
     
-if (isset($_GET['show']) && $_GET['show'] == 'all') {
-    $newsList = $news->article_list($offset, 'all');
-} else {
-    $newsList = $news->article_list($offset, $itemsPerPage);
-
-}
-
-
-if (is_array($newsList)) {
-    $news->print_article_list($newsList, true, true, false, 'news', 'news-archive');
-    
-	echo pagination(ceil($news->count_articles() / $itemsPerPage), $page, "/news/" . $slug . "&page=", 1 );
-
-} else {
+    if (isset($recent) && $recent !== false){
 ?>
-    <p>There are no articles currently present.</p>
+    <div class="archive-widget" id="news-archive-recent">
+    <div class="blankMainHeader"><h2>Recent News Posts:</h2></div>
+    <div id="news-achive" class="news-archive">
+    <ul>
 <?php
-}
+        foreach ($recent as $post){
+            echo '<li><a href="/news/'.trim($post['slug']).'">'.str_shorten($post['title'], 30).'</a><br /><small>Posted On: '.date("M j, Y",$post["displayDate"]).'</small></li>';
+        }
 ?>
+    </ul>
+    </div>
+<?php
+        if (count($recent) == 4){
+            echo '<a href="/news/archive-recent">View All</a>';
+        }
+?>
+    </div>
+<?php
+    }
+    if (isset($archive) && $archive !== false){
+        
+        echo '<h4>OLDER POSTS</h4>';
+        
+        foreach($archive as $category => $posts){
+            $p = 0;
+?>
+		
+        <div class="news-archive" id="news-archive-<?php echo str_replace(" ","-",$category);?>">
+        <h5><?php echo $category;?></h5>
+        <ul>
+<?php
+        foreach ($posts as $listing){
+            if ($p < 4){
+                echo '<li><a href="/news/'.trim($listing['slug']).'">'.trim($listing["title"]).'</a><br /><small>Posted On: '.date("M j, Y",$listing["displayDate"]).'</small></li>';
+                $p++;
+            } else{
+                break;
+            }
+        }
+?>
+        </ul>
+<?php
+        if (count($posts) > 4){
+            echo '<a href="/news/archive-'.str_replace(" ","-",$category).'">View All</a>';
+        }
+?>
+        </div>
+<?php
+        }
+    }
+}

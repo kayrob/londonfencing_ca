@@ -13,4 +13,10 @@ $(document).ready(function(){
                     }
             });
     });
+    
+    $('.homeThumb').click(function(){
+        $('.primeImg').cycle(($(this).parent().index()-1));
+        
+    });
+    
 });

@@ -356,13 +356,15 @@ $(function () {
         // the UI plugin - it handles selecting/deselecting/hovering nodes
         "ui": {
             // this makes the node with ID node_4 selected onload
-            "initially_select": ["node_4"]
+            //"initially_select": ["node_4"]
         },
         // the core plugin - not many options here
         "core": {
             // just open those two nodes up
             // as this is an AJAX enabled tree, both will be downloaded from the server
-            "initially_open": ["node_2", "node_3"]
+           // "initially_open": ["node_2", "node_3"]
+           "initially_open": ["s1","i1","b1"],
+           "animation" : 150
         }
     }).bind("create.jstree", function (e, data) {
         $.post("/admin/ajax/structure.php", {
@@ -438,6 +440,10 @@ $(function () {
                 }
             });
         });
+    }).bind("dblclick.jstree", function (e){
+            if ($(e.target).parent('li').attr('rel') == 'page'){
+                window.location = "/admin/content.php?navID=" + $(e.target).parent("li").attr("id").replace('l', '');
+            }
     });
 });
 
