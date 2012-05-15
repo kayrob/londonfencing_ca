@@ -236,7 +236,6 @@ body {
 }
 
 #container {
-    width: 960px; 
     margin: 0 auto;
     position: relative; 
     z-index: 3; 
@@ -369,8 +368,7 @@ label {
    Header
    ========================================================================== */
 
-header { 
-    width: 958px; 
+header {
     position: relative; 
     text-align: center; 
     padding: 10px 0 0 0;
@@ -551,7 +549,7 @@ a:active.btnStyle {
 }
 #colA ul li:last-child { padding: 10px 23px 10px 0; }
 #colA ul li:first-child { padding: 10px 0 10px 23px; }
-
+ul.banner{margin-top: 310px}
 .banner li#arrow {
 	display: inline-block;
 	background: #444;
@@ -575,7 +573,7 @@ a:active.btnStyle {
     cursor:pointer
 }
 
-#colA .homeThumbB, #intermediate #colA .homeThumb:hover {
+#colA .homeThumbB, #intermediate #colA .homeThumb:hover, #beginner #colA .homeThumb:hover {
 	opacity: 1.0;
   	filter: alpha(opacity=100);
 }
@@ -603,9 +601,10 @@ a:active.btnStyle {
 }
 .banner .next, .banner .prev {cursor: pointer}
 
-#intermediate #colA li:first-child, #intermediate #colA li:last-child { display: none; }
+#intermediate #colA li:first-child, #intermediate #colA li:last-child, 
+#beginner #colA li:first-child, #beginner #colA li:last-child { display: none; }
 
-#intermediate #colA ul { padding-left: 70px; }
+#intermediate #colA ul, #beginner #colA ul { padding-left: 70px; }
 
 /* Home callouts -------------------------------------------------------------*/
 

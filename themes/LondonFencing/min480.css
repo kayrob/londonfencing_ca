@@ -1,0 +1,91 @@
+/** Containers
+------------------------------------------------------------**/
+
+#container {
+    width: 480px; 
+}
+
+header {
+    width: 478px;
+}
+
+header h1{
+    font-size: 20px
+}
+header h1 img{
+    width: 132px;
+    height: 60px;
+}
+nav ul li {
+    padding: 8px 10px;
+    display:block
+}
+nav ul li {
+    padding: 5px 14px;
+}
+
+.four-column #colA, .two-column #colA{
+    width: 478px;
+}
+.four-column #colC,.four-column #colD {width: 434px;float:none}
+
+.two-column #colB,.two-column #colC {width: 408px;float:none}
+.four-column #colD, .two-column #colC {margin-left:0px;}
+.two-column #colC{background:none;padding-left: 0px}
+#practiceWidget{margin-top:60px}
+
+input[type="text"], input[type="email"], input[type="password"], textarea, #RQvalMAILEmail_Address{
+    width: 240px;
+}
+
+
+.alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty{
+    width: 370px;float:none;
+}
+
+footer ul{
+    float: none;
+    display: block;
+}
+footer div{
+    float:none;
+    display:block;
+    margin:0 0 0 20px;
+}
+.icons {
+    padding: 5px 5px !important;
+}
+.icons img{
+    width: 14px !important;
+    height: 14px !important;
+    padding: 4px 3px 0 0;
+}
+#homeGallery .primeImg{
+    width: 478px;
+    height: 155px;
+}
+ul.banner{
+    margin-top: 155px;
+}
+
+#colA ul{
+    padding: 0 0 20px 12px;
+}
+#beginner #colA ul, #intermediate #colA ul {
+    padding-left: 40px;
+}
+#colA ul li {
+    padding: 10px 4px 10px 4px;
+}
+#colA .homeThumb, #colA .homeThumbB{
+    border-width: 3px;
+}
+.banner li#arrow{
+    padding: 5px 8px !important;
+    width: 18px;
+    height: 24px;
+}
+.prev img, .next img{
+    width: 18px !important;
+    height: 18px !important;
+}

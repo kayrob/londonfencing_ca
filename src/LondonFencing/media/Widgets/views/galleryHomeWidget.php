@@ -17,8 +17,10 @@ if ($this instanceof Page && isset($props[0])){
                       $limit = (count($album) <= 6)? count($album): 6;
                       for ($a = 0; $a < $limit; $a++){
                           $display = ($a == 0)?'':' style="display:none"';
-                        echo '<img src="/uploads/media/home/'.$album[$a]['img'].'" width="960px;"'.$display.'/>';
+                          //echo '<img src="/uploads/media/home/'.$album[$a]['img'].'" width="960px;"'.$display.' />';
+                         echo '<img src=""'.$display.' data-src="'.$album[$a]['img'].'" alt="" />';              
                       }
+                          
                   }
 ?>
 	</div>
@@ -26,7 +28,7 @@ if ($this instanceof Page && isset($props[0])){
                 </div>-->
     </div>
 <div class="clearFix"></div>
-<ul style="margin-top: 310px" class="banner">
+<ul class="banner">
         <li id="arrow" class="prev"><img src="/themes/LondonFencing/img/arrowL.png" alt="arrowL" width="24px" height="28px" /></li>
 <?php
         foreach($photos as $tagID => $album){

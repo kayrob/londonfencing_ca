@@ -1,0 +1,40 @@
+/** Containers
+------------------------------------------------------------**/
+
+#container {
+    width: 768px; 
+}
+
+header {
+    width: 766px;
+}
+nav ul li {
+    padding: 10px 14px;
+}
+.four-column #colA, .two-column #colA{
+    width: 766px;
+}
+.four-column #colC {width: 344px}
+.four-column #colD { width: 344px; margin-left: 34px; }
+
+.two-column #colB {width:444px; }
+.two-column #colC { width:230px;}
+
+.alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty{
+    width: 420px;
+}
+
+textarea{
+    width: 400px !important;
+}
+
+#homeGallery .primeImg{
+    width: 766px;
+    height: 248px;
+}
+ul.banner{
+    margin-top: 248px;
+}
+#colA ul li {
+    padding: 10px 7px 10px 8px;
+}
