@@ -426,6 +426,8 @@ nav ul li a {
     text-decoration: none;
     border:none;
 }
+
+#momenu{ display:none;}
 /* =============================================================================
    Templates
    ========================================================================== */   
@@ -593,7 +595,7 @@ ul.banner{margin-top: 310px}
     clear:left;
 }
 #homeGallery .imgTitle {
-    width: 330px;
+    width: 33or 0px;
     height: 310px;
     margin: 0 0 0 630px;
     clear:right;

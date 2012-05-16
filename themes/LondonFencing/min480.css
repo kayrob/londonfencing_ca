@@ -16,6 +16,7 @@ header h1 img{
     width: 132px;
     height: 60px;
 }
+nav ul{display:none;}
 nav ul li {
     padding: 8px 10px;
     display:block
@@ -23,6 +24,8 @@ nav ul li {
 nav ul li {
     padding: 5px 14px;
 }
+
+#momenu{ display:inline;margin-left:15px}
 
 .four-column #colA, .two-column #colA{
     width: 478px;

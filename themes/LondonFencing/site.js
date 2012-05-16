@@ -39,4 +39,11 @@ jQuery(document).ready(function($) {
         $('.banner img:eq('+($(this).index() +1)+')').removeClass('homeThumb').addClass('homeThumbB');
     }
     
+    $('#momenu').click(function(){
+        $('nav ul').toggle(300,function(){
+            var triangle = ($('#momenu').html() == '▼' )?'▲' : '▼';
+            $('#momenu').html(triangle);
+        });
+    });
+    
 });
