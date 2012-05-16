@@ -39,11 +39,18 @@ jQuery(document).ready(function($) {
         $('.banner img:eq('+($(this).index() +1)+')').removeClass('homeThumb').addClass('homeThumbB');
     }
     
-    $('#momenu').click(function(){
+ /*   $('#momenu').click(function(){
         $('nav ul').toggle(300,function(){
             var triangle = ($('#momenu').html() == '▼' )?'▲' : '▼';
             $('#momenu').html(triangle);
         });
-    });
+    });*/
     
 });
+function hsNav(){
+    var navUL = document.getElementById("container").getElementsByTagName("ul");
+    var navStyle = (navUL[0].style.display == 'none')?"block":"none";
+    var triangle = (navStyle == "block")?"▲":"▼";
+    navUL[0].style.display = navStyle;
+    document.getElementById('momenu').innerHTML = triangle;
+}

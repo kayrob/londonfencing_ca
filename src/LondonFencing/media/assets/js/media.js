@@ -13,7 +13,6 @@ $(document).ready(function(){
         //full size thumb = 100 x 100
         //scale based on width b/c thumbnails are square
         var newWH = Math.round(($('.banner').width()/960) * 100);
-        console.log(newWH);
         var imgSrc = "/src/LondonFencing/StaticPage/resize.php?jpeg="+encodeURIComponent('med/'+$(this).data('src'))+"&jpgw="+newWH+"&jpgh="+newWH;
         $(this).attr('src',imgSrc);
         $(this).attr('width',newWH);
