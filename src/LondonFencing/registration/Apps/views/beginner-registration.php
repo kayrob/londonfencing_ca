@@ -505,7 +505,7 @@ include $root. "/admin/templates/header.php";
        
         //list table query:
         
-        $listqry = sprintf("SELECT cl.`itemID`, cl.`sessionName`, cl.`regOpen`, cl.`regClose` , (SELECT count(cr.`itemID`) FROM `tblClassesRegistration` AS cr WHERE cr.`sessionID` = cl.`itemID`) AS `submissions` 
+        $listqry = sprintf("SELECT cl.`itemID`, cl.`sessionName`, cl.`regOpen`, cl.`regClose` , (SELECT count(cr.`itemID`) FROM `tblClassesRegistration` AS cr WHERE cr.`sessionID` = cl.`itemID` AND cr.`sysOpen` = '1') AS `submissions` 
                 FROM $primaryTableName AS cl WHERE cast(sysOpen as UNSIGNED) > 0 AND `level` = 'beginner'");
         
         $resqry = $db->query($listqry);

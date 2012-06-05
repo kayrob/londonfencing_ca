@@ -475,7 +475,7 @@ if ($hasPermission && $intID !== false) {
             $formBuffer .= "</td></tr>";
             $formBuffer .= "</table>";
             $formBuffer .= "<div class=\"clearfix\" style=\"margin-top: 10px; height:10px; border-top: 1px dotted #B1B1B1;\">&nbsp;</div>";
-            $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration\" value=\"Cancel\" />
+            $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration'\" value=\"Cancel\" />
 		<input class='btnStyle green' type=\"submit\" name=\"submitUserForm\" id=\"submitUserForm\" value=\"Save Changes\" />";
             $formBuffer .= "</form>";
             //print the form
