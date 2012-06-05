@@ -610,6 +610,8 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
         else{
             echo 'no data present';
         }
+        echo '<p>&nbsp;</p>';
+        echo '<input type="button" class="btnStyle noPad" value="Cancel" onclick="javascript:window.location.href=\'/admin/apps/registration/beginner-registration\'" />';
         //to pass more advanced controls, you'll need to create your own $fields array and pass it directly to $te->display_editor_list($fields);
         break;
     }
