@@ -134,26 +134,54 @@ class PageUtility
 	}
                     
                  function copy_live_content_properties($liveContentID, $draftContentID){
-                     $res = $this->_db->query(sprintf("SELECT `propertyData` FROM `sysPageContentDataLink` WHERE `pageTemplateRegionContentID` = %d",
-                             (int)$liveContentID
-                             ));
-                     
+                     if ($liveContentID > 0 && $draftContentID > 0){
+                        $draftQry = sprintf("SELECT `propertyData` FROM `sysContentDataLink` WHERE `pageTemplateRegionContentID` = %d",
+                                (int)$liveContentID
+                                );
+
+                        $res = $this->_db->query(sprintf("SELECT `propertyData` FROM `sysContentDataLink` WHERE `pageTemplateRegionContentID` = %d",
+                                (int)$liveContentID
+                                ));
+
+                        if ($this->_db->valid($res)){
+                            $row = $this->_db->fetch_assoc($res);
+
+                            $this->_db->query(sprintf("INSERT INTO `sysContentDataLink` (`propertyData`, `pageTemplateRegionContentID`, `sysDateCreated`, `sysOpen`) 
+                                VALUES ('%s', '%d', NOW(), '1') ON DUPLICATE KEY UPDATE `propertyData` = '%s'",
+                                    (string)$row['propertyData'],
+                                    (int)$draftContentID,
+                                    (string)$row['propertyData'])
+                            );
+                        }
+                     }
+                 }
+                 /*
+                  * Need to get the content region ID so properties can be copied from live to draft without always re-saving
+                  */
+                 function getContentTemplateIDByPage($pageSystemName, $version){
+                     $contentID = 0;
+                     $qry = sprintf("SELECT c.itemID
+                                FROM  `sysPageTemplateRegionContent` AS c
+                                INNER JOIN  `sysPage` AS p ON c.`pageID` = p.`itemID` 
+                                WHERE p.`sysStatus` =  'active'
+                                AND p.`sysOpen` =  '1'
+                                AND p.`systemName` =  '%s' 
+                                AND p.`sysVersion` = '%s'
+                                ORDER BY c.`itemID` DESC
+                                LIMIT 0 , 1",
+                                $this->_db->escape($pageSystemName),
+                                $version);
+	   $res = $this->_db->query($qry);
                      if ($this->_db->valid($res)){
                          $row = $this->_db->fetch_assoc($res);
-                         $this->_db->free_result();
-                         
-                        $this->_db->query(sprintf("INSERT INTO `sysPageContentDataLink` (`propertyData`, `pageTemplateRegionContentID`, `sysDateCreated`, `sysOpen`) 
-                             VALUES ('%s', '%d', NOW(), 1)",
-                                 (string)$row['propertyData'],
-                                 (int)$draftContentID)
-                        );
+                         $contentID = (int)$row["itemID"];
                      }
+                     return $contentID;
                  }
 
 	function create_draft_copy_of_live_page($systemName)
 	{
 		global $quipp;
-                
 		//error_log("Calling create_draft_copy_of_live_page(" . $systemName . ")  \n", 3, Quipp()->config('yell_log'));
 		
 		//only create a draft if one doesn't already exist, if it does, just return that id instead
@@ -166,6 +194,10 @@ class PageUtility
 			
 			if($this->_db->valid($pRes)) {  //grab the page data
 				if($pageID = $this->_db->fetch_assoc($pRes)) {
+                                                                                         //$this->copy_live_content_properties($liveIDHere, $pageID['itemID']);
+                                                                                         $liveContID = $this->getContentTemplateIDByPage($systemName, 'live');
+                                                                                         $draftContID = $this->getContentTemplateIDByPage($systemName, 'draft');
+                                                                                         $this->copy_live_content_properties($liveContID, $draftContID);
 					return $pageID['itemID'];
 				}
 			}
@@ -205,6 +237,7 @@ class PageUtility
 		$this->_db->query($dQry);
 		$draftID = $this->_db->insert_id();
 		
+                                    echo "draftID".$draftID;
 		//error_log($dQry . " \n", 3, Quipp()->config('yell_log'));
 
 		//dupicate page content, from the old live version
