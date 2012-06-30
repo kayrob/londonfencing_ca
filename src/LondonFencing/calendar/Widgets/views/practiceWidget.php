@@ -36,8 +36,8 @@ if ($this instanceof Page && isset($db)){
         $p = 0;
         $practices = multi_array_subval_sort($practices,'start');
         foreach ($practices as $type => $pData){
-           $mapLoc = str_replace(" ","+",stripslashes($pData['location']));
-           $map = "http://maps.google.com/maps/api/staticmap?center=43.021341,-81.212730&zoom=13&markers=".$mapLoc."&size=500x300&sensor=false";
+           $mapLoc = (strstr($pData['location'],"Boyle") !== false)?"530+Charlotte+Street+London+Ontario":str_replace(" ","+",stripslashes($pData['location']))."+London+Ontario";
+           $map = "http://maps.google.com/maps/api/staticmap?zoom=15&markers=".$mapLoc."&size=600x400&sensor=false";
            $h4Class = ($p > 0) ?' class="bordered"' : '';
            echo '<h4'.$h4Class.'>' .$pData['type'].'</h4>';
            echo '<p>';
