@@ -365,7 +365,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
 
             //this delete query will work for most single table interactions, you may need to cusomize your own
 
-            $db->query(sprintf("UPDATE %s SET `sysStatus` = 'inactive', `sysOpen` = '0' WHERE itemID = %d", 
+            $db->query(sprintf("UPDATE %s SET `sysStatus` = 'inactive', `sysOpen` = '0' , `isRegistered`='0', `waitlist` = '0' WHERE itemID = %d", 
                 (string) $primaryTableName, 
                 (int)$db->escape($_GET['id'], true)
             ));

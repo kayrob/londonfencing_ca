@@ -55,7 +55,7 @@ class registration{
     }
     public function getRegistrationSession($level){
             if ($level == "beginner" || $level == "intermediate"){
-                $qry = sprintf("SELECT c.*, (SELECT count(cr.`itemID`) AS count FROM `tblClassesRegistration` AS cr WHERE cr.`sessionID` = c.`itemID`) as count, UNIX_TIMESTAMP(ce.`eventStartDate`) as eventStart, 
+                $qry = sprintf("SELECT c.*, (SELECT count(cr.`itemID`) AS count FROM `tblClassesRegistration` AS cr WHERE cr.`sessionID` = c.`itemID` AND cr.`sysStatus` = 'active' AND cr.`sysOpen` = '1') as count, UNIX_TIMESTAMP(ce.`eventStartDate`) as eventStart, 
                     UNIX_TIMESTAMP(ce.`eventEndDate`) as eventEnd, UNIX_TIMESTAMP(ce.`recurrenceEnd`) as endDate 
                     FROM `tblClasses` AS c INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
                     WHERE c.`sysStatus` = 'active' AND c.`sysOpen` = '1' AND c.`level` = '%s'  AND c.`regOpen` <= UNIX_TIMESTAMP() AND c.`regClose` 
