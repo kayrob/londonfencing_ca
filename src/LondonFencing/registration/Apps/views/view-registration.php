@@ -554,6 +554,15 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
         $resqry = $db->query($listqry);
         if (is_object($resqry) && $resqry->num_rows > 0){
             //list table field titles
+            
+?>
+           <p>How to send a link to the registration/waiver page for registered participants:<br /><br />
+           Emailer (1+ recipients): <?php echo "http://".$_SERVER["SERVER_NAME"]."/print-reg/".$_GET['sid']."/%REGKEY%";?><br />
+           Gmail (or one recipient): <?php echo "http://".$_SERVER["SERVER_NAME"]."/print-reg/".$_GET['sid']."/xx-####-##";?>
+           <br /><br />
+           %REGKEY% will automatically be replaced by the emailer with the user's registration number. Make sure to select "Individual"
+           <br />xx-####-## represents the value in the Registration Number column. You will have to replace this manually<br /><br /></p>
+<?php
             $titles[0] = "Name";
             $titles[1] = "Registration Number";
             $titles[2] = "Email Address";
