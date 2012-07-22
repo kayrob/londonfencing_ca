@@ -15,9 +15,25 @@ if (isset($db) && $this INSTANCEOF Quipp){
 <?php
     if (!empty($articles)){
         foreach($articles as $data){
-            $end = (strlen(strip_tags(trim($data["lead_in"]))) > 300)?strpos(strip_tags(trim($data["lead_in"]))," ", 295):strlen(strip_tags(trim($data["lead_in"])));
-            $lead = substr(strip_tags(trim($data["lead_in"])),0,$end);
-            if ($end < strlen(strip_tags(trim($data["lead_in"])))){ $lead .= "&hellip;"; }
+            $anchors = array();
+            $leadin = strip_tags($data["lead_in"],"<a><br>");
+            preg_match_all('%\s(href=[^\s]*(\starget=[\'\"]_blank[\'\"])?)%', $leadin,$matches);
+            if (!empty($matches) && isset($matches[1])){
+                foreach ($matches[1] as $index => $href){
+                    $leadin = str_replace('<a '.$href.'>','%AC'.$index.'%',$leadin);
+                    $anchors[$index] = $href;
+                }
+                $leadin = str_replace('</a>','%AD%', $leadin);
+            }
+            $end = (strlen($leadin) > 300)?strpos($leadin," ", 295):strlen(trim($leadin));
+            $lead = substr($leadin,0,$end);
+            if ($end < strlen($lead)){ $lead .= "&hellip;"; }
+            if (!empty($anchors)){
+                foreach($anchors as $aInd => $href){
+                    $lead = str_replace('%AC'.$aInd.'%', '<a '.$href.'>', $lead);
+                }
+                $lead = str_replace('%AD%', '</a>', $lead);
+            }
             echo '<h3>'.trim($data['title']).'</h3>';
             echo '<h4> '.date('M j, Y',trim($data['displayDate'])).' | <span class="lowlight">Posted By: '.trim($data['author']).'</span></h4>';
             echo '<p>'.$lead.'</p>';

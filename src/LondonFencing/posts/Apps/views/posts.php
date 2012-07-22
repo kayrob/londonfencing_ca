@@ -126,7 +126,7 @@ if ($hasPermission) {
         'dbColName'  => "displayDate",
         'tooltip'   => "",
         'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"date\" class=\"uniform datepicker\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform datepicker\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
         'valCode'   => "RQvalALPH",
         'dbValue'   => date('Y-m-d'),
         'stripTags'  => false
