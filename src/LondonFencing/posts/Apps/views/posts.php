@@ -218,18 +218,18 @@ if ($hasPermission) {
                     $requestFieldID = $dbField['valCode'] . str_replace(" ", "_", $dbField['label']);
                     if ($dbField['dbColName'] == 'sysStatus') {
                     
-    					if (isset($_POST[$requestFieldID])) {
-    						$fieldColValues .= "'active',";
-    					} else {
-    						$fieldColValues .= "'inactive',";
-    					}
-    					
-    					$fieldColNames .= "" . $dbField['dbColName'] .",";
+                            if (isset($_POST[$requestFieldID])) {
+                                    $fieldColValues .= "'active',";
+                            } else {
+                                    $fieldColValues .= "'inactive',";
+                            }
+
+                            $fieldColNames .= "" . $dbField['dbColName'] .",";
     				}
                     else if (isset($_POST[$requestFieldID])){
-    				    $fieldColValues .= "'" . $db->escape($_POST[$requestFieldID], $dbField['stripTags']) . "',";
-    				    $fieldColNames .= "" . $dbField['dbColName'] . ",";
-    				}
+                            $fieldColValues .= "'" . $db->escape($_POST[$requestFieldID], $dbField['stripTags']) . "',";
+                            $fieldColNames .= "" . $dbField['dbColName'] . ",";
+                        }
 
                 }
             }
@@ -294,18 +294,18 @@ if ($hasPermission) {
 
                     if ($dbField['dbColName'] == 'sysStatus') {
                     
-    					if (isset($_POST[$requestFieldID])) {
-    						$fieldColValue = "'active',";
-    					} else {
-    						$fieldColValue = "'inactive',";
-    					}
-    					
-    					$fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
-    				}
+                            if (isset($_POST[$requestFieldID])) {
+                                    $fieldColValue = "'active',";
+                            } else {
+                                    $fieldColValue = "'inactive',";
+                            }
+
+                            $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
+                    }
                     else if (isset($_POST[$requestFieldID])){
-    				    $fieldColValue = "'" . $db->escape($_POST[$requestFieldID], $dbField['stripTags']) . "',";
-    				    $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
-    				}
+                        $fieldColValue = "'" . $db->escape($_POST[$requestFieldID], $dbField['stripTags']) . "',";
+                        $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
+                    }
                 }
             }
 
@@ -399,9 +399,9 @@ include $root. "/admin/templates/header.php";
 
 
             $qry = sprintf("SELECT * FROM $primaryTableName WHERE itemID = '%d' AND `sysOpen` = '1' AND `siteID` IN (%s) AND `approvalStatus` < 2 AND `isPublic` = '1';",
-			(int)$_GET['id'],
-			implode(",",$sites)
-			);
+                (int)$_GET['id'],
+                implode(",",$sites)
+                );
 
             $res = $db->query($qry);
 
@@ -427,10 +427,9 @@ include $root. "/admin/templates/header.php";
             print $message;
         }
 
-        $formBuffer = "
-					<form enctype=\"multipart/form-data\" name=\"tableEditorForm\" id=\"tableEditorForm\" method=\"post\" action=\"" . $_SERVER['REQUEST_URI'] .  "\">
-					<table>
-				";
+    $formBuffer = "
+    <form enctype=\"multipart/form-data\" name=\"tableEditorForm\" id=\"tableEditorForm\" method=\"post\" action=\"" . $_SERVER['REQUEST_URI'] .  "\">
+    <table>";
 
         //print the base fields
         $f=0;
@@ -457,18 +456,21 @@ include $root. "/admin/templates/header.php";
                 } 
                 else if ($field['dbColName'] == "siteID"){
                      if (count($domains) > 1){
-    			         $field['widgetHTML'] = str_replace('value="'.$field['dbValue'].'"','value="'.$field['dbValue'].'" selected="selected"',$field['widgetHTML']);
-    			     }
-    			     if (isset($domains[$field['dbValue']])){
-    			         $field['widgetHTML'] = str_replace($domains[$field['dbValue']],$domains[$field['dbValue']]."*",$field['widgetHTML']);
-    			     }
-    			}
-    			else if ($field['dbColName'] == "autoTweet"){
-    			     $field['widgetHTML'] = str_replace('value="'.$field['dbValue'].'"','value="'.$field['dbValue'].'" selected="selected"',$field['widgetHTML']);
-    			     if (isset($domains[$field['dbValue']])){
-    			         $field['widgetHTML'] = str_replace(">".$domains[$field['dbValue']]."<",">".$domains[$field['dbValue']]."*"."<",$field['widgetHTML']);
-    			     }
-    			}
+                                $field['widgetHTML'] = str_replace('value="'.$field['dbValue'].'"','value="'.$field['dbValue'].'" selected="selected"',$field['widgetHTML']);
+                            }
+                            if (isset($domains[$field['dbValue']])){
+                                $field['widgetHTML'] = str_replace($domains[$field['dbValue']],$domains[$field['dbValue']]."*",$field['widgetHTML']);
+                            }
+                    }
+               else if ($field['dbColName'] == "autoTweet"){
+                            $field['widgetHTML'] = str_replace('value="'.$field['dbValue'].'"','value="'.$field['dbValue'].'" selected="selected"',$field['widgetHTML']);
+                            if (isset($domains[$field['dbValue']])){
+                                $field['widgetHTML'] = str_replace(">".$domains[$field['dbValue']]."<",">".$domains[$field['dbValue']]."*"."<",$field['widgetHTML']);
+                            }
+                }
+                else if ($field['dbColName'] == 'displayDate'){
+                    $field['widgetHTML'] = str_replace("FIELD_VALUE", substr($field['dbValue'],0,10), $field['widgetHTML']);
+                }
                 else {
                     if (isset($_POST[$newFieldID]) && $message != '') {
                         $field['dbValue'] = $_POST[$newFieldID];
@@ -492,8 +494,8 @@ include $root. "/admin/templates/header.php";
         //end temp
 
         $formBuffer .= "<tr><td colspan='2'>
-					<input type=\"hidden\" name=\"nonce\" value=\"".Quipp()->config('security.nonce')."\" />
-					<input type=\"hidden\" name=\"dbaction\" id=\"dbaction\" value=\"$dbaction\" />";
+	<input type=\"hidden\" name=\"nonce\" value=\"".Quipp()->config('security.nonce')."\" />
+	<input type=\"hidden\" name=\"dbaction\" id=\"dbaction\" value=\"$dbaction\" />";
 
         if ($dbaction == "update") { //add in the id to pass back for queries if this is an edit/update form
             $formBuffer .= "<input type=\"hidden\" name=\"id\" id=\"id\" value=\"".$_GET['id']."\" />";
@@ -503,7 +505,7 @@ include $root. "/admin/templates/header.php";
         $formBuffer .= "</table>";
         $formBuffer .= "<div class=\"clearfix\" style=\"margin-top: 10px; height:10px; border-top: 1px dotted #B1B1B1;\">&nbsp;</div>";
         $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='" . $_SERVER['PHP_SELF'] . "';\" value=\"Cancel\" />
-					<input class='btnStyle green' type=\"submit\" name=\"submitUserForm\" id=\"submitUserForm\" value=\"Save Changes\" />";
+		<input class='btnStyle green' type=\"submit\" name=\"submitUserForm\" id=\"submitUserForm\" value=\"Save Changes\" />";
         $formBuffer .= "</form>";
         //print the form
         print $formBuffer;
