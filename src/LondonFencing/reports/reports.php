@@ -33,14 +33,18 @@ class reports{
                     LEFT JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
                     WHERE (cr.`isRegistered` = '1' AND c.`sysStatus` = 'active' AND c.`sysOpen` = '1'  AND cr.`sysOpen` = '1' AND c.`regClose` <= UNIX_TIMESTAMP()
                     AND UNIX_TIMESTAMP(ce.`eventStartDate`) >= %d AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) <= %d AND c.`level` = 'beginner')
-                    OR (cr.`isRegistered` = '1' AND cr.`sysStatus` = 'active' AND cr.`sysOpen` = '1' AND c.`level` = 'intermediate' 
-                    AND UNIX_TIMESTAMP(cr.`sysDateCreated`) >= %d AND UNIX_TIMESTAMP(cr.`sysDateCreated`) <= %d)
                     ORDER BY c.`level` DESC)", 
-                        $rangeStart, 
-                        $rangeEnd,
                         $rangeStart, 
                         $rangeEnd
                 );
+                $qryInt = sprintf("(SELECT i.`email`, i.`lastName`, i.`firstName`, i.`gender`, i.`birthDate`, i.`address`, i.`address2`, 
+                    i.`city`, i.`province`, i.`postalCode`, i.`phoneNumber` 
+                    FROM `tblIntermediateRegistration` AS i 
+                    INNER JOIN `tblIntermediatePayments` AS ip ON i.`itemID` = ip.`registrationID` 
+                    WHERE ip.`paymentDate` >= %d AND ip.`paymentDate` <= %d)",
+                        $rangeStart,
+                        $rangeEnd
+                        );
                 
                 $qryMembers = sprintf("(SELECT m.`email`, m.`lastName`, m.`firstName`, m.`gender`, m.`birthDate`, m.`address`, m.`address2`, 
                     m.`city`, m.`province`, m.`postalCode`, m.`phone` AS phoneNumber 
@@ -49,8 +53,8 @@ class reports{
                         $rangeStart, 
                         $rangeEnd
                 );
-
-                $res = $this->_db->query($qryClasses." UNION ".$qryMembers);
+                
+                $res = $this->_db->query($qryClasses." UNION ".$qryMembers. " UNION ".$qryInt);
                 if (is_object($res) && $res->num_rows > 0){
                     while ($row = $this->_db->fetch_assoc($res)){
                         $members[] = $row;

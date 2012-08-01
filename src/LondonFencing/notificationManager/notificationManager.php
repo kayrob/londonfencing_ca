@@ -52,7 +52,7 @@ class notificationManager{
         $this->mailer->ClearAddresses();
     }
     /**
-     * Get email list for beginner or intermediate class members. This can be used for multiple mailing options
+     * Get email list for beginner class members. This can be used for multiple mailing options
      * @access protected
      * @param string $emailID
      * @return object
@@ -60,6 +60,19 @@ class notificationManager{
     protected function getEmailClassAddresses($emailID){
         $qry = sprintf("SELECT cr.`firstName`, cr.`lastName`, cr.`email`,cr.`parentName`, cr.`registrationKey`, c.`sessionName` 
                 FROM `tblClassesRegistration` AS cr INNER JOIN `tblClasses` AS c ON cr.`sessionID` = c.`itemID` WHERE cr.`itemID` IN (%s)",
+                    $this->_db->escape($emailID,true)
+            );
+        return $this->_db->query($qry);
+    }
+    /**
+     * Get email list for intermediate class members. This can be used for multiple mailing options
+     * @access protected
+     * @param string $emailID
+     * @return object
+     */
+    protected function getEmailIntermediates($emailID){
+        $qry = sprintf("SELECT cr.`firstName`, cr.`lastName`, cr.`email`,cr.`parentName`, cr.`registrationKey` 
+                FROM `tblIntermediateRegistration` AS cr WHERE cr.`itemID` IN (%s) AND `sysOpen` = '1'",
                     $this->_db->escape($emailID,true)
             );
         return $this->_db->query($qry);
@@ -122,11 +135,11 @@ class notificationManager{
      * @see sendMailBatch()
      * @return boolean 
      */
-    public function emailClassParticipants($subject, $content, $eList, $batch, $format){
+    public function emailClassParticipants($subject, $content, $eList, $batch, $format, $level){
         $this->mailer->ClearAddresses();
         if (is_array($eList)){
             $emailID = implode(",",$eList);
-            $res = $this->getEmailClassAddresses($emailID);
+            $res = ($level == 'intermediate') ? $this->getEmailIntermediates($emailID) : $this->getEmailClassAddresses($emailID);
             
             if ($res->num_rows > 0){
                 
@@ -134,11 +147,15 @@ class notificationManager{
                 
                 $body = "<p>".$body."</p>";
                 while ($row = $this->_db->fetch_assoc($res)){
+                    if ($level == "intermediate"){
+                        $row["sessionName"] = "intermediate";
+                    }
                     $body = str_replace('%SESSION%',trim($row["sessionName"]),$body);
                     if ($batch == "single"){
                          $send = (trim($row["parentName"]) != "") ? str_replace('%NAME%',trim($row["parentName"]),$body): str_replace('%NAME%',trim($row["firstName"]),$body);
                          $send = str_replace('%REGKEY%',trim($row["registrationKey"]),$send);
                          $this->sendMailSingle(trim($row['email']), stripslashes($send));
+                         echo $send;
                     }
                     else{
                          $this->mailer->addAddress(trim($row["email"]));

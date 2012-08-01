@@ -10,7 +10,7 @@ $post = array(
    "RQvalALPHfirstName"                 => "",
    "RQvalALPHlastName"                  => "",
    "RQvalDATEbirthDate"                  => "",
-   "RQvalALPHgender"                  => "",
+   "RQvalALPHgender"                     => "",
    "RQvalALPHaddress"                     => "",
    "OPvalALPHaddress2"                   => "",
    "RQvalALPHcity"                           => "",
@@ -20,7 +20,8 @@ $post = array(
    "RQvalMAILemail"                         => "",
    "OPvalALPHparentName"              => "",
    "RQvalALPHemergencyContact"    => "",
-   "RQvalPHONemergencyPhone"      => ""
+   "RQvalPHONemergencyPhone"      => "",
+    "OPvalALPHnotes"                        => ""
 );
 if (isset($message) && $message != '') {
         print alert_box($message, 2);
@@ -101,6 +102,10 @@ $gender = array("F" => "Female", "M" => "Male");
     <div>
         <label for="RQvalPHONemergencyPhone" class="req">Emergency Phone</label>
         <input type="text" name="RQvalPHONemergencyPhone" id="RQvalPHONemergencyPhone"  value = "<?php echo $post["RQvalPHONemergencyPhone"];?>" />*
+    </div>
+    <div>
+        <label for="OPvalALPHnotes">Allergies and/or Medical Concerns</label>
+        <textarea name="OPvalALPHnotes" id="OPvalALPHnotes" cols="50" rows="2"><?php echo $post["OPvalALPHnotes"];?></textarea>
     </div>
     <div class="submitWrap">
         <input type="button" id="regSubmit" value="Submit" name="sub-reg" class="btnStyle" />

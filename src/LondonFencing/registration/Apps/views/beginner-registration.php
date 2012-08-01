@@ -49,7 +49,7 @@ if ($hasPermission) {
         'dbColName'  => 'startDate',
         'tooltip'   => "Date of the first class in the session",
         'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform datepicker\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
         'valCode'   => "RQvalDATE",
         'dbValue'   => false,
         'stripTags'  => true
@@ -59,7 +59,7 @@ if ($hasPermission) {
         'dbColName'  => 'startTime',
         'tooltip'   => "Time a single class starts",
         'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform timepicker\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
         'valCode'   => "RQvalTIME",
         'dbValue'   => false,
         'stripTags'  => true
@@ -70,7 +70,7 @@ if ($hasPermission) {
         'dbColName'  => 'endDate',
         'tooltip'   => "Date of the last class in the session",
         'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform datepicker\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
         'valCode'   => "RQvalDATE",
         'dbValue'   => false,
         'stripTags'  => true
@@ -80,7 +80,7 @@ if ($hasPermission) {
         'dbColName'  => 'endTime',
         'tooltip'   => "Time a single class ends",
         'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform timepicker\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
         'valCode'   => "RQvalTIME",
         'dbValue'   => false,
         'stripTags'  => true
@@ -145,7 +145,7 @@ if ($hasPermission) {
         'dbColName'  => "regOpen",
         'tooltip'   => "The first date participants can register",
         'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform datepicker\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
         'valCode'   => "RQvalDATE",
         'dbValue'   => false,
         'stripTags'  => true
@@ -155,7 +155,7 @@ if ($hasPermission) {
         'dbColName'  => "regClose",
         'tooltip'   => "The last date participants can register",
         'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform datepicker\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
         'valCode'   => "RQvalDATE",
         'dbValue'   => false,
         'stripTags'  => true

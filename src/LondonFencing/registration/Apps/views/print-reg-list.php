@@ -10,13 +10,24 @@ if ($auth->has_permission("canEditReg")){
     $hasPermission = true;
 }
 
-if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
+if ($hasPermission && isset($_GET['sid'])) {
+    if (is_numeric($_GET['sid'])){
     $listqry = sprintf("SELECT cr.*, c.`level`, c.`sessionName` 
                 FROM `tblClassesRegistration` AS cr INNER JOIN `tblClasses` AS c ON cr.`sessionID` = c.`itemID` 
                 WHERE cr.`sessionID` = %d AND cr.`isRegistered` = 1 AND cr.`sysStatus` = 'active'
                 ORDER BY cr.`lastName` ASC, cr.`firstName` ASC", 
           (int)$db->escape($_GET['sid'],true)
      );
+    }
+    else if ($_GET['sid'] == "I"){
+        $listqry = sprintf("SELECT i.`lastName`, i.`firstName`, i.`formDate` , p.`paymentDate`
+                FROM `tblIntermediateRegistration` AS i
+                LEFT JOIN `tblIntermediatePayments` AS p ON i.`itemID` = p.`registrationID`
+                WHERE i.`sysStatus` = 'active' AND (p.`paymentDate` IS NULL OR (p.`paymentDate` >= %d)) 
+                ORDER BY i.`lastName` ASC, i.`firstName` ASC",
+                mktime(0,0,0,date('n'),1,date('Y'))
+            );
+    }
     $res = $db->query($listqry);
     if ($res->num_rows > 0){
            while ($row = $db->fetch_assoc($res)){
@@ -41,7 +52,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
     <style type="text/css" media="print">p.aPrint{display:none;}</style>
     </head>
     <body>
-        <h1><?php echo $rs[0]["sessionName"]." - (".ucwords($rs[0]["level"]).")";?></h1>
+        <h1><?php echo (!isset($rs[0]["sessionName"]) ? "Intermediate" :  $rs[0]["sessionName"]." - (".ucwords($rs[0]["level"]).")");?></h1>
         <table>
             <thead>
                 <tr><th colspan="4">&nbsp;</th><th colspan="4" class="thEquip">Equipment</th></tr>

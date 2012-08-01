@@ -15,22 +15,20 @@ if ($auth->has_permission("canEditReg")) {
     $hasPermission = true;
 }
 
-$intID = $db->return_specific_item(false, "tblClasses", "itemID", false, "level='intermediate'");
-
 $filter = 'active';
   
 if (isset($_GET['filter']) && (stristr($_GET['filter'],'active') !== false || $_GET['filter'] == 'all')){
       $filter = $db->escape($_GET['filter'],true);
 }
 
-if ($hasPermission && $intID !== false) {
+if ($hasPermission) {
     $aReg = new AReg\AdminRegister(false, $db);
     $quipp->js['footer'][] = "/src/LondonFencing/registration/assets/js/adminRegistration.js";
 
     $te = new Editor();
 
     //set the primary table name
-    $primaryTableName = "tblClassesRegistration";
+    $primaryTableName = "tblIntermediateRegistration";
 
     $provs = array("AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT");
     $gender = array("F" => "Female", "M" => "Male");
@@ -182,7 +180,17 @@ if ($hasPermission && $intID !== false) {
         'dbValue' => false,
         'stripTags' => true
     );
-    $fields[] = array(
+     $fields[] = array(
+        'label' => "Allergies or Medical Concerns",
+        'dbColName' => "notes",
+        'tooltip' => "",
+        'writeOnce' => false,
+        'widgetHTML' => "<textarea id=\"FIELD_ID\" name=\"FIELD_ID\" cols=\"50\" rows=\"2\">FIELD_VALUE</textarea>",
+        'valCode' => "OPvalALPH",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+   /* $fields[] = array(
         'label' => "Payment Date",
         'dbColName' => "paymentDate",
         'tooltip' => "",
@@ -191,13 +199,13 @@ if ($hasPermission && $intID !== false) {
         'valCode' => "OPvalDATE",
         'dbValue' => false,
         'stripTags' => true
-    );
+    );*/
     $fields[] = array(
         'label' => "Form Submitted",
         'dbColName' => "formDate",
         'tooltip' => "",
         'writeOnce' => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform datepicker\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
         'valCode' => "OPvalDATE",
         'dbValue' => false,
         'stripTags' => true
@@ -225,10 +233,31 @@ if ($hasPermission && $intID !== false) {
         //yell($_POST);
 
         switch ($_POST['dbaction']) {
+            case "addBeg":
+                //add beginners to intermediate class automatically
+                $valid = true;
+                if (isset($_POST['begList'])){
+                    foreach($_POST['begList'] as $begID){
+                        if ((int)$begID > 0){
+                           $isValid = $aReg->createBeginnerToIntermediate($begID);
+                           if ($valid === true && $isValid === false){
+                               $valid = false;
+                           }
+                        }
+                    }
+                }
+                if ($valid === true){
+                    header("location: /admin/apps/registration/intermediate-registration");
+                }
+                else{
+                    echo '<p>All Inserts Did Not Work</p>';
+                }
+                break;
+            
             case "insert":
 
-                $countQry = $db->fetch_assoc($db->query("SELECT (COUNT(itemID) + 1) AS rk FROM tblClassesRegistration WHERE `sessionID` = " . $db->escape($intID)));
-                $newCount = (isset($countQry['rk'])) ? $countQry['rk'] : "1";
+                //$countQry = $db->fetch_assoc($db->query("SELECT (COUNT(itemID) + 1) AS rk FROM tblIntermediateRegistration"));
+                //$newCount = (isset($countQry['rk'])) ? $countQry['rk'] : "1";
 
                 //this insert query will work for most single table interactions, you may need to cusomize your own
 
@@ -265,13 +294,17 @@ if ($hasPermission && $intID !== false) {
                 $fieldColNames = rtrim($fieldColNames, ",");
                 $fieldColValues = rtrim($fieldColValues, ",");
 
-                $regKey = strtoupper(substr(str_replace("'", "", $_POST["RQvalALPHLast_Name"]), 0, 2)) . "-" . str_pad($db->escape($intID, true), 4, '0', STR_PAD_LEFT) . "-" . $newCount;
-                $qry = sprintf("INSERT INTO %s (%s, sysDateCreated, sysOpen, membershipType, registrationKey, sessionID, isRegistered, waitlist) VALUES (%s, NOW(),  '1', 'foundation','%s', '%d', 1, 0)", (string) $primaryTableName, (string) $fieldColNames, (string) $fieldColValues, $regKey, $db->escape($intID, true)
-                );
+                //$regKey = strtoupper(substr(str_replace("'", "", $_POST["RQvalALPHLast_Name"]), 0, 2)) . "-000I-" . $newCount;
+                $regKey = $aReg->createIntermediateRegKey($_POST["RQvalALPHLast_Name"]);
+                $qry = sprintf("INSERT INTO %s (%s, sysDateCreated, sysOpen, membershipType, registrationKey, sessionID, beginnerID) VALUES (%s, NOW(),  '1', 'foundation','%s', 'I', 0)", (string) $primaryTableName, (string) $fieldColNames, (string) $fieldColValues, $regKey);
                 $res = $db->query($qry);
 
                 if ($db->affected_rows($res) == 1) {
-                    header('Location:/admin/apps/registration/intermediate-registration?Insert=true');
+                    $insID = $db->insert_id();
+                    if ($aReg->validatePayments($_POST["payment"][0], $_POST["payment"][1]) === true){
+                        $aReg->createIntermediatePayment($_POST["payment"], $insID, $user->id);
+                    }
+                   header('Location:/admin/apps/registration/intermediate-registration?Insert=true');
                 } else {
                     echo "Insert did not work";
                 }
@@ -321,12 +354,19 @@ if ($hasPermission && $intID !== false) {
                 //trim the extra comma off the end of the above var
                 $fieldColNames = substr($fieldColNames, 0, strlen($fieldColNames) - 1);
 
-                $qry = sprintf("UPDATE %s SET %s WHERE itemID = '%s'", (string) $primaryTableName, (string) $fieldColNames, (int) $_POST['id']);
+                $qry = sprintf("UPDATE %s SET %s WHERE itemID = '%s'", (string) $primaryTableName, (string) $fieldColNames, (int)$_POST['id']);
 
                 $res = $db->query($qry);
 
                 if ($db->affected_rows($res) == 1 || $db->error() === false) {
-                    header('Location:/admin/apps/registration/intermediate-registration?Update=true');
+                    if ((int)strtotime($_POST["payment"][0]) > 0 && preg_match('%^\d+(\.\d{2})?$%', $_POST["payment"][1], $matches)){
+                        $aReg->createIntermediatePayment($_POST["payment"], (int)$_POST['id'], $user->id);
+                    }
+                    if (isset($_POST['radioPayment'])){
+                            $editPayments = (isset($_POST["editPayment"])) ? $_POST["editPayment"] : array();
+                            $aReg->editIntermediatePayment($_POST['radioPayment'], $editPayments, (int)$_POST['id']);
+                    }
+                   header('Location:/admin/apps/registration/intermediate-registration?Update=true');
                 } else {
                     echo "Update did not work";
                 }
@@ -357,7 +397,9 @@ if ($hasPermission && $intID !== false) {
             <div class="boxStyleHeading">
                 <h2>Edit</h2>
                 <div class="boxStyleHeadingRight">
-    <?php print "<input class='btnStyle blue' type=\"button\" name=\"newItem\" id=\"newItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration?view=edit';\" value=\"New\" />"; ?>
+    <?php print "<input class='btnStyle blue' type=\"button\" name=\"newItem\" id=\"newItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration?view=edit';\" value=\"New Member\" />"; 
+            print "<input class='btnStyle blue' type=\"button\" name=\"begItem\" id=\"begItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration?view=beg';\" value=\"Add Beginner\" />";
+    ?>
                 </div>
             </div>
             <div class="clearfix">&nbsp;</div>
@@ -370,16 +412,22 @@ if ($hasPermission && $intID !== false) {
     }
 
     switch ($_GET['view']) {
+        case "beg":
+            //include new file to show beginner list
+            //class is over and beginnerID not in  `tblIntermediateRegistrations`
+            include_once(__DIR__."/beginnerToIntermediate.php");
+            break;
         case "edit": //show an editor for a row (existing or new)
             //determine if we are editing an existing record, otherwise this will be a 'new'
 
             $dbaction = "insert";
 
             $_GET['id'] = intval($_GET['id'], 10);
+            
+            $payments = array();
 
             if (is_numeric($_GET['id'])) { //if an ID is provided, we assume this is an edit and try to fetch that row from the single table
-                $qry = sprintf("SELECT tp.* FROM $primaryTableName AS tp WHERE tp.`itemID` = '%d' AND tp.`sessionID` = '%d' AND tp.`sysOpen` = '1'", (int) $_GET['id'], $intID
-                );
+                $qry = sprintf("SELECT tp.* FROM $primaryTableName AS tp WHERE tp.`itemID` = '%d' AND tp.`sysOpen` = '1'", (int)$_GET['id']);
                 $res = $db->query($qry);
 
                 if ($db->valid($res)) {
@@ -391,6 +439,20 @@ if ($hasPermission && $intID !== false) {
                     }
 
                     $dbaction = "update";
+                    
+                    $qryP = sprintf("SELECT `paymentAmount`, `paymentDate`, `itemID` FROM `tblIntermediatePayments` 
+                        WHERE `sysOpen` = '1' AND `registrationID` = '%d'",
+                            (int)$_GET['id'] 
+                     );
+                    $resP = $db->query($qryP);
+                    if ($db->valid($resP)){
+                        while ($rowP = $db->fetch_assoc($resP)){
+                            $payments[trim($rowP["itemID"])] = array(
+                                'date'      => trim($rowP["paymentDate"]), 
+                                'amount' => trim($rowP["paymentAmount"])
+                                );
+                        }
+                    }
                 }
             } else {
                 //yell($_GET);
@@ -415,6 +477,13 @@ if ($hasPermission && $intID !== false) {
                 if ($field['dbColName'] != false) {
 
                     $newFieldIDSeed = str_replace(" ", "_", $field['label']);
+                    
+                    /*for insert only, change it so only ln, fn and email are required. this allows admin to create a record from email 
+                     * and get the user to fill out the remainder of the form online using registration form previously created
+                     * */
+                    if ($dbaction == "insert" && (!preg_match('%(name|email)%i', $field['dbColName'], $match))){ 
+                        $field['valCode'] = str_replace("RQ","OP",$field['valCode']);
+                    }
                     $newFieldID = $field['valCode'] . $newFieldIDSeed;
 
                     $field['widgetHTML'] = str_replace("FIELD_ID", $newFieldID, $field['widgetHTML']);
@@ -455,7 +524,7 @@ if ($hasPermission && $intID !== false) {
                 }
 
                 //write in the html
-                $formBuffer .= "<td valign=\"top\"><label for=\"" . $newFieldID . "\">" . $field['label'] . "</label></td><td>" . $field['widgetHTML'] . " <p>" . $field['tooltip'] . "</p></td>";
+                $formBuffer .= "<td valign=\"top\" width=\"30%\"><label for=\"" . $newFieldID . "\">" . $field['label'] . "</label></td><td>" . $field['widgetHTML'] . " <p>" . $field['tooltip'] . "</p></td>";
                 $formBuffer .= "</tr>";
             }
 
@@ -474,6 +543,25 @@ if ($hasPermission && $intID !== false) {
 
             $formBuffer .= "</td></tr>";
             $formBuffer .= "</table>";
+            $formBuffer .= "<p>&nbsp;</p><h3>Payments</h3><p>&nbsp;</p>";
+            $formBuffer .=  '<table id="payments">';
+            $formBuffer .= '<tr><td width="30%"><label for="paymentDate">New Payment Date</label></td><td><input type="text" name="payment[]" id="paymentDate" class="uniform datepicker" style="width:300px" /></td></tr>';
+            $formBuffer .= '<tr><td><label for="paymentAmount">New Payment Amount</label></td><td><input type="text" name="payment[]" id="paymentAmount" class="uniform" style="width:300px" /></td></tr>';
+            $formBuffer .= '</table><p>&nbsp;</p><table id="history"><tr><td colspan="2"><strong>Payment History</strong></td></tr>';
+            if (!empty($payments)){
+                foreach($payments as $pID => $nfo){
+                    $formBuffer .= '<tr>';
+                    $formBuffer .= '<td width="30%"><input type="radio" name="radioPayment['.$pID.']" value="edit" id="editPayment_'.$pID.'" /><label for="editPayment_'.$pID.'">Edit</label>';
+                    $formBuffer .= '<input type="radio" name="radioPayment['.$pID.']" value="delete" id="deletePayment_'.$pID.'" /><label for="deletePayment_'.$pID.'">Delete</label>';
+                    $formBuffer .= '<input type="radio" name="resetPayment_'.$pID.'" id="resetPayment_'.$pID.'" /><label for="resetPayment_'.$pID.'">Reset</label></td>';
+                    $formBuffer .= '<td><label for="editDate_'.$pID.'">Date</label>&nbsp;<input type="text" name="editPayment['.$pID.'][]" id="editDate_'.$pID.'" class="uniform datepicker" style="width:150px" disabled="disabled" value="'.date("Y-m-d",$nfo["date"]).'"/>';
+                    $formBuffer .= '&nbsp;<label for="editAmount_'.$pID.'">Amount</label>&nbsp;<input type="text" name="editPayment['.$pID.'][]" id="editAmount_'.$pID.'" class="uniform" style="width:150px" disabled="disabled" value="'.number_format($nfo['amount'],2).'"/></td></tr>';
+                }
+            }
+            else{
+                $formBuffer .= '<tr><td colspan="2">No Payment History</td></tr>';
+            }
+            $formBuffer .= '</table>';
             $formBuffer .= "<div class=\"clearfix\" style=\"margin-top: 10px; height:10px; border-top: 1px dotted #B1B1B1;\">&nbsp;</div>";
             $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration'\" value=\"Cancel\" />
 		<input class='btnStyle green' type=\"submit\" name=\"submitUserForm\" id=\"submitUserForm\" value=\"Save Changes\" />";
@@ -498,12 +586,13 @@ if ($hasPermission && $intID !== false) {
 
             $where = ($filter == 'active' || $filter == "inactive")? " AND cr.`sysStatus` = '".$filter."'" : "";
             $listqry = sprintf("SELECT cr.`itemID`, concat(cr.`lastName`, ', ' ,cr.`firstName`) AS name, cr.`email`, cr.`formDate`, 
-                UNIX_TIMESTAMP(cr.`sysDateCreated`) as dateReg, cr.`paymentDate`, cr.`registrationKey`, cr.`sysStatus` 
+                UNIX_TIMESTAMP(cr.`sysDateCreated`) as dateReg, 
+                    (SELECT MAX(p.`paymentDate`) FROM `tblIntermediatePayments` AS p WHERE p.`registrationID` = cr.`itemID`) AS paymentDate, 
+                    cr.`registrationKey`, 
+                    cr.`sysStatus` 
                 FROM $primaryTableName AS cr 
-                WHERE cr.`sessionID` = %d
-                AND cr.`sysOpen` = '1' %s
+                WHERE cr.`sysOpen` = '1' %s
                 ORDER BY cr.`sysStatus`, cr.`itemID` ASC", 
-                    (int) $db->escape($intID, true),
                     $where
             );
 
@@ -514,7 +603,7 @@ if ($hasPermission && $intID !== false) {
                 $titles[1] = "Registration Number";
                 $titles[2] = "Email Address";
                 $titles[3] = "Date Registered";
-                $titles[4] = "Payment Date";
+                $titles[4] = "Last Payment Date";
                 $titles[5] = "Form Submitted";
 
                 while ($rs = $db->fetch_assoc($resqry)) {
@@ -536,10 +625,10 @@ if ($hasPermission && $intID !== false) {
                 echo '</tbody>
             <tbody>
             <tr><td colspan="10">
-            <input  style="float:right" class="btnStyle green noPad" id="btnPrint" type="button" onclick="javascript:window.open(\'/admin/apps/registration/print-reg-list?sid=' . $intID . '\');" value="Print">
+            <input  style="float:right" class="btnStyle green noPad" id="btnPrint" type="button" onclick="javascript:window.open(\'/admin/apps/registration/print-reg-list?sid=I\');" value="Print">
             <input  style="float:right" class="btnStyle blue noPad" id="btnSelect" type="submit" value="Send Email">
             <input type="hidden" name="nonce" value="' . Quipp()->config('security.nonce') . '" />
-            <input type="hidden" name="etype" value="class-reg" />
+            <input type="hidden" name="etype" value="int-reg" />
             </td>
                 </tr>
             </tbody>
