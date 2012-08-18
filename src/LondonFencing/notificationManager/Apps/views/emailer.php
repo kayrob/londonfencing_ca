@@ -12,11 +12,19 @@ if ((isset($_POST['eList']) && is_array($_POST['eList'])) || (isset($_POST['aLis
     global $message;
     $addresses = array();
     $a_addresses = array();
+    $i_addresses = array();
     
     if (isset($_POST['eList'])){
         foreach($_POST['eList'] as $emailID){
             if (is_numeric($emailID) && (int)$emailID > 0){
                 $addresses[] = (int)$db->escape($emailID,true);
+            }
+        }
+    }
+    if (isset($_POST['iList'])){
+        foreach($_POST['iList'] as $emailID){
+            if (is_numeric($emailID) && (int)$emailID > 0){
+                $i_addresses[] = (int)$db->escape($emailID,true);
             }
         }
     }
@@ -110,7 +118,7 @@ if ((isset($_POST['eList']) && is_array($_POST['eList'])) || (isset($_POST['aLis
                         $sent = $ntfy->emailClassParticipants($_POST['RQvalALPHSubject'], $_POST['RQvalALPHMessage'], $addresses, $_POST['RQvalALPHSend_Type'], $_POST['RQvalALPHFormat'], 'intermediate');
                         break;
                     case 'all-reg':
-                        $sent = $ntfy->emailAllMembers($_POST['RQvalALPHSubject'], $_POST['RQvalALPHMessage'], $addresses, $a_addresses, $_POST['RQvalALPHSend_Type'], $_POST['RQvalALPHFormat']);
+                        $sent = $ntfy->emailAllMembers($_POST['RQvalALPHSubject'], $_POST['RQvalALPHMessage'], $addresses, $a_addresses, $i_addresses, $_POST['RQvalALPHSend_Type'], $_POST['RQvalALPHFormat']);
                     break;
             }
 

@@ -84,8 +84,11 @@ class notificationManager{
      * @return object
      */
     protected function getEmailMemberAddresses($emailList){
-        $qry = sprintf("SELECT m.`firstName`, m.`lastName`, m.`email`,m.`parentName`, m.`cffNumber` 
-                FROM `tblMembers` AS m WHERE m.`itemID` IN (%s)",
+        $qry = sprintf("SELECT group_concat(m.`value` ORDER BY f.`myOrder` ASC) as meta  
+                FROM `sysUGFValues` AS m 
+                INNER JOIN `sysUGFields` AS f ON m.`fieldID` = f.`itemID`
+                WHERE m.`userID` IN (%s) AND f.`slug` IN ('firstName', 'lastName', 'email','parentName', 'cffNumber') 
+                GROUP BY m.`userID`",
                     $this->_db->escape($emailList,true)
             );
         return $this->_db->query($qry);
@@ -197,11 +200,15 @@ class notificationManager{
      * @see sendMailBatch()
      * @return boolean 
      */
-    public function emailAllMembers($subject, $content, $eList, $aList, $batch, $format){
+    public function emailAllMembers($subject, $content, $eList, $aList, $iList, $batch, $format){
         $this->mailer->ClearAddresses();
         if (is_array($eList)){
             $eListID = implode(",",$eList);
             $eRes = $this->getEmailClassAddresses($eListID);
+        }
+        if (is_array($iList)){
+            $iListID = implode(",",$iList);
+            $iRes = $this->getEmailIntermediates($iListID);
         }
         if (is_array($aList)){
             $aListID = implode(",",$aList);
@@ -222,16 +229,29 @@ class notificationManager{
                     $addr[] = trim($row['email']);
                 }
             }
-            if (isset($aRes) && $aRes->num_rows > 0){
-                while ($arow = $this->_db->fetch_assoc($aRes)){
+            if (isset($iRes) && $iRes->num_rows > 0){
+                while ($irow = $this->_db->fetch_assoc($iRes)){
                     if ($batch == "single"){
-                         $send = (trim($arow["parentName"]) != "") ? str_replace('%NAME%',trim($arow["parentName"]),$body): str_replace('%NAME%',trim($arow["firstName"]),$body);
-                         $this->sendMailSingle(trim($arow['email']), stripslashes($send));
+                         $send = (trim($irow["parentName"]) != "") ? str_replace('%NAME%',trim($irow["parentName"]),$body): str_replace('%NAME%',trim($irow["firstName"]),$body);
+                         $this->sendMailSingle(trim($irow['email']), stripslashes($send));
                     }
                     else{
-                         $this->mailer->addAddress(trim($arow["email"]));
+                         $this->mailer->addAddress(trim($irow["email"]));
                     }
-                    $addr[] = trim($arow['email']);
+                    $addr[] = trim($irow['email']);
+                }
+            }
+            if (isset($aRes) && $aRes->num_rows > 0){
+                while ($arow = $this->_db->fetch_assoc($aRes)){
+                    $aData = explode(",", $arow["meta"]);
+                    if ($batch == "single"){
+                         $send = (trim($aData[3]) != "") ? str_replace('%NAME%',trim($aData[3]),$body): str_replace('%NAME%',trim($aData[0]),$body);
+                         $this->sendMailSingle(trim($aData[2]), stripslashes($send));
+                    }
+                    else{
+                         $this->mailer->addAddress(trim($aData[2]));
+                    }
+                    $addr[] = trim($aData[2]);
                 }
             }
             
