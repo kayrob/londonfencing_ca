@@ -176,13 +176,13 @@ class User
 	{
 		global $auth;
 
-		if($udResult = $this->db->result_please((int) $userID, "sysUsers")) {
+		if($udResult = $this->db->result_please((int)$userID, "sysUsers")) {
 			$udRS = $this->db->fetch_assoc($udResult);
 		}
 		
 
-
 		$groupCheck = sprintf("SELECT groupID FROM sysUGLinks WHERE userID = '%d'", $userID);
+
 		if (is_array($groups)) {
 			$tmp = '';
 			foreach ($groups as $groupID) {
@@ -196,14 +196,14 @@ class User
 		$fields = array();
 		
 
-		$uQry = sprintf("SELECT DISTINCT f.itemID, f.fieldLabel, f.sysAdFieldName, f.sysISADField, f.myOrder, f.validationCode, v.value
+		$uQry = sprintf("SELECT DISTINCT f.itemID, f.fieldLabel, f.sysAdFieldName, f.sysISADField, f.myOrder, f.validationCode, f.isPublic, v.value
 			FROM sysUGFields AS f
-				LEFT OUTER JOIN sysUGFValues as v ON(f.itemID = v.fieldID AND v.userID = '%d')
-				LEFT OUTER JOIN sysUGFLinks as fglinks ON(f.itemID = fglinks.fieldID)
+			LEFT OUTER JOIN sysUGFValues as v ON(f.itemID = v.fieldID AND v.userID = '%d')
+			LEFT OUTER JOIN sysUGFLinks as fglinks ON(f.itemID = fglinks.fieldID)
 			WHERE f.sysOpen = '1' 
 			AND fglinks.groupID IN (%s)
 			ORDER BY f.myOrder ASC;",
-				(int) $userID,
+				(int)$userID,
 				$groupCheck);
 		$uRes = $this->db->query($uQry);
 	
@@ -268,8 +268,13 @@ class User
 					case "COUN":
 						$fieldBuffer = get_country_list('meta[' . $newFormID . ']', $udRS['value']);
 						break;
+                                                                                           case "DATE":
+						$fieldBuffer = '<input type="text" class="uniform datepicker" id="meta[' . $newFormID . ']" name="meta[' . $newFormID . ']" value="' . $udRS['value'] . '" />';
+						break;
 					default:
-						$fieldBuffer = '<input type="text" class="uniform" id="meta[' . $newFormID . ']" name="meta[' . $newFormID . ']" value="' . $udRS['value'] . '" />';
+                                                                                                            $show = ($udRS['isPublic'] == '1')? '' : ' disabled=\"disabled\"';
+                                                                                                            $tip = ($udRS['isPublic'] == '1')? '' : '<span>This value is auto-set</span>';
+						$fieldBuffer = '<input type="text" class="uniform" id="meta[' . $newFormID . ']" name="meta[' . $newFormID . ']" value="' . $udRS['value'] . '" '.$show.'/>'.$tip;
 						break;
 				}
 								

@@ -27,6 +27,8 @@
         $_GET['id'] = intval($_GET['id'], 10);
     }
     
+    $resCount = $db->query(sprintf("SELECT `itemID` FROM `sysUsers` WHERE `itemID` > 1"));
+    
     //editable fields
     $fields[] = array(
         'label'   => "User Name",
@@ -41,7 +43,7 @@
     $fields[] = array(
         'label'   => "Password",
         'dbColName'  => 'userIDPassword',
-        'tooltip'   => "If you don't enter/confirm a new password, your password will not be changed.",
+        'tooltip'   => "If you don't enter/confirm a new password, your password will not be changed.<br /><br />For Public Users set a default password of XX-".str_pad(($resCount->num_rows+1),4,'0',STR_PAD_LEFT)."-LFC (XX = first two letters of last name)",
         'writeOnce'  => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"RQvalALPHPassword\" name=\"RQvalALPHPassword\" value=\"\" />",
         'valCode'   => "RQvalALPH",
@@ -227,25 +229,34 @@
                     (int) $_GET['id'],
                     (int) $sID);
             }
-            echo $qry;
+            
             $qry = substr($qry, 0, -1);
             $db->query($qry);
         }
     
     
         if (isset($_POST['meta']) && is_array($_POST['meta'])) {
-            $qry = sprintf("DELETE FROM sysUGFValues WHERE userID='%d';",
-                (int) $_GET['id']);
+            $qry = sprintf("DELETE FROM sysUGFValues WHERE userID='%d' AND `fieldID` <> '29'",
+                (int)$_GET['id']);
             $db->query($qry);
     
+            if ((int)$_GET['id'] > 1){
+                //get registration key and set it if empty
+                $res = $db->query(sprintf("SELECT `value` FROM `sysUGFValues` WHERE `userID` = '%d' AND `fieldID` = '29'",(int)$_GET['id']));
+                if ($res->num_rows == 0){
+                    $_POST['meta']['RQvalALPHRegistration_Key'] = strtoupper(substr($_POST['meta']['RQvalALPHLast_Name'],0,2))."-".str_pad(($resCount->num_rows+1),4,'0',STR_PAD_LEFT)."-LFC";
+                    
+                }
+            }
     
             $qry = sprintf("SELECT DISTINCT f.itemID, f.fieldLabel, f.validationCode, f.sysIsADField, f.sysADFieldName, f.sysADFieldNameClean, f.myOrder
-    			FROM sysUGFields AS f
-    				LEFT OUTER JOIN sysUGFLinks as fglinks ON(f.itemID = fglinks.fieldID)
-    			WHERE f.sysOpen = '1'
-    			AND fglinks.groupID IN (SELECT groupID FROM sysUGLinks WHERE userID = '%d')
-    			ORDER BY f.myOrder ASC;",
+    	FROM sysUGFields AS f
+    	LEFT OUTER JOIN sysUGFLinks as fglinks ON(f.itemID = fglinks.fieldID)
+    	WHERE f.sysOpen = '1'
+    	AND fglinks.groupID IN (SELECT groupID FROM sysUGLinks WHERE userID = '%d')
+    	ORDER BY f.myOrder ASC;",
                 (int) $_GET['id']);
+            
             $res = $db->query($qry);
     
             if ($db->valid($res)) {
@@ -265,8 +276,8 @@
     
                     } else if (isset($_POST['meta'][$udRS['validationCode'] . str_replace(" ", "_", $udRS['fieldLabel'])])) {
                             $qry = sprintf("INSERT INTO sysUGFValues (userID, fieldID, value, sysStatus, sysOpen) VALUES ('%d', '%d', '%s', 'active', '1')",
-                                (int) $_GET['id'],
-                                (int) $udRS['itemID'],
+                                (int)$_GET['id'],
+                                (int)$udRS['itemID'],
                                 $db->escape($_POST['meta'][$udRS['validationCode'] . str_replace(" ", "_", $udRS['fieldLabel'])]));
                             $db->query($qry);
     
