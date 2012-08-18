@@ -5,10 +5,39 @@ require_once dirname(__DIR__).'/registration.php';
 use LondonFencing\registration as REG;
 
 if (isset($_GET['s']) && is_numeric($_GET['s']) && isset($_GET['r'])){
-    $reg = new REG\Registration($db);
-    $regNfo = $reg->getSavedRegistration($_GET['s'],$_GET['r']);
+    $regKeyData = explode("-", $_GET['r']);
+    if (!isset($_SESSION['userID'])){
+        $auth->boot_em_out(1);
+    }
+    if (count($regKeyData) != 3){
+        header('location:http://'.$_SERVER["SERVER_NAME"]);
+        exit;
+    }
+    $regKey = $regKeyData[0]."-".$regKeyData[1]."-LFC";
     
-    if (isset($regNfo['isRegistered']) && (int)$regNfo['isRegistered'] == 1){
+    $reg = new REG\Registration($db);
+    $regNfo = $reg->getSavedClubRegistration($_GET['s'], $user->id, $regKeyData[2]);
+    
+    
+    if (!empty($regNfo) && $user->get_meta('Registration Key') == $regKey && (int)$regNfo['formDate'] == 0){
+        
+        $feeField = array('annually' => 'annualFee', 'quarterly' => 'quarterlyFee', 'monthly' => 'monthlyFee');
+        $feeTypes = array("annually" => "Annual (one-time)", "quarterly" => "Quarterly (4-times)", "monthly" => "Monthly");
+        $provID = array(
+            "1" => "AB", 
+            "2" => "BC", 
+            "3" => "MB", 
+            "4" => "NB", 
+            "5" => "NL",
+            "6" => "NT",
+            "7" => "NS",
+            "8" => "NU",
+            "9" => "ON",
+            "10" => "PE",
+            "11" => "QC",
+            "12" => "SK",
+            "13" => "YT"               
+            ) ;
 ?>
 <!doctype html>
 <html>
@@ -55,62 +84,78 @@ if (isset($_GET['s']) && is_numeric($_GET['s']) && isset($_GET['r'])){
     </head>    
     <body>
         <a id="aprint" onclick="window.print()" class="btnStyle">Print</a>
-        <div id="head">London Fencing Club Registration: <?php echo $regNfo['sessionName'];?></div>
+        <div id="head">London Fencing Club Registration: <?php echo date('Y', $regNfo['seasonStart'])."-".date('Y', $regNfo['seasonEnd']); ?></div>
         <div id="termsRefs">
     <?php
-    if ((date('U') - $regNfo["birthDate"])/(60*60*24*365) < 18 || trim($regNfo["parentName"]) != ''){
-        $terms = str_replace('%DATE%', date('F j, Y', $regNfo['eventStart']), file_get_contents(__DIR__.'/minorTerms.php'));
-        $terms = str_replace('%MINORNAME%', $regNfo['firstName'].' '.$regNfo['lastName'], $terms);
-        echo str_replace('%PARENTNAME%', $regNfo['parentName'], $terms);
+     $birthDate = strtotime($user->get_meta('Birthdate'));
+     $parentName = $user->get_meta('Parent/Guardian');
+     $fn = $user->get_meta('First Name');
+     $ln = $user->get_meta('Last Name');
+    if ((date('U') - $birthDate)/(60*60*24*365) < 18 || trim($parentName) != ''){
+        $terms = str_replace('%DATE%', date('F j, Y', $regNfo['seasonStart']), file_get_contents(__DIR__.'/minorTerms.php'));
+        $terms = str_replace('%MINORNAME%', $fn.' '.$ln, $terms);
+        echo str_replace('%PARENTNAME%', $parentName, $terms);
     }
     else{
-        $terms = str_replace('%DATE%', date('F j, Y', $regNfo['eventStart']), file_get_contents(__DIR__.'/adultTerms.php'));
-        echo str_replace('%NAME%', $regNfo['firstName'].' '.$regNfo['lastName'], $terms);
+        $terms = str_replace('%DATE%', date('F j, Y', $regNfo['seasonStart']), file_get_contents(__DIR__.'/adultTerms.php'));
+        echo str_replace('%NAME%', $fn.' '.$ln, $terms);
     }
     ?>
     </div>
-        <div id="printHead">London Fencing Club Registration: <?php echo $regNfo['sessionName'];?></div>
+        <div id="printHead">London Fencing Club Registration: <?php echo date('Y', $regNfo['seasonStart'])."-".date('Y', $regNfo['seasonEnd']); ?></div>
     <div>
-        <label>First Name: </label><?php echo $regNfo["firstName"];?>
+        <label>First Name: </label><?php echo $fn;?>
     </div>
     <div>
-        <label>Last Name: </label><?php echo $regNfo["lastName"];?>
+        <label>Last Name: </label><?php echo $ln;?>
     </div>
     <div>
-        <label>Birth Date: </label><?php echo date('Y-m-d',$regNfo["birthDate"]);?>
+        <label>Birth Date: </label><?php echo date('Y-m-d',$birthDate);?>
+    </div>
+        <div>
+        <label>Gender: </label><?php echo $user->get_meta("Gender");?>
     </div>
     <div>
-        <label>Gender: </label><?php echo $regNfo["gender"];?>
+        <label>Address: </label><?php echo $user->get_meta("Address");?>
     </div>
     <div>
-        <label>Address: </label><?php echo $regNfo["address"];?>
+        <label>Unit/Apt: </label><?php echo $user->get_meta("Unit/Apt");?>
     </div>
     <div>
-        <label>Unit/Apt: </label><?php echo $regNfo["address2"];?>
+        <label>City: </label><?php echo $user->get_meta("City");?>
     </div>
     <div>
-        <label>City: </label><?php echo $regNfo["city"];?>
+        <label>Province: </label><?php  echo $provID[$user->get_meta("Province")]; ?>
     </div>
     <div>
-        <label>Province: </label><?php  echo $regNfo["province"]; ?>
+        <label>Postal Code: </label><?php echo $user->get_meta("Postal Code");?>
     </div>
     <div>
-        <label>Postal Code: </label><?php echo $regNfo["postalCode"];?>
+        <label>Phone Number: </label><?php echo str_format("(###) ###-####", str_replace("-","",$user->get_meta("Phone Number")));?>
     </div>
     <div>
-        <label>Phone Number: </label><?php echo $regNfo["phoneNumber"];?>
+        <label>Email: </label><?php echo $user->get_meta("E-Mail");?>
     </div>
     <div>
-        <label>Email: </label><?php echo $regNfo["email"];?>
+        <label>Parent/Guardian: </label><?php echo (trim($parentName) == '' ? 'N/A' : $parentName); ?>
     </div>
     <div>
-        <label>Parent/Guardian: </label><?php echo (trim($regNfo["parentName"]) == '' ? 'N/A' : $regNfo["parentName"]); ?>
+        <label>Emergency Contact: </label><?php echo $user->get_meta("Emergency Contact");?>
     </div>
     <div>
-        <label>Emergency Contact: </label><?php echo $regNfo["emergencyContact"];?>
+        <label>Emergency Phone: </label><?php echo str_format("(###) ###-####", str_replace("-","",$user->get_meta("Emergency Phone Number")));?>
     </div>
     <div>
-        <label>Emergency Phone: </label><?php echo $regNfo["emergencyPhone"];?>
+        <label>CFF Number: </label><?php echo $user->get_meta("CFF Number");?>
+    </div>
+    <div>
+        <label>Membership Type: </label><?php echo $regNfo['membershipType'];?>
+    </div>
+    <div>
+        <label>Fee Type: </label><?php echo $feeTypes[$regNfo['feeType']];?>
+    </div>
+   <div>
+        <label>Allergies/Medical Conditions: </label><?php echo $user->get_meta("Notes");?>
     </div>
     <div class="sig">
         <label>Signature: </label>_____________________________________________
@@ -120,7 +165,7 @@ if (isset($_GET['s']) && is_numeric($_GET['s']) && isset($_GET['r'])){
     </div>
     </div>
     <div class="sig">
-        <label>Fee: </label>$<?php echo number_format($regNfo['fee'],2);?><br /><br />Please make cheques payable to: London Fencing Club
+        <label>Fee: </label>$<?php echo number_format($regNfo[$feeField[$regNfo['feeType']]],2);?><br /><br />Please make cheques payable to: London Fencing Club
     </div>
     <div id="footer"><img src="/src/LondonFencing/registration/assets/img/printLogo.png" /></div>
     </body>

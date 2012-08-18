@@ -1,58 +1,61 @@
 <?php
-if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof LondonFencing\registration\registration){
+if (isset($user->id) && isset($regID) && (int)$regID > 0 && isset($reg) && $reg instanceof LondonFencing\registration\registration){
     
-    $sessionSaved = $reg->getSavedRegistration($sessionNfo["itemID"], $message);
-    if ($sessionSaved !== false){
-        $address = $sessionSaved['address'].", ".$sessionSaved["city"]." ".$sessionSaved["province"].", ".$sessionSaved["postalCode"];
-        if (trim($sessionSaved['address2']) != ""){
-            $address = trim($sessionSaved['address2'])." -  ".$address;
+    $sessRes = $db->query(sprintf("SELECT * FROM `tblMembersRegistration` WHERE `itemID` = '%d' AND `userID` = '%d'", 
+            (int)$regID,
+            (int)$user->id
+    ));
+    
+    if ($sessRes->num_rows == 1){
+   
+        $sessionSaved = $db->fetch_assoc($sessRes);
+        $address = $user->get_meta("Address").", ".$user->get_meta("City")." ".$provID[$user->get_meta("Province")].", ".$user->get_meta("Postal Code");
+        if (trim($user->get_meta("Unit/Apt")) != ""){
+            $address = trim($user->get_meta("Unit/Apt"))." -  ".$address;
         }
         
         $emailTemplate = file_get_contents(dirname(dirname(dirname(__DIR__))).'/StaticPage/emailTemplate.html');
+        $feeField = array('annually' => 'annualFee', 'quarterly' => 'quarterlyFee', 'monthly' => 'monthlyFee');
         
-        $phone = str_format("(###) ###-####", str_replace("-","",$sessionSaved["phoneNumber"]));
-        $ePhone = str_format("(###) ###-####", str_replace("-","",$sessionSaved["emergencyPhone"]));
+        $regKey = str_replace('LFC', str_pad($regID,2,'0',STR_PAD_LEFT), $user->get_meta("Registration Key"));
+        
+        $phone = str_format("(###) ###-####", str_replace("-","",$user->get_meta("Phone Number")));
+        $ePhone = str_format("(###) ###-####", str_replace("-","",$user->get_meta("Emergency Phone Number")));
         $title = "Registration to London Fencing Club";
-        $body = '<p><label>Session: </label>&nbsp;'.$sessionNfo['sessionName'].'<br />';
-        $body .= '<label>Level: </label>&nbsp;'.ucwords($sessionSaved['level']).'</p><p>';
-        $body .= '<label>First Name: </label>&nbsp;'.$sessionSaved['firstName'].'<br />';
-        $body .= '<label>Last Name: </label>&nbsp;'.$sessionSaved['lastName'].' <br />';
-        $body .= '<label>Date of Birth: </label>&nbsp;'.date('Y-m-d',$sessionSaved['birthDate']).'<br />';
-        $body .= '<label>Gender: </label>&nbsp;'.$sessionSaved['gender'].' <br />';
+        $body = '<p><label>Season: </label>&nbsp;'.date('Y', $sessionNfo['seasonStart']) . "-" . date('Y', $sessionNfo['seasonEnd']).'<br />';
+        $body .= '<label>Membership Type: </label>&nbsp;'.$sessionSaved["membershipType"].'</p><p>';
+        $body .= '<label>Fee Type: </label>&nbsp;'.$sessionSaved["feeType"].'</p><p>';
+        $body .= '<label>First Name: </label>&nbsp;'.$user->get_meta("First Name").'<br />';
+        $body .= '<label>Last Name: </label>&nbsp;'.$user->get_meta("Last Name").' <br />';
+        $body .= '<label>Date of Birth: </label>&nbsp;'.date('Y-m-d',$user->get_meta("Birthdate")).'<br />';
+        $body .= '<label>Gender: </label>&nbsp;'.$user->get_meta("Gender").' <br />';
         $body .= '<label>Address: </label>&nbsp;'.$address.'<br />';
         $body .= '<label>Phone Number: </label>&nbsp;'.$phone.'<br />';
-        $body .= '<label>Email Address: </label>&nbsp;'.$sessionSaved["email"].'<br />';
-        $body .= '<label>Parent/Guardian: </label>&nbsp;'.(trim($sessionSaved["parentName"]) != "" ?$sessionSaved["parentName"]:"N/A").'<br />';
-        $body .= '<label>Emergency Contact: </label>&nbsp;'.$sessionSaved["emergencyContact"].'<br />';
+        $body .= '<label>Email Address: </label>&nbsp;'.$user->get_meta("E-Mail").'<br />';
+        $body .= '<label>Parent/Guardian: </label>&nbsp;'.($user->get_meta("Parent/Guardian") != "" ?$user->get_meta("Parent/Guardian"):"N/A").'<br />';
+        $body .= '<label>Emergency Contact: </label>&nbsp;'.$user->get_meta("Emergency Contact").'<br />';
         $body .= '<label>Emergency Phone: </label>&nbsp;'.$ePhone.'<br />';
-        $body .= '<label>Registration Status: </label>&nbsp;'.((int)$sessionSaved['isRegistered'] == 1?'Registered':'Wait List').'<br />';
-        $body .= '<label>Confirmation Number: </label>&nbsp;'.$sessionSaved['registrationKey'].'<br />';
-        $body .= '<label>Date Registered: </label>&nbsp;'.$sessionSaved['sysDateCreated'].'</p>';
-        if ((int)$sessionSaved['isRegistered'] == 1){
+        $body .= '<label>CFF Number: </label>&nbsp;'.($sessionSaved["membershipType"] == 'Foundation' ? 'N/A' : $user->get_meta("CFF Number")).'<br />';
+        $body .= '<label>Confirmation Number: </label>&nbsp;'.$regKey.'<br />';
+        $body .= '<label>Date Registered: </label>&nbsp;'.substr($sessionSaved['sysDateCreated'],0,10).'</p>';
+
         $body .= '<p>Print out your form to sign by clicking the link or copying it and pasting it into your browser: 
-            <a href="http://'.$_SERVER["SERVER_NAME"].'/print-reg/'.$sessionNfo['itemID'].'/'.$sessionSaved['registrationKey'].'">http://'.$_SERVER["SERVER_NAME"].'/print-reg/'.$sessionNfo['itemID'].'/'.$sessionSaved['registrationKey'].'</a>';
+            <a href="http://'.$_SERVER["SERVER_NAME"].'/club-consent/'.$sessionNfo['itemID'].'/'.$regKey.'">http://'.$_SERVER["SERVER_NAME"].'/print-reg/'.$sessionNfo['itemID'].'/'.$regKey.'</a>';
         $body .= '<p>&nbsp;</p><p>Next Steps:</p>';
         $body .= '<ol>
         <li>Read the Terms and Conditions listed on the printable registration sheet</li>
         <li>Print this form out, sign it, and bring it with payment to the first class.<br />This form MUST be signed by the participant (if over the age of 18) 
             OR by the Parent/Guardian listed on the form (if the participant is under the age of 18)</li>
-        <li>Make cheques payable to <strong>The London Fencing Club</strong> for the value of $'.number_format($sessionNfo['fee'],2).'</li>
+        <li>Make cheques payable to <strong>The London Fencing Club</strong> for the value of $'.number_format($sessionNfo[$feeField[$sessionSaved['feeType']]],2).'</li>
     </ol>';
         $body .= '<p>&nbsp;</p><p>Come dressed to move! All fencers are required to wear:</p>';
         $body .= '<ol><li>Athletic shoes with non-marking soles</li><li>Track pants (no shorts, jeans, khakis)</li></ol>';
-        $body .= '<p>All other fencing equipment will be provided by the Club</p>';
-        }
-        else{
-            $body .= '<p>Thank you for your interest in the London Fencing Club. If a space becomes available, you will be notified by email. If not, we hope you try to register for the next session.</p>';
-        }
+
         $emailBody = str_replace('%SERVERNAME%',$_SERVER['SERVER_NAME'],str_replace('%BODY%',$body,str_replace('%TITLE%',$title,$emailTemplate)));
         $subject = "London Fencing ".ucwords($sessionSaved['level'])." Session Registration";
         $from = "info@londonfencing.ca";
-        $admEmail = $db->return_specific_item(false, 'sysStorageTable', 'value', '--', "application='".$sessionSaved['level']."-registration'");
-        if ($admEmail == "--"){
-            $admEmail = 'info@londonfencing.ca';
-            //$admEmail = 'robertsonkaren@rogers.com';
-        }
+        $admEmail = 'info@londonfencing.ca';
+
         $mail = new PHPMailer\PHPMailer();
         $mail->IsHTML(true);
         $mail->SetFrom($from);
@@ -61,41 +64,29 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
         $mail->Subject = $subject;
         $mail->Body = $emailBody;
         if ($mail->send()){
-            if ((int)$sessionSaved['isRegistered'] == 1){
                 print alert_box("Thank you!<br />Please follow the steps below in order to complete your registration", 1);
-            }
-            else{
-                print alert_box("Thank you for your interest in the London Fencing Club. If a space becomes available, you will be notified by email<br />
-                If not, we hope you try to register for the next session.", 1);
-            }
         }
         else{
             print alert_box("An Email could not be sent.<br />Please use the print button below or contact <a href='mailto:\"info@londonfencing.ca\"'>info@londonfencing.ca</a>", 2);
         }
-    }
-    else{
-        print alert_box("An Error Occured and your Registration information could not be displayed.<br />Please contact <a href='mailto:\"info@londonfencing.ca\"'>info@londonfencing.ca</a>", 2);
-    }
-}
 ?>
 <div>
-<?php
-    if ((int)$sessionSaved['isRegistered'] == 1){
-?>
     <h3>Next Steps:</h3>
     <ol>
         <li>Read the Terms and Conditions listed on the printable registration sheet</li>
         <li>Print this form out, sign it, and bring it with payment to the first class.<br />This form MUST be signed by the participant (if over the age of 18) 
             OR by the Parent/Guardian listed on the form (if the participant is under the age of 18)</li>
-        <li>Make cheques payable to <strong>The London Fencing Club</strong> for the value of $<?php echo number_format($sessionNfo['fee'],2);?></li>
+        <li>Make cheques payable to <strong>The London Fencing Club</strong> for the value of $<?php echo number_format($sessionNfo[$feeField[$sessionSaved['feeType']]],2);?></li>
     </ol>
     <h3>Come dressed to move! All fencers are required to wear:</h3>
     <ol><li>Athletic shoes with non-marking soles</li><li>Track pants (no shorts, jeans, khakis)</li></ol>
-    <p>All other fencing equipment will be provided by the Club</p>
     <p>&nbsp;</p>
     <p>You will receive an email at the address you provided along with the information you submitted and a link to the printable version of this form</p>
-    <p><a href="/print-reg/<?php echo $sessionNfo["itemID"];?>/<?php echo $message;?>" class="btnStyle" target="_blank">Print Form</a></p>
+    <p><a href="/club-consent/<?php echo $sessionNfo['itemID'];?>/<?php echo $regKey;?>" class="btnStyle" target="_blank">Print Form</a></p>
+</div>
 <?php
     }
-?>
-</div>
+    else{
+        print alert_box("An Error Occured and your Registration information could not be displayed.<br />Please contact <a href='mailto:\"info@londonfencing.ca\"'>info@londonfencing.ca</a>", 2);
+    }
+}

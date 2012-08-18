@@ -132,4 +132,101 @@ class registration{
         }
         return array(0,"An Error Occured and your Registration could not be completed. Please retry or contact <a href='mailto:\"info@londonfencing.ca\"'>info@londonfencing.ca</a>");
     }
+    
+    public function getAdvancedSeason(){
+            $details = array();
+            $filter = ((int)date('n') == 8 || (int)date('n') == 9) ? '`seasonStart` >'.date('U') : '`seasonStart` <= '.date('U').' AND `seasonEnd` >= '.date('U') ;
+            $qry = sprintf("SELECT * FROM tblSeasons WHERE `sysStatus` = 'active' AND `sysOpen` = '1' AND %s ORDER BY `itemID` DESC LIMIT 1",$filter);
+            $res = $this->_db->query($qry);
+            
+            if ($res->num_rows == 1){
+                $details  = $this->_db->fetch_assoc($res);
+            }
+            return $details;
+    }
+    
+    protected function updateMeta($slug, $value, $userID){
+        $provID = array(
+                "AB" => "1", 
+                "BC" => "2", 
+                "MB" => "3", 
+                "NB" => "4", 
+                "NL" => "5",
+                "NT" => "6",
+                "NS" => "7",
+                "NU" => "8",
+                "ON" => "9",
+                "PE" => "10",
+                "QC" => "11",
+                "SK"  => "12",
+                "YT"  => "13"               
+                ) ;
+        $updated = true;
+        $fieldID = $this->_db->return_specific_item(false, 'sysUGFields','itemID', "0", "slug='".$this->_db->escape($slug)."'");
+        if ((int)$fieldID > 0){
+            $value = ($slug == 'province')? $provID[$value] :  $this->_db->escape($value);
+            $this->_db->query(sprintf("UPDATE `sysUGFValues` SET `value` = '%s' WHERE `fieldID` = '%d' AND `userID` = '%d'",
+                    $value,
+                    $fieldID,
+                    (int)$userID
+            ));
+            if ($this->_db->error() > 0){
+                $updated = false;
+            }
+        }
+        return $updated;
+    }
+    
+    public function saveClubRegistration($post, $regID, $userID){
+        $message = "";
+        $sent = 0;
+        unset($post["nonce"]);
+        foreach($post as $key => $value){
+            if (!$this->updateMeta(preg_replace('%^(OP|RQ)val[A-Z]{4}%','',$key), $value, $userID)){
+                $message = "Personal Information could not be updated";
+            }
+        }
+        if ($regID == 0 && isset($post["RQvalALPHmembershipType"]) && isset($post["RQvalALPHfeeType"]) && $message == ""){
+            $qry = sprintf("INSERT INTO `tblMembersRegistration` (`membershipType`, `feeType`, `sysUserLastMod`, `sysDateLastMod`, `sysDateCreated`, `sysOpen`, `seasonID`, `userID`) VALUES ('%s', '%s', '%d', %s, %s, '1', '%d', '%d')",
+                $this->_db->escape($post["RQvalALPHmembershipType"]),
+                $this->_db->escape($post["RQvalALPHfeeType"]),
+                $userID,
+                $this->_db->now,
+                $this->_db->now,
+                (int)$this->_db->escape($post["RQvalNUMBsessionID"]),
+                (int)$userID
+            );    
+            $this->_db->query($qry);
+            if ($this->_db->error() > 0){
+                $message = "Your registration was not saved. Please retry";
+            }
+            else{
+                $sent = 1;
+            }
+        }
+        else{
+            $sent = 1;
+        }
+        return array($sent, $message);
+    }
+   
+    public function getSavedClubRegistration($season, $userID, $registrationID){
+        $data = array();
+        if ((int)$season > 0 && (int)$userID > 0 && (int)$registrationID > 0){
+            $qry = sprintf("SELECT mr.*, s.`seasonStart`, s.`seasonEnd`, s.`annualFee`, s.`quarterlyFee`, s.`monthlyFee` 
+                FROM `tblMembersRegistration` AS mr
+                INNER JOIN `tblSeasons` AS s ON mr.`seasonID` = s.`itemID`
+                WHERE mr.`itemID` = '%d' AND mr.`userID` = '%d' AND mr.`seasonID` = '%d' AND mr.`sysStatus` = 'active' AND mr.`sysOpen` = '1' 
+                AND s.`sysStatus` = 'active' AND s.`sysOpen` = '1'",
+                    (int)$registrationID,
+                    (int)$userID,
+                    (int)$season
+                    );
+            $res = $this->_db->query($qry);
+            if ($res->num_rows == 1){
+                $data = $this->_db->fetch_assoc($res);
+            }
+        }
+        return $data;
+    }
 }

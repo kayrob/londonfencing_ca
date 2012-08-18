@@ -1,32 +1,9 @@
 <?php
-
-if (isset($sessionNfo['regMax']) && isset($sessionNfo['count']) && (int)$sessionNfo['count'] >= (int)$sessionNfo['regMax']){
-    print alert_box("This session is currently full<br />Please complete the form to be put on the waitlist. You will be notified by email if a space becomes available", 3);
-}
-
-$sessionDate = date("F j, Y", $sessionNfo['eventStart']);
-
-$post = array(
-   "RQvalALPHfirstName"                 => "",
-   "RQvalALPHlastName"                  => "",
-   "RQvalDATEbirthDate"                  => "",
-   "RQvalALPHgender"                     => "",
-   "RQvalALPHaddress"                     => "",
-   "OPvalALPHaddress2"                   => "",
-   "RQvalALPHcity"                           => "",
-   "RQvalALPHprovince"                    => "ON",
-   "RQvalPOSTpostalCode"                => "",
-   "RQvalPHONphoneNumber"          => "",
-   "RQvalMAILemail"                         => "",
-   "OPvalALPHparentName"              => "",
-   "RQvalALPHemergencyContact"    => "",
-   "RQvalPHONemergencyPhone"      => "",
-    "OPvalALPHnotes"                        => ""
-);
+//post fields are set in the file that calls this as the include. Beginner and Club Membership use the same for but have difft settings for $post
 if (isset($message) && $message != '') {
         print alert_box($message, 2);
         foreach ($_POST as $key => $value){
-	$post[$key] = $value;
+        $post[$key] = $value;
         }
 }
 $provs = array("AB","BC","MB","NB","NL","NS","NT","NU","ON","PE","QC","SK","YT");
@@ -103,9 +80,43 @@ $gender = array("F" => "Female", "M" => "Male");
         <label for="RQvalPHONemergencyPhone" class="req">Emergency Phone</label>
         <input type="text" name="RQvalPHONemergencyPhone" id="RQvalPHONemergencyPhone"  value = "<?php echo $post["RQvalPHONemergencyPhone"];?>" />*
     </div>
+<?php
+     if (isset($post["OPvalALPHcffNumber"])){
+ ?>
+        <div>
+        <label for="OPvalALPHcffNumber">CFF Number</label>
+        <input type="text" name="OPvalALPHcffNumber" id="OPvalALPHcffNumber"  value = "<?php echo $post["OPvalALPHcffNumber"];?>" /> (Transition &amp; Excellence)
+    </div>
+<?php
+     }
+    if (isset($regPost) && isset($feeTypes) && isset($membershipTypes)){
+?>
+     <div>
+        <label for="RQvalALPHmembershipType" class="req">Membership Type</label>
+        <select name="RQvalALPHmembershipType" id="RQvalALPHmembershipType">
+        <?php
+            foreach ($membershipTypes as $memTypes){
+                echo '<option value="'.$memTypes.'"'.($post["RQvalALPHmembershipType"] == $memTypes ? 'selected="selected"':'').'>'.$memTypes.($post["RQvalALPHmembershipType"] == $memTypes ? '*':'').'</option>';
+            }
+        ?>
+        </select> *
+    </div>
+    <div>
+        <label for="RQvalALPHfeeType" class="req">Fee Type</label>
+        <select name="RQvalALPHfeeType" id="RQvalALPHfeeType">
+        <?php
+            foreach ($feeTypes as $ft => $ftLabel){
+                echo '<option value="'.$ft.'"'.($post["RQvalALPHfeeType"] == $ft ? 'selected="selected"':'').'>'.$ftLabel.($post["RQvalALPHfeeType"] == $abbrev ? '*':'').'</option>';
+            }
+        ?>
+        </select> *
+    </div>
+<?php
+    }
+?>
     <div>
         <label for="OPvalALPHnotes">Allergies and/or Medical Concerns</label>
-        <textarea name="OPvalALPHnotes" id="OPvalALPHnotes" cols="50" rows="2"><?php echo $post["OPvalALPHnotes"];?></textarea>
+        <textarea name="OPvalALPHnotes" id="OPvalALPHnotes" cols="20" rows="1" style="width:300px"><?php echo $post["OPvalALPHnotes"];?></textarea>
     </div>
     <div class="submitWrap">
         <input type="button" id="regSubmit" value="Submit" name="sub-reg" class="btnStyle" />

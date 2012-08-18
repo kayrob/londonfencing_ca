@@ -34,6 +34,27 @@ if (isset($sessionNfo['isOpen'])){
                 include_once __DIR__ ."/registrationConfirm.php";
             }
         else{
+                if (isset($sessionNfo['regMax']) && isset($sessionNfo['count']) && (int)$sessionNfo['count'] >= (int)$sessionNfo['regMax']){
+                    print alert_box("This session is currently full<br />Please complete the form to be put on the waitlist. You will be notified by email if a space becomes available", 3);
+                }
+
+                $post = array(
+                "RQvalALPHfirstName"                 => "",
+                "RQvalALPHlastName"                  => "",
+                "RQvalDATEbirthDate"                  => "",
+                "RQvalALPHgender"                     => "",
+                "RQvalALPHaddress"                     => "",
+                "OPvalALPHaddress2"                   => "",
+                "RQvalALPHcity"                           => "",
+                "RQvalALPHprovince"                    => "ON",
+                "RQvalPOSTpostalCode"                => "",
+                "RQvalPHONphoneNumber"          => "",
+                "RQvalMAILemail"                         => "",
+                "OPvalALPHparentName"              => "",
+                "RQvalALPHemergencyContact"    => "",
+                "RQvalPHONemergencyPhone"      => "",
+                    "OPvalALPHnotes"                        => ""
+                ); 
                 include_once __DIR__ ."/registrationFormFields.php";
                 global $quipp;
                 $quipp->js['footer'][] = "/src/LondonFencing/registration/assets/js/registration.js";

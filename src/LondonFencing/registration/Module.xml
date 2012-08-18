@@ -21,4 +21,15 @@
     <module name="register-sidenav">
         <widget enabled="1" adminLink="0" name="Form: Registration Side Nav">Widgets/views/registrationSideBar.php</widget>
     </module>
+    <module name="register-seasons">
+        <ns>\Apps\Register\Seasons</ns>
+        <label>Registration: Seasons</label>
+       <admin enabled="1" adminLink="1">registration/Apps/views/seasons.php</admin>
+        <widget enabled="1" adminLink="1" name="Seasons: Sidebar">Widgets/views/seasonDetails.php</widget>
+        <icon>registration/assets/img/registration_fencing_icon.png</icon>
+        <help>Use this tool to add details about the current/upcoming club season including start dates and fees.</help>
+    </module>
+    <module name="register-club">
+        <widget enabled="1" adminLink="0" name="Form: Club Registration">Widgets/views/clubRegistration.php</widget>
+    </module>
 </modules>
