@@ -1,5 +1,8 @@
 <?php
 require_once dirname(dirname(__DIR__))."/members.php";
+require_once dirname(dirname(dirname(__DIR__))) . "/registration/registration.php";
+
+use LondonFencing\registration\Apps as AReg;
 use LondonFencing\members as MEMB;
 
    
@@ -7,7 +10,7 @@ $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
 require $root . '/inc/init.php';
 require $root . '/admin/classes/Editor.php';
 
-$meta['title'] = 'Members Manager';
+$meta['title'] = 'Registration: Club Members';
 $meta['title_append'] = ' &bull; Quipp CMS';
 
 $hasPermission = false;
@@ -19,175 +22,78 @@ if ($auth->has_permission('canEditReg')){
 if ($hasPermission) {
     
     if (!isset($_GET['id'])) { $_GET['id'] = null; }
+    if (!isset($_GET['uid'])) { $_GET['uid'] = null; }
+    if (!isset($_GET['season'])) { $_GET['season'] = null; }
     $te = new Editor();
+    
+    $sRes = $db->query("SELECT `itemID`, `seasonStart`, `seasonEnd` FROM `tblSeasons` WHERE `sysStatus` = 'active' AND `sysOpen` = '1' ORDER BY `seasonEnd` desc");
+    $seasons = array();
+    $currentSeasonID = 0;
+    if ($sRes->num_rows > 0){
+        while ($sRow = $db->fetch_assoc($sRes)){
+            $seasons[trim($sRow["itemID"])] = date('Y', trim($sRow["seasonStart"]))."-".date('Y', trim($sRow["seasonEnd"]));
+            if ($currentSeasonID == 0){
+                $currentSeasonID = (int)$sRow["itemID"];
+            }
+        }
+    }
 
     $mem = new MEMB\members($db);
     
     //set the primary table name
-    $primaryTableName = "tblMembers";
-
+    $primaryTableName = "tblMembersRegistration";
+    $feeTypes = array("annually" => "Annual (one-time)", "quarterly" => "Quarterly (4-times)", "monthly" => "Monthly");
+    $membershipTypes = array("Excellence", "Foundation","Transition");
     //editable fields
     $fields[] = array(
-        'label'   => "Last Name",
-        'dbColName'  => "lastName",
-        'tooltip'   => "Member Last Name",
+        'label'   => "Member Name",
+        'dbColName'  => "userID",
         'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "RQvalALPH",
+        'widgetHTML' => "FIELD_VALUE",
+        'valCode'   => "",
         'dbValue'   => false,
         'stripTags'  => true
     );
     
     $fields[] = array(
-        'label'   => "First Name",
-        'dbColName'  => "firstName",
-        'tooltip'   => "Member First Name",
+        'label'   => "Season",
+        'dbColName'  => "seasonID",
+        'tooltip'   => "The current fencing season",
         'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "RQvalALPH",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    
-    $fields[] = array(
-        'label'   => "Email",
-        'dbColName'  => "email",
-        'tooltip'   => "Email Address eg user@domain.com",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "RQvalMAIL",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    
-    $fields[] = array(
-        'label'   => "Birth Date",
-        'dbColName'  => "birthDate",
-        'tooltip'   => "Optional",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "OPvalDATE",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    
-$gender = array("F" => "Female", "M" => "Male");
-    $fields[] = array(
-        'label'   => "Gender",
-        'dbColName'  => "gender",
-        'tooltip'   => "",
-        'writeOnce'  => false,
-        'widgetHTML' => "",
-        'valCode'   => "RQvalALPH",
+        'widgetHTML' => "FIELD_VALUE",
+        'valCode'   => "",
         'dbValue'   => false,
         'stripTags'  => true
     );
     $fields[] = array(
-        'label'   => "Address",
-        'dbColName'  => "address",
-        'tooltip'   => "Member Mailing Address *Optional",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "OPvalALPH",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    $fields[] = array(
-        'label'   => "Unit/Apt",
-        'dbColName'  => "address2",
-        'tooltip'   => "Optional",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "OPvalALPH",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    $fields[] = array(
-        'label'   => "City",
-        'dbColName'  => "city",
-        'tooltip'   => "Optional",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "OPvalALPH",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    $provs = array("ON","AB","BC","MB","NB","NL","NS","NT","NU","PE","QC","SK","YT");
-    
-    $fields[] = array(
-        'label'   => "Province",
-        'dbColName'  => "province",
-        'tooltip'   => "Optional",
-        'writeOnce'  => false,
-        'widgetHTML' => "",
-        'valCode'   => "OPvalALPH",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-
-    $fields[] = array(
-        'label'   => "Postal Code",
-        'dbColName'  => "postalCode",
-        'tooltip'   => "N1N 1N1 *Optional",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"date\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "OPvalPOST",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-    
-    $fields[] = array(
-        'label'   => "Phone Number",
-        'dbColName'  => "phone",
-        'tooltip'   => "519-555-3333 *Optional",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"date\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "OPvalPHON",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-   $fields[] = array(
-        'label'   => "Parent/Guardian",
-        'dbColName'  => "parentName",
-        'tooltip'   => "Optional",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "OPvalALPH",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-   $memberTypes = array("foundation" => "Foundation", "transitional" => "Transitional", "excellence" => "Excellence");
-   $fields[] = array(
         'label'   => "Membership Type",
         'dbColName'  => "membershipType",
-        'tooltip'   => "Optional",
         'writeOnce'  => false,
-        'widgetHTML' => "",
-        'valCode'   => "OPvalALPH",
-        'dbValue'   => false,
-        'stripTags'  => true
-    );
-   
-   $fields[] = array(
-        'label'   => "CFF Number",
-        'dbColName'  => "cffNumber",
-        'tooltip'   => "Optional",
-        'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "OPvalALPH",
+        'widgetHTML' => "<select class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\">FIELD_VALUE</select>",
+        'valCode'   => "RQvalALPH",
         'dbValue'   => false,
         'stripTags'  => true
     );
     
-   $fields[] = array(
-        'label'   => "OFA Number",
-        'dbColName'  => "ofaNumber",
-        'tooltip'   => "Optional",
+    $fields[] = array(
+        'label'   => "Fee Type",
+        'dbColName'  => "feeType",
+        'tooltip'   => "Annually, Quarterly, Monthly",
         'writeOnce'  => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode'   => "OPvalALPH",
+        'widgetHTML' => "<select class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\">FIELD_VALUE</select>",
+        'valCode'   => "RQvalALPH",
         'dbValue'   => false,
         'stripTags'  => true
+    );
+    $fields[] = array(
+        'label' => "Form Submitted",
+        'dbColName' => "formDate",
+        'tooltip' => "Date consent form was submitted",
+        'writeOnce' => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform datepicker\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode' => "OPvalDATE",
+        'dbValue' => false,
+        'stripTags' => true
     );
     $fields[] = array(
         'label'   => "Active",
@@ -231,7 +137,7 @@ $gender = array("F" => "Female", "M" => "Male");
 
                             $fieldColNames .= "" . $dbField['dbColName'] .",";
                     }
-                    else if ($dbField['dbColName'] == 'birthDate'){
+                    else if ($dbField['dbColName'] == 'formDate'){
                         if(trim($_POST[$requestFieldID]) != ''){
                             $fieldColValues .= strtotime($_POST[$requestFieldID]).",";
                             $fieldColNames .= "" . $dbField['dbColName'] . ",";
@@ -249,20 +155,24 @@ $gender = array("F" => "Female", "M" => "Male");
             $fieldColNames = rtrim($fieldColNames,",");
             $fieldColValues = rtrim($fieldColValues,",");
 
-            $qry = sprintf("INSERT INTO %s (%s, sysUserLastMod, sysDateLastMod, sysDateCreated, sysOpen) VALUES (%s, '%d', %s, %s, '1')",
+            $qry = sprintf("INSERT INTO %s (%s, sysUserLastMod, sysDateLastMod, sysDateCreated, sysOpen, seasonID, userID) VALUES (%s, '%d', %s, %s, '1', '%d', '%d')",
                 (string) $primaryTableName,
                 (string) $fieldColNames,
                 (string) $fieldColValues,
                 $user->id,
                 $db->now,
-                $db->now
+                $db->now,
+                (int)$_POST['season'],
+                (int)$_POST['uid']
             );
             //yell($qry);
             //print $te->commit_a_modify_action($qry, "Insert", true);
             $res = $db->query($qry);
-            
+            $insID = $db->insert_id();
             if ($db->affected_rows($res) == 1){
-
+                if (AReg\AdminRegister::validatePayments($_POST["payment"][0], $_POST["payment"][1]) === true){
+                        $mem->createMemberPayment($_POST["payment"], $insID, $user->id);
+                }
                 header('Location:' . dirname($_SERVER['REQUEST_URI']) . '/index?Insert=true');
             }
             else{
@@ -291,7 +201,7 @@ $gender = array("F" => "Female", "M" => "Male");
 
                             $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
                     }
-                    else if ($dbField['dbColName'] == 'birthDate'){
+                    else if ($dbField['dbColName'] == 'formDate'){
                         if (trim($_POST[$requestFieldID]) != ''){
                             $fieldColNames .= "" . $dbField['dbColName'] . " = " . strtotime($_POST[$requestFieldID])  . ",";
                         }
@@ -315,6 +225,14 @@ $gender = array("F" => "Female", "M" => "Male");
             
             $res = $db->query($qry);
             if ($db->affected_rows($res) == 1|| $db->error() == 0){
+                
+                if (AReg\AdminRegister::validatePayments($_POST["payment"][0], $_POST["payment"][1]) === true){
+                    $mem->createMemberPayment($_POST["payment"], (int)$_POST['id'], $user->id);
+                }
+                if (isset($_POST['radioPayment'])){
+                        $editPayments = (isset($_POST["editPayment"])) ? $_POST["editPayment"] : array();
+                        $mem->editMemberPayment($_POST['radioPayment'], $editPayments, (int)$_POST['id']);
+                }
                 header('Location:' . dirname($_SERVER['REQUEST_URI']) . '/index?Update=true');
             }
             else{
@@ -339,6 +257,7 @@ $gender = array("F" => "Female", "M" => "Male");
         $_GET['view'] = 'edit';
     }
 
+$quipp->js['footer'][] = "/src/LondonFencing/registration/assets/js/adminRegistration.js";
 include $root. "/admin/templates/header.php";
 
 ?>
@@ -351,7 +270,7 @@ to generate reports</p>
             <div class="boxStyleHeading">
                     <h2>Edit</h2>
                     <div class="boxStyleHeadingRight">
-                            <?php print "<input class='btnStyle blue' type=\"button\" name=\"newItem\" id=\"newItem\" onclick=\"javascript:window.location.href='" . dirname($_SERVER['REQUEST_URI']) . "/index?view=edit';\" value=\"New Single Member\" />"; ?>
+                            <?php print "<input class='btnStyle blue' type=\"button\" name=\"newItem\" id=\"newItem\" onclick=\"javascript:window.location.href='/admin/users.php?view=edit';\" value=\"New Single Member\" />"; ?>
                     </div>
             </div>
             <div class="clearfix">&nbsp;</div>
@@ -371,10 +290,14 @@ to generate reports</p>
         $dbaction = "insert";
 
         $_GET['id'] = intval($_GET['id'], 10);
+        $_GET["uid"] = (int)$_GET['uid'];
+        $_GET['season'] = (int)$_GET['season'];
+        
+        $payments = array();
 
         if (is_numeric($_GET['id'])) { //if an ID is provided, we assume this is an edit and try to fetch that row from the single table
 
-
+            
             $qry = sprintf("SELECT * FROM $primaryTableName WHERE itemID = '%d' AND `sysOpen` = '1' ;",
                     (int)$_GET['id']
             );
@@ -391,6 +314,21 @@ to generate reports</p>
                 }
 
                 $dbaction = "update";
+                
+                
+                $qryP = sprintf("SELECT `paymentAmount`, `paymentDate`, `itemID` FROM `tblMembersPayments` 
+                        WHERE `sysOpen` = '1' AND `registrationID` = '%d'",
+                            (int)$_GET['id'] 
+                     );
+                    $resP = $db->query($qryP);
+                    if ($db->valid($resP)){
+                        while ($rowP = $db->fetch_assoc($resP)){
+                            $payments[trim($rowP["itemID"])] = array(
+                                'date'      => trim($rowP["paymentDate"]), 
+                                'amount' => trim($rowP["paymentAmount"])
+                                );
+                        }
+                    }
             }
 
 
@@ -429,31 +367,30 @@ to generate reports</p>
                     } else {
                         $field['widgetHTML'] = str_replace("FIELD_VALUE", '', $field['widgetHTML']);
                     }
-                } 
-                else if ($field['dbColName'] == 'birthDate'){
+                }
+                else if ($field['dbColName'] == 'userID'){
+                    $field['widgetHTML'] = str_replace("FIELD_VALUE", $user->get_meta("First Name", $_GET['uid'])." ".$user->get_meta("Last Name", $_GET['uid']), $field['widgetHTML']);
+                }
+                else if ($field['dbColName'] == 'seasonID'){
+                    $field['widgetHTML'] = str_replace("FIELD_VALUE", $seasons[$currentSeasonID], $field['widgetHTML']);
+                }
+                else if ($field['dbColName'] == 'formDate'){
                     $field['dbValue'] = ($field['dbValue'] > 0)?date('Y-m-d', $field['dbValue']) : '';
                     $field['widgetHTML'] = str_replace("FIELD_VALUE", $field['dbValue'], $field['widgetHTML']);
                 }
-                else if ($field['dbColName'] == 'gender'){
-                    $field['widgetHTML'] = '<select name="'.$newFieldID.'" id="'.$newFieldID.'">';
-                    foreach($gender as $gAbbr => $oText){
-                        $field['widgetHTML'] .= '<option value="'.$gAbbr.'"'.($field['dbValue'] == $gAbbr ? ' selected="selected"':'').'>'.$oText.($field['dbValue'] == $gAbbr ? '*':'').'</option>';
+                else if ($field['dbColName'] == 'feeType'){
+                    $opts = "";
+                    foreach($feeTypes as $type => $fee){
+                        $opts .= '<option value="'.$type.'"'.($field['dbValue'] == $type ? ' selected="selected"':'').'>'.$fee.($field['dbValue'] == $type ? '*':'').'</option>';
                     }
-                    $field['widgetHTML'] .= '</select>';
-                }
-                else if ($field['dbColName'] == 'province'){
-                    $field['widgetHTML'] = '<select select name="'.$newFieldID.'" id="'.$newFieldID.'">';
-                    foreach($provs as $pAbbr){
-                        $field['widgetHTML'] .= '<option value="'.$pAbbr.'"'.($field['dbValue'] == $pAbbr ? ' selected="selected"':'').'>'.$pAbbr.($field['dbValue'] == $pAbbr ? '*':'').'</option>';
-                    }
-                    $field['widgetHTML'] .= '</select>';
+                    $field['widgetHTML'] = str_replace("FIELD_VALUE", $opts, $field['widgetHTML']);
                 }
                 else if ($field['dbColName'] == 'membershipType'){
-                    $field['widgetHTML'] = '<select select name="'.$newFieldID.'" id="'.$newFieldID.'">';
-                    foreach($memberTypes as $mAbbr => $mText){
-                        $field['widgetHTML'] .= '<option value="'.$mAbbr.'"'.($field['dbValue'] == $mAbbr ? ' selected="selected"':'').'>'.$mText.($field['dbValue'] == $mAbbr ? '*':'').'</option>';
+                    $opts = "";
+                    foreach($membershipTypes as $mText){
+                        $opts .= '<option value="'.$mText.'"'.($field['dbValue'] == $mText ? ' selected="selected"':'').'>'.$mText.($field['dbValue'] == $mText ? '*':'').'</option>';
                     }
-                    $field['widgetHTML'] .= '</select>';
+                    $field['widgetHTML'] = str_replace("FIELD_VALUE", $opts, $field['widgetHTML']);
                 }
                 else {
                     if (isset($_POST[$newFieldID]) && $message != '') {
@@ -476,7 +413,9 @@ to generate reports</p>
 
         $formBuffer .= "<tr><td colspan='2'>
 	<input type=\"hidden\" name=\"nonce\" value=\"".Quipp()->config('security.nonce')."\" />
-	<input type=\"hidden\" name=\"dbaction\" id=\"dbaction\" value=\"$dbaction\" />";
+	<input type=\"hidden\" name=\"dbaction\" id=\"dbaction\" value=\"$dbaction\" />
+        <input type=\"hidden\" name=\"season\" id=\"season\" value=\"".$_GET['season']."\" />
+        <input type=\"hidden\" name=\"uid\" id=\"uid\" value=\"".$_GET['uid']."\" />";
 
         if ($dbaction == "update") { //add in the id to pass back for queries if this is an edit/update form
             $formBuffer .= "<input type=\"hidden\" name=\"id\" id=\"id\" value=\"".$_GET['id']."\" />";
@@ -484,6 +423,27 @@ to generate reports</p>
 
         $formBuffer .= "</td></tr>";
         $formBuffer .= "</table>";
+        //payments
+        $formBuffer .= "<p>&nbsp;</p><h3>Payments</h3><p>&nbsp;</p>";
+            $formBuffer .=  '<table id="payments">';
+            $formBuffer .= '<tr><td width="30%"><label for="paymentDate">New Payment Date</label></td><td><input type="text" name="payment[]" id="paymentDate" class="uniform datepicker" style="width:300px" /></td></tr>';
+            $formBuffer .= '<tr><td><label for="paymentAmount">New Payment Amount</label></td><td><input type="text" name="payment[]" id="paymentAmount" class="uniform" style="width:300px" /></td></tr>';
+            $formBuffer .= '</table><p>&nbsp;</p><table id="history"><tr><td colspan="2"><strong>Payment History</strong></td></tr>';
+            if (!empty($payments)){
+                foreach($payments as $pID => $nfo){
+                    $formBuffer .= '<tr>';
+                    $formBuffer .= '<td width="30%"><input type="radio" name="radioPayment['.$pID.']" value="edit" id="editPayment_'.$pID.'" /><label for="editPayment_'.$pID.'">Edit</label>';
+                    $formBuffer .= '<input type="radio" name="radioPayment['.$pID.']" value="delete" id="deletePayment_'.$pID.'" /><label for="deletePayment_'.$pID.'">Delete</label>';
+                    $formBuffer .= '<input type="radio" name="resetPayment_'.$pID.'" id="resetPayment_'.$pID.'" /><label for="resetPayment_'.$pID.'">Reset</label></td>';
+                    $formBuffer .= '<td><label for="editDate_'.$pID.'">Date</label>&nbsp;<input type="text" name="editPayment['.$pID.'][]" id="editDate_'.$pID.'" class="uniform datepicker" style="width:150px" disabled="disabled" value="'.date("Y-m-d",$nfo["date"]).'"/>';
+                    $formBuffer .= '&nbsp;<label for="editAmount_'.$pID.'">Amount</label>&nbsp;<input type="text" name="editPayment['.$pID.'][]" id="editAmount_'.$pID.'" class="uniform" style="width:150px" disabled="disabled" value="'.number_format($nfo['amount'],2).'"/></td></tr>';
+                }
+            }
+            else{
+                $formBuffer .= '<tr><td colspan="2">No Payment History</td></tr>';
+            }
+            $formBuffer .= '</table>';
+        
         $formBuffer .= "<div class=\"clearfix\" style=\"margin-top: 10px; height:10px; border-top: 1px dotted #B1B1B1;\">&nbsp;</div>";
         $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='" . dirname($_SERVER['REQUEST_URI']) . "/index';\" value=\"Cancel\" />
 		<input class='btnStyle green' type=\"submit\" name=\"submitUserForm\" id=\"submitUserForm\" value=\"Save Changes\" />";
@@ -493,20 +453,30 @@ to generate reports</p>
         break;
     default: //(list)
 
-        $members = $mem->getMembersEmailList('all');
-
+        $members = $mem->getMembersEmailList('all'); 
+        
         if (!empty($members)){
             echo '<form name="frmMembers" action="/admin/apps/members/index" method="post" enctype="multipart/form-data">';
             echo '<table id="adminTableList_email" class="adminTableList tablesorter" width="100%" cellpadding="5" cellspacing="0" border="1">';
-            echo '<thead><tr><th>Member Name</th><th>Email Address</th><th>Parent Name</th><th>Membership Type</th><th>Status</th><th>&nbsp;</th><th>&nbsp;</th></tr></thead>';
+            echo '<thead><tr><th>Member Name</th><th>Email Address</th><th>Parent Name</th><th>Membership Type</th><th>Status</th><th>View/Edit</th><th>&nbsp;</th></tr></thead>';
             echo '<tbody>';
-            if (!empty($members)){
-                foreach($members as $email => $aInfo){
-                    echo '<tr><td>'.$aInfo['name'].'</td><td>'.$email.'</td><td>'.$aInfo['parent'].'</td><td>'.$aInfo['membership'].'</td><td>'.$aInfo['status'].'</td>
-                        <td><input class="btnStyle blue noPad" id="btnEdit_'.$aInfo['id'].'" type="button" onclick="javascript:window.location=\'?view=edit&amp;id='.$aInfo['id'].'\';" value="Edit" /></td>
-                        <td><input class="btnStyle red noPad" id="btnDelete_'.$aInfo['id'].'" type="button" onclick="javascript:confirmDelete(\'?action=delete&amp;id='.$aInfo['id'].'\');" value="Delete"></td>
-                        </tr>';
+
+            foreach($members as $email => $aInfo){
+                echo '<tr><td>'.$aInfo['name'].'</td><td>'.$email.'</td><td>'.$aInfo['parent'].'</td><td>'.$aInfo['membership'].'</td><td>'.$aInfo['status'].'</td>
+                    <td><select id="selEdit_'.$aInfo['id'].'" name="selEdit_'.$aInfo['id'].'"><option value="">--</option>';
+                foreach($seasons as $sID => $sYear){
+                    if (0 != ($regID = $mem->getRegistered($aInfo['id'], $sID))){
+                        echo '<option value="'.$sID.'-'.$regID.'">'.$sYear.'</option>';
+                    }
                 }
+                echo '</select></td><td>';
+                if (0 == ($regID = $mem->getRegistered($aInfo['id'], $currentSeasonID))){
+                    echo '<input class="btnStyle green noPad" id="btnReg_'.$aInfo['id'].'" type="button" onclick="javascript:window.location=\'?view=edit&amp;uid='.$aInfo['id'].'&amp;season='.$currentSeasonID.'\';" value="Register">';
+                }
+                else{ echo '&nbsp;'; }
+                
+                echo '</td>
+                    </tr>';
             }
             echo '</tbody>';
             echo '</table>';
