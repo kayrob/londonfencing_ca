@@ -7,7 +7,7 @@ jQuery(document).ready(function($){
             timeFormat: 'hh:mm TT',
             ampm: true
         });
-        $('#RQvalDATEBirth_Date').datepicker({
+        $('.birthdatepicker').datepicker({
                 dateFormat : 'yy-mm-dd',
                 changeMonth: true,
                 changeYear: true,

@@ -58,7 +58,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
         'dbColName' => 'birthDate',
         'tooltip' => "Participant's Date of Birth",
         'writeOnce' => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform birthdatepicker\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
         'valCode' => "RQvalDATE",
         'dbValue' => false,
         'stripTags' => true

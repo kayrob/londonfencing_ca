@@ -21,6 +21,9 @@ if (isset($user->id) && isset($regID) && (int)$regID > 0 && isset($reg) && $reg 
         
         $phone = str_format("(###) ###-####", str_replace("-","",$user->get_meta("Phone Number")));
         $ePhone = str_format("(###) ###-####", str_replace("-","",$user->get_meta("Emergency Phone Number")));
+        
+        $userEmail = $user->get_meta("E-Mail");
+        
         $title = "Registration to London Fencing Club";
         $body = '<p><label>Season: </label>&nbsp;'.date('Y', $sessionNfo['seasonStart']) . "-" . date('Y', $sessionNfo['seasonEnd']).'<br />';
         $body .= '<label>Membership Type: </label>&nbsp;'.$sessionSaved["membershipType"].'</p><p>';
@@ -31,7 +34,7 @@ if (isset($user->id) && isset($regID) && (int)$regID > 0 && isset($reg) && $reg 
         $body .= '<label>Gender: </label>&nbsp;'.$user->get_meta("Gender").' <br />';
         $body .= '<label>Address: </label>&nbsp;'.$address.'<br />';
         $body .= '<label>Phone Number: </label>&nbsp;'.$phone.'<br />';
-        $body .= '<label>Email Address: </label>&nbsp;'.$user->get_meta("E-Mail").'<br />';
+        $body .= '<label>Email Address: </label>&nbsp;'.$userEmail.'<br />';
         $body .= '<label>Parent/Guardian: </label>&nbsp;'.($user->get_meta("Parent/Guardian") != "" ?$user->get_meta("Parent/Guardian"):"N/A").'<br />';
         $body .= '<label>Emergency Contact: </label>&nbsp;'.$user->get_meta("Emergency Contact").'<br />';
         $body .= '<label>Emergency Phone: </label>&nbsp;'.$ePhone.'<br />';
@@ -52,14 +55,14 @@ if (isset($user->id) && isset($regID) && (int)$regID > 0 && isset($reg) && $reg 
         $body .= '<ol><li>Athletic shoes with non-marking soles</li><li>Track pants (no shorts, jeans, khakis)</li></ol>';
 
         $emailBody = str_replace('%SERVERNAME%',$_SERVER['SERVER_NAME'],str_replace('%BODY%',$body,str_replace('%TITLE%',$title,$emailTemplate)));
-        $subject = "London Fencing ".ucwords($sessionSaved['level'])." Session Registration";
+        $subject = "London Fencing Session Registration";
         $from = "info@londonfencing.ca";
         $admEmail = 'info@londonfencing.ca';
 
         $mail = new PHPMailer\PHPMailer();
         $mail->IsHTML(true);
         $mail->SetFrom($from);
-        $mail->AddAddress($sessionSaved['email']);
+        $mail->AddAddress($userEmail);
         $mail->AddBCC($admEmail);
         $mail->Subject = $subject;
         $mail->Body = $emailBody;

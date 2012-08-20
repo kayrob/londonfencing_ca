@@ -10,7 +10,7 @@ $sessionNfo = $reg->getAdvancedSeason();
 <div id="regSideNav">
     <div class="blankMainHeader"><h2>Season: <?php echo date('Y', $sessionNfo['seasonStart']) . "-" . date('Y', $sessionNfo['seasonEnd']); ?></h2></div>
     <ul>
-        <li><span>Start Date</span><br /><?php echo date('M j, Y', $sessionNfo['seasonStart']) ?></li>
+        <li><span>Start Date</span><br /><?php echo date('M j, Y', $sessionNfo['seasonStart']); ?></li>
         <li><span>End Date</span><br /><?php echo date('M j, Y', $sessionNfo['seasonEnd']); ?></li>
         <li><span>Coach</span><br /><?php echo (trim($sessionNfo['headCoach']) == '' ? 'TBA' : $sessionNfo['headCoach']); ?></li>
         <li><span>Fees:</span><br />Annually:&nbsp;&nbsp;<?php echo sprintf('$%001.2f', trim($sessionNfo['annualFee'])); ?><br />

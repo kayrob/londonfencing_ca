@@ -60,8 +60,8 @@ if ($hasPermission) {
         'dbColName' => 'birthDate',
         'tooltip' => "Participant's Date of Birth",
         'writeOnce' => false,
-        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode' => "RQvalDATE",
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform birthdatepicker\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode' => "OPvalDATE",
         'dbValue' => false,
         'stripTags' => true
     );
@@ -81,7 +81,7 @@ if ($hasPermission) {
         'tooltip' => "Participant's Home Address",
         'writeOnce' => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode' => "RQvalALPH",
+        'valCode' => "OPvalALPH",
         'dbValue' => false,
         'stripTags' => true
     );
@@ -102,7 +102,7 @@ if ($hasPermission) {
         'tooltip' => "",
         'writeOnce' => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode' => "RQvalALPH",
+        'valCode' => "OPvalALPH",
         'dbValue' => false,
         'stripTags' => true
     );
@@ -113,7 +113,7 @@ if ($hasPermission) {
         'tooltip' => "",
         'writeOnce' => false,
         'widgetHTML' => "",
-        'valCode' => "RQvalALPH",
+        'valCode' => "OPvalALPH",
         'dbValue' => false,
         'stripTags' => true
     );
@@ -123,7 +123,7 @@ if ($hasPermission) {
         'tooltip' => false,
         'writeOnce' => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" min=\"1\" />",
-        'valCode' => "RQvalPOST",
+        'valCode' => "OPvalPOST",
         'dbValue' => false,
         'stripTags' => true
     );
@@ -134,7 +134,7 @@ if ($hasPermission) {
         'tooltip' => "eg. 519-555-1212",
         'writeOnce' => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode' => "RQvalPHON",
+        'valCode' => "OPvalPHON",
         'dbValue' => false,
         'stripTags' => true
     );
@@ -166,7 +166,7 @@ if ($hasPermission) {
         'tooltip' => "The name of the emergency contact person",
         'writeOnce' => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode' => "RQvalALPH",
+        'valCode' => "OPvalALPH",
         'dbValue' => false,
         'stripTags' => true
     );
@@ -176,7 +176,7 @@ if ($hasPermission) {
         'tooltip' => "The name of the emergency contact phone number e.g 519-555-2323",
         'writeOnce' => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
-        'valCode' => "RQvalPHON",
+        'valCode' => "OPvalPHON",
         'dbValue' => false,
         'stripTags' => true
     );
@@ -266,6 +266,7 @@ if ($hasPermission) {
 
                 foreach ($fields as $dbField) {
                     if ($dbField['dbColName'] != false) {
+                        
                         $requestFieldID = $dbField['valCode'] . str_replace(" ", "_", $dbField['label']);
                         if ($dbField['dbColName'] == 'sysStatus') {
 
@@ -481,9 +482,6 @@ if ($hasPermission) {
                     /*for insert only, change it so only ln, fn and email are required. this allows admin to create a record from email 
                      * and get the user to fill out the remainder of the form online using registration form previously created
                      * */
-                    if ($dbaction == "insert" && (!preg_match('%(name|email)%i', $field['dbColName'], $match))){ 
-                        $field['valCode'] = str_replace("RQ","OP",$field['valCode']);
-                    }
                     $newFieldID = $field['valCode'] . $newFieldIDSeed;
 
                     $field['widgetHTML'] = str_replace("FIELD_ID", $newFieldID, $field['widgetHTML']);
