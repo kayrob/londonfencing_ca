@@ -1,7 +1,7 @@
 <?php
 $articles = array();
 if (isset($db) && $this INSTANCEOF Quipp){
-    $qry = "SELECT `slug`, `lead_in`, `type`, `title` , UNIX_TIMESTAMP(`displayDate`) as displayDate, `author` FROM `tblNews` WHERE `approvalStatus` = '1' AND `sysStatus` = 'active' AND `sysOpen` = '1' AND `type` IN ('news') AND UNIX_TIMESTAMP(`displayDate`) <= UNIX_TIMESTAMP() ORDER BY `displayDate` DESC, `itemID` DESC LIMIT 0,2 ";
+    $qry = "SELECT `slug`, `lead_in`, `type`, `title` , UNIX_TIMESTAMP(`displayDate`) as displayDate, `author` FROM `tblNews` WHERE `approvalStatus` = '1' AND `sysStatus` = 'active' AND `sysOpen` = '1' AND `type` IN ('news') AND UNIX_TIMESTAMP(`displayDate`) <= UNIX_TIMESTAMP() ORDER BY `displayDate` DESC, `itemID` DESC LIMIT 0,3 ";
     $res = $db->query($qry);
     if ($res->num_rows > 0){
         while ($row = $db->fetch_assoc($res)){

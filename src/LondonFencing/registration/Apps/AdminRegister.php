@@ -129,7 +129,7 @@ class AdminRegister {
         if (is_array($payments)) {
             foreach ($payments as $paymentID => $editType) {
                 if ($editType == "delete") {
-                    $this->deleteIntermediatePayment($paymentID);
+                    $this->deleteIntermediatePayment($paymentID, $regID);
                 } else {
                     if (isset($paymentInfo[$paymentID][0]) && isset($paymentInfo[$paymentID][1]) && $this->validatePayments($paymentInfo[$paymentID][0], $paymentInfo[$paymentID][1]) === true) {
                         $this->_db->query(sprintf("UPDATE `tblIntermediatePayments` SET `paymentDate` = %d, `paymentAmount` = %f 
