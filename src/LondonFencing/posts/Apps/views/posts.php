@@ -66,7 +66,7 @@ if ($hasPermission) {
         'stripTags'  => true
     );
     
-    $fields[] = array(
+ /*   $fields[] = array(
         'label'   => "Category",
         'dbColName'  => "category",
         'tooltip'   => false,
@@ -75,7 +75,7 @@ if ($hasPermission) {
         'valCode'   => "OPvalALPH",
         'dbValue'   => false,
         'stripTags'  => true
-    );
+    );*/
     
     $fields[] = array(
         'label'   => "Lead-in",
