@@ -10,9 +10,12 @@ if (isset($db) && $this INSTANCEOF Quipp){
     }    
     $news->type = "news";
     
-    $recent = $news->getRecentPosts(0,4);
-    $archive = $news->getPostArchive();
+    $page = (isset($_GET['page']) && (int)$_GET['page'] > 1) ? (int)$_GET['page']:1;
+    $recent = $news->getPostList(($page*5)-5,5);
     
+    $articles = 1;
+    
+    $newsSlug = (isset($_GET['slug'])) ? "/".$_GET['slug'] :'' ;
     if (isset($recent) && $recent !== false){
 ?>
     <div class="archive-widget" id="news-archive-recent">
@@ -21,48 +24,17 @@ if (isset($db) && $this INSTANCEOF Quipp){
     <ul>
 <?php
         foreach ($recent as $post){
+            $articles = $post["count"];
             echo '<li><a href="/news/'.trim($post['slug']).'">'.str_shorten($post['title'], 30).'</a><br /><small>Posted On: '.date("M j, Y",$post["displayDate"]).'</small></li>';
         }
 ?>
     </ul>
     </div>
 <?php
-        if (count($recent) == 4){
-            echo '<a href="/news/archive-recent">View All</a>';
-        }
+     echo pagination($articles, $page, "/news".$newsSlug."?page=", 5, false);
 ?>
     </div>
+
 <?php
-    }
-    if (isset($archive) && $archive !== false){
-        
-        echo '<h4>OLDER POSTS</h4>';
-        
-        foreach($archive as $category => $posts){
-            $p = 0;
-?>
-		
-        <div class="news-archive" id="news-archive-<?php echo str_replace(" ","-",$category);?>">
-        <h5><?php echo $category;?></h5>
-        <ul>
-<?php
-        foreach ($posts as $listing){
-            if ($p < 4){
-                echo '<li><a href="/news/'.trim($listing['slug']).'">'.trim($listing["title"]).'</a><br /><small>Posted On: '.date("M j, Y",$listing["displayDate"]).'</small></li>';
-                $p++;
-            } else{
-                break;
-            }
-        }
-?>
-        </ul>
-<?php
-        if (count($posts) > 4){
-            echo '<a href="/news/archive-'.str_replace(" ","-",$category).'">View All</a>';
-        }
-?>
-        </div>
-<?php
-        }
     }
 }

@@ -56,6 +56,9 @@ if (!empty($tourns)){
                 if ($location != ''){
                     echo '<span class="lowlight">Where:</span>&nbsp;&nbsp;'.$location.'<br />';
                 }
+                if (!empty($tourn['about'])){
+                    echo '<span class="lowlight">About:</span>&nbsp;&nbsp;'.str_replace('<br />',', ',nl2br($tourn['about'])).'<br />';
+                }
                 echo '</p>';
             }
             $p++;

@@ -26,8 +26,10 @@ class Blog extends Posts\posts{
         
         $limit = "LIMIT ".$offset.",".$max;
         
-        $qry = sprintf("SELECT `title`, `lead_in`, `displayDate`, `slug` FROM `tblNews` WHERE `approvalStatus` = '1' AND `sysOpen` = '1' AND `sysStatus` = '%s' AND `type` = '%s' AND `siteID` = %d ORDER BY 
-        UNIX_TIMESTAMP(`displayDate`) DESC %s",
+        $qry = sprintf("SELECT `title`, `lead_in`, UNIX_TIMESTAMP(`displayDate`) as displayDate, `slug` , (SELECT count(`itemID`) FROM `tblNews` WHERE `approvalStatus` = '1' AND `sysOpen` = '1' AND `sysStatus` = 'active' AND `siteID` = %d  AND type='%s') AS count FROM `tblNews` WHERE `approvalStatus` = '1' AND `sysOpen` = '1' AND `sysStatus` = '%s' AND `type` = '%s' AND `siteID` = %d ORDER BY 
+        UNIX_TIMESTAMP(`displayDate`) DESC, `itemID` DESC %s",
+            (int)$this->_siteID,
+            $this->type,
             $this->_status,
             $this->type,
             (int)$this->_siteID,

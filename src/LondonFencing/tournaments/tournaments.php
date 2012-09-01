@@ -28,7 +28,8 @@ class tournaments  extends Cal\calendar{
                             "description"   =>  ltrim(ltrim($description,"<br />"),"<br>"),
                             "title"              =>  (string)$tourn->title,
                             "link"              => $regLink,
-                            "eID"               => false
+                            "eID"               => false,
+                            "about"            => ''
                         );
                     }
             }
@@ -61,7 +62,8 @@ class tournaments  extends Cal\calendar{
                             "description"   =>  $description,
                             "title"              =>  $eData->title,
                             "link"              => (isset($eData->altUrl) && trim($eData->altUrl) != '' ? trim($eData->altUrl) : false),
-                            "eID"               => $eData->id
+                            "eID"               => $eData->id,
+                            "about"            => $eData->description
                         );
                     }
                 }
