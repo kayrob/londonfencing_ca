@@ -252,14 +252,18 @@ class notificationManager{
             if (isset($aRes) && $aRes->num_rows > 0){
                 while ($arow = $this->_db->fetch_assoc($aRes)){
                     $aData = explode(",", $arow["meta"]);
-                    if ($batch == "single"){
+                    if ($batch == "single" && !empty($aData[2])){
                          $send = (trim($aData[3]) != "") ? str_replace('%NAME%',trim($aData[3]),$body): str_replace('%NAME%',trim($aData[0]),$body);
                          $this->sendMailSingle(trim($aData[2]), stripslashes($send));
                     }
                     else{
-                         $this->mailer->addAddress(trim($aData[2]));
+                        if (!empty($aData[2])){
+                            $this->mailer->addAddress(trim($aData[2]));
+                        }
                     }
-                    $addr[] = trim($aData[2]);
+                    if (!empty($aData[2])){
+                        $addr[] = trim($aData[2]);
+                    }
                 }
             }
             
