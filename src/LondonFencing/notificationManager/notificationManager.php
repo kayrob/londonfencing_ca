@@ -84,14 +84,22 @@ class notificationManager{
      * @return object
      */
     protected function getEmailMemberAddresses($emailList){
-        $qry = sprintf("SELECT group_concat(m.`value` ORDER BY f.`myOrder` ASC) as meta  
+        $qry = sprintf("(SELECT group_concat(m.`value` ORDER BY f.`myOrder` ASC) as meta  
                 FROM `sysUGFValues` AS m 
                 INNER JOIN `sysUGFields` AS f ON m.`fieldID` = f.`itemID`
                 WHERE m.`userID` IN (%s) AND f.`slug` IN ('firstName', 'lastName', 'email','parentName', 'cffNumber') 
-                GROUP BY m.`userID`",
+                GROUP BY m.`userID`)",
                     $this->_db->escape($emailList,true)
             );
-        return $this->_db->query($qry);
+        
+        $qryAlt = sprintf("(SELECT group_concat(m.`value` ORDER BY f.`myOrder` ASC) as meta  
+                FROM `sysUGFValues` AS m 
+                INNER JOIN `sysUGFields` AS f ON m.`fieldID` = f.`itemID`
+                WHERE m.`userID` IN (%s) AND f.`slug` IN ('firstName', 'lastName', 'altEmail','parentName', 'cffNumber') 
+                GROUP BY m.`userID`)",
+                    $this->_db->escape($emailList,true)
+       );
+        return $this->_db->query($qry. " UNION ".$qryAlt);
     }
     /**
      * Set initial email headers and body content.
