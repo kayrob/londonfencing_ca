@@ -77,6 +77,7 @@ if (!empty($sessionNfo)){
             "RQvalPOSTpostalCode"                => $user->get_meta("Postal Code"),
             "RQvalPHONphoneNumber"          => $user->get_meta("Phone Number"),
             "RQvalMAILemail"                         => $user->get_meta("E-Mail"),
+            "OPvalMAILaltEmail"                     => $user->get_meta("Alternate E-Mail"),
             "OPvalALPHparentName"              => $user->get_meta("Parent/Guardian"),
             "RQvalALPHemergencyContact"    => $user->get_meta("Emergency Contact"),
             "RQvalPHONemergencyPhone"      => $user->get_meta("Emergency Phone Number"),

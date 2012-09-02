@@ -68,6 +68,16 @@ $gender = array("F" => "Female", "M" => "Male");
         <label for="RQvalMAILemail" class="req">Email</label>
         <input type="email" name="RQvalMAILemail" id="RQvalMAILemail" value = "<?php echo $post["RQvalMAILemail"];?>"/> *
     </div>
+    <?php
+     if (isset($post["OPvalMAILaltEmail"])){
+ ?>
+        <div>
+        <label for="OPvalMAILaltEmail">Additional Email</label>
+        <input type="text" name="OPvalMAILaltEmail" id="OPvalMAILaltEmail"  value = "<?php echo $post["OPvalMAILaltEmail"];?>" />
+    </div>
+<?php
+     }
+?>
     <div>
         <label for="OPvalALPHparentName" class="req">Parent/Guardian</label>
         <input type="text" name="OPvalALPHparentName" id="OPvalALPHparentName"  value = "<?php echo $post["OPvalALPHparentName"];?>" /> (if Participant is less than 18 years old)
