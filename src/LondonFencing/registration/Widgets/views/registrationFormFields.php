@@ -96,7 +96,8 @@ $gender = array("F" => "Female", "M" => "Male");
         <div>
         <label for="OPvalALPHcffNumber">CFF Number</label>
         <input type="text" name="OPvalALPHcffNumber" id="OPvalALPHcffNumber"  value = "<?php echo $post["OPvalALPHcffNumber"];?>" /> (Transition &amp; Excellence)
-    </div>
+        <a href="http://fencingontario.ca/membership/" target="_blank" class="iconsM blue"><img src="/themes/LondonFencing/img/extLink.png" alt="more info" width="12px" height="12px" title="OFA/CFF Registration" style="margin: 0 0 4px 4px"/></a>
+        </div>
 <?php
      }
     if (isset($regPost) && isset($feeTypes) && isset($membershipTypes)){
@@ -109,7 +110,7 @@ $gender = array("F" => "Female", "M" => "Male");
                 echo '<option value="'.$memTypes.'"'.($post["RQvalALPHmembershipType"] == $memTypes ? 'selected="selected"':'').'>'.$memTypes.($post["RQvalALPHmembershipType"] == $memTypes ? '*':'').'</option>';
             }
         ?>
-        </select> *
+        </select>*
     </div>
     <div>
         <label for="RQvalALPHfeeType" class="req">Fee Type</label>

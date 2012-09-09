@@ -40,7 +40,9 @@ if (!empty($sessionNfo)){
 
 <?php
     if ($regID > 0){
-        print alert_box("Thank you!<br />Your registration is complete. You can update your contact information below, or print out your consent form", 1);
+        $regKey = str_replace('LFC', str_pad($regID,2,'0',STR_PAD_LEFT), $user->get_meta("Registration Key"));
+        $consentLink = '<a href="http://'.$_SERVER["SERVER_NAME"].'/club-consent/'.$sessionNfo['itemID'].'/'.$regKey.'">print out your consent form</a>';
+        print alert_box("Thank you!<br />Your registration is complete. You can update your contact information below, or ".$consentLink, 1);
     }
     
     if (!empty($_POST) && isset($_POST["nonce"]) && validate_form($_POST)) {

@@ -43,7 +43,7 @@ if (isset($user->id) && isset($regID) && (int)$regID > 0 && isset($reg) && $reg 
         $body .= '<label>Date Registered: </label>&nbsp;'.substr($sessionSaved['sysDateCreated'],0,10).'</p>';
 
         $body .= '<p>Print out your form to sign by clicking the link or copying it and pasting it into your browser: 
-            <a href="http://'.$_SERVER["SERVER_NAME"].'/club-consent/'.$sessionNfo['itemID'].'/'.$regKey.'">http://'.$_SERVER["SERVER_NAME"].'/print-reg/'.$sessionNfo['itemID'].'/'.$regKey.'</a>';
+            <a href="http://'.$_SERVER["SERVER_NAME"].'/club-consent/'.$sessionNfo['itemID'].'/'.$regKey.'">http://'.$_SERVER["SERVER_NAME"].'/club-consent/'.$sessionNfo['itemID'].'/'.$regKey.'</a>';
         $body .= '<p>&nbsp;</p><p>Next Steps:</p>';
         $body .= '<ol>
         <li>Read the Terms and Conditions listed on the printable registration sheet</li>
