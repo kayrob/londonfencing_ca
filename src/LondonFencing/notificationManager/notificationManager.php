@@ -87,7 +87,7 @@ class notificationManager{
         $qry = sprintf("(SELECT group_concat(m.`value` ORDER BY f.`myOrder` ASC) as meta  
                 FROM `sysUGFValues` AS m 
                 INNER JOIN `sysUGFields` AS f ON m.`fieldID` = f.`itemID`
-                WHERE m.`userID` IN (%s) AND f.`slug` IN ('firstName', 'lastName', 'email','parentName', 'cffNumber') 
+                WHERE m.`userID` IN (%s) AND f.`slug` IN ('firstName', 'lastName', 'email','parentName', 'registrationKey', 'cffNumber') 
                 GROUP BY m.`userID`)",
                     $this->_db->escape($emailList,true)
             );
@@ -95,7 +95,7 @@ class notificationManager{
         $qryAlt = sprintf("(SELECT group_concat(m.`value` ORDER BY f.`myOrder` ASC) as meta  
                 FROM `sysUGFValues` AS m 
                 INNER JOIN `sysUGFields` AS f ON m.`fieldID` = f.`itemID`
-                WHERE m.`userID` IN (%s) AND f.`slug` IN ('firstName', 'lastName', 'altEmail','parentName', 'cffNumber') 
+                WHERE m.`userID` IN (%s) AND f.`slug` IN ('firstName', 'lastName', 'altEmail','parentName', 'registrationKey', 'cffNumber') 
                 GROUP BY m.`userID`)",
                     $this->_db->escape($emailList,true)
        );
@@ -166,7 +166,6 @@ class notificationManager{
                          $send = (trim($row["parentName"]) != "") ? str_replace('%NAME%',trim($row["parentName"]),$body): str_replace('%NAME%',trim($row["firstName"]),$body);
                          $send = str_replace('%REGKEY%',trim($row["registrationKey"]),$send);
                          $this->sendMailSingle(trim($row['email']), stripslashes($send));
-                         echo $send;
                     }
                     else{
                          $this->mailer->addAddress(trim($row["email"]));
@@ -254,6 +253,10 @@ class notificationManager{
                     $aData = explode(",", $arow["meta"]);
                     if ($batch == "single" && !empty($aData[2])){
                          $send = (trim($aData[3]) != "") ? str_replace('%NAME%',trim($aData[3]),$body): str_replace('%NAME%',trim($aData[0]),$body);
+                         //replace user data as supplied
+                         $send = str_replace('%REGKEY%',trim($aData[4]),$send);
+                         $send = str_replace('%LOGIN%',trim($aData[2]),$send);
+                         $send = str_replace('%CFFNUM%',trim($aData[5]),$send);
                          $this->sendMailSingle(trim($aData[2]), stripslashes($send));
                     }
                     else{
@@ -269,6 +272,9 @@ class notificationManager{
             
             if ($batch == "batch"){
                 $send = str_ireplace('%NAME%','', $body);
+                $send = str_replace('%REGKEY%','',$body);
+                $send = str_replace('%LOGIN%','',$body);
+                $send = str_replace('%CFFNUM%','',$body);
                 $this->sendMailBatch(stripslashes($send));
             }
             if (empty($this->errs)){

@@ -49,7 +49,9 @@ if ((isset($_POST['eList']) && is_array($_POST['eList'])) || (isset($_POST['aLis
                 $placeHolders["%REGKEY%"] = "Individual Registration Confirmation Code";
                 break;
             case "members":
-                $placeHolders["%CFCNUM%"] = "Member's CFC Number";
+                $placeHolders["%CFFNUM%"] = "Member's CFC Number";
+                $placeHolders["%LOGIN%"] = "Member's Website Username";
+                $placeHolders["%REGKEY%"] = "Member's Default Website Password";
                 break;
         }
         
