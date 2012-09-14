@@ -30,7 +30,7 @@ if (isset($user->id) && isset($regID) && (int)$regID > 0 && isset($reg) && $reg 
         $body .= '<label>Fee Type: </label>&nbsp;'.$sessionSaved["feeType"].'</p><p>';
         $body .= '<label>First Name: </label>&nbsp;'.$user->get_meta("First Name").'<br />';
         $body .= '<label>Last Name: </label>&nbsp;'.$user->get_meta("Last Name").' <br />';
-        $body .= '<label>Date of Birth: </label>&nbsp;'.date('Y-m-d',$user->get_meta("Birthdate")).'<br />';
+        $body .= '<label>Date of Birth: </label>&nbsp;'.$user->get_meta("Birthdate").'<br />';
         $body .= '<label>Gender: </label>&nbsp;'.$user->get_meta("Gender").' <br />';
         $body .= '<label>Address: </label>&nbsp;'.$address.'<br />';
         $body .= '<label>Phone Number: </label>&nbsp;'.$phone.'<br />';
