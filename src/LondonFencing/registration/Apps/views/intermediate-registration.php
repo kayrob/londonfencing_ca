@@ -442,7 +442,7 @@ if ($hasPermission) {
                     $dbaction = "update";
                     
                     $qryP = sprintf("SELECT `paymentAmount`, `paymentDate`, `paymentType`, `itemID` FROM `tblIntermediatePayments` 
-                        WHERE `sysOpen` = '1' AND `registrationID` = '%d'",
+                        WHERE `sysOpen` = '1' AND `registrationID` = '%d' ORDER BY `paymentDate` ASC",
                             (int)$_GET['id'] 
                      );
                     $resP = $db->query($qryP);

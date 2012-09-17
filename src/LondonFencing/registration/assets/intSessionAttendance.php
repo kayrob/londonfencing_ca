@@ -8,11 +8,7 @@ if ($auth->has_permission("canCreateReports") && isset($_POST["sessionStart"]) &
     
     $adm = new REG\AdminRegister(false, $db);
     $attendance = $adm->getSessionCardsInt($_POST["sessionStart"], $_POST["sessionEnd"]);
-    
-    //test
-    for ($i = count($attendance); $i < 12; $i++){
-        $attendance[] = "First Middle Last";
-    }
+
 ?>
 <!doctype html>
 <html>
