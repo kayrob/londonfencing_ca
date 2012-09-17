@@ -1,5 +1,4 @@
 <?php
-
 namespace LondonFencing\registration\Apps;
 
 use LondonFencing\calendar\Apps as aCal;
@@ -104,14 +103,15 @@ class AdminRegister {
 
     public function createIntermediatePayment($payment, $regID, $userID) {
         if (is_array($payment) && is_numeric($regID) && (int) $regID > 0 && (int) $userID > 0) {
-            $this->_db->query(sprintf("INSERT INTO `tblIntermediatePayments` (`paymentDate`, `paymentAmount`, `sysDateLastMod`,`registrationID`, `sysUserLastMod`, `sysOpen`) 
-                VALUES (%d, %1.2f, %d, %d, %d, '1')", strtotime($payment[0]), number_format($payment[1], 2), date("U"), $regID, $userID
+            $this->_db->query(sprintf("INSERT INTO `tblIntermediatePayments` (`paymentDate`, `paymentAmount`, `paymentType`, `sysDateLastMod`,`registrationID`, `sysUserLastMod`, `sysOpen`) 
+                VALUES (%d, %1.2f, '%s', %d, %d, %d, '1')", strtotime($payment[0]), number_format($payment[1], 2), $this->_db->escape($payment[2],true), date("U"), $regID, $userID
                     ));
         }
     }
 
-    public function validatePayments($paymentDate, $paymentAmount) {
-        if ((int) strtotime($paymentDate) > 0 && preg_match('%^\d+(\.\d{2})?$%', $paymentAmount, $matches)) {
+    public function validatePayments($paymentDate, $paymentAmount, $paymentType) {
+        if ((int) strtotime($paymentDate) > 0 && preg_match('%^\d+(\.\d{2})?$%', $paymentAmount, $matches) 
+                && preg_match('%^(monthly|card|drop-in)$%',$paymentType, $matchT)) {
             return true;
         } else {
             return false;
@@ -131,9 +131,14 @@ class AdminRegister {
                 if ($editType == "delete") {
                     $this->deleteIntermediatePayment($paymentID, $regID);
                 } else {
-                    if (isset($paymentInfo[$paymentID][0]) && isset($paymentInfo[$paymentID][1]) && $this->validatePayments($paymentInfo[$paymentID][0], $paymentInfo[$paymentID][1]) === true) {
-                        $this->_db->query(sprintf("UPDATE `tblIntermediatePayments` SET `paymentDate` = %d, `paymentAmount` = %f 
-                            WHERE `itemID` = %d AND `registrationID` = %d", strtotime($paymentInfo[$paymentID][0]), (float) $paymentInfo[$paymentID][1], (int) $paymentID, (int) $regID
+                    if (isset($paymentInfo[$paymentID][0]) && isset($paymentInfo[$paymentID][1]) && isset($paymentInfo[$paymentID][2]) && $this->validatePayments($paymentInfo[$paymentID][0], $paymentInfo[$paymentID][1], $paymentInfo[$paymentID][2]) === true) {
+                        $this->_db->query(sprintf("UPDATE `tblIntermediatePayments` SET `paymentDate` = %d, `paymentAmount` = %f , `paymentType` = '%s'
+                            WHERE `itemID` = %d AND `registrationID` = %d", 
+                                strtotime($paymentInfo[$paymentID][0]), 
+                                (float)$paymentInfo[$paymentID][1],
+                                $this->_db->escape($paymentInfo[$paymentID][2], true), 
+                                (int)$paymentID,
+                                (int)$regID
                                 ));
                     }
                 }
@@ -185,4 +190,25 @@ class AdminRegister {
         return $registered;
     }
 
+    public function getSessionCardsInt($paymentStart, $paymentEnd){
+        $attendance = array();
+        if (strtotime($paymentStart) > 0 && strtotime($paymentEnd) > 0){
+            $qry = sprintf("SELECT concat(i.`firstName`,' ',i.`lastName`) AS name 
+                FROM `tblIntermediateRegistration` AS i
+                INNER JOIN `tblIntermediatePayments` AS p ON i.`itemID` = p.`registrationID` 
+                WHERE p.`paymentType` = 'card' AND p.`paymentDate` >= %d AND p.`paymentDate` <= %d 
+                AND i.`sysStatus` = 'active' AND i.`sysOpen` = '1'",
+                    strtotime($paymentStart),
+                    strtotime($paymentEnd)
+            );
+            
+            $res = $this->_db->query($qry);
+            if ($res->num_rows > 0){
+                while ($row = $this->_db->fetch_assoc($res)){
+                    $attendance[] = trim($row["name"]);
+                }
+            }
+        }
+        return $attendance;
+    }
 }

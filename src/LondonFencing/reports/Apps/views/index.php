@@ -18,6 +18,7 @@ if ($hasPermission) {
 include $root. "/admin/templates/header.php";   
 
 $foundationLog = $rpt->getLastReportLog('foundation');
+$taxLog             = $rpt->getLastReportLog('taxReceipts');
 ?>
 <h1>Reporting Tools</h1>
 <p>Allows the creation/download of reports using simple input options</p>
@@ -37,9 +38,9 @@ $foundationLog = $rpt->getLastReportLog('foundation');
                 <div id="template">
                     <form name="frmFoundation" id="frmFoundation" action="/src/LondonFencing/reports/assets/foundationReport.php" method="post">
                         <label for="foundationStart">Date Range Start</label>
-                        <input type="text" class="uniform" name="foundationStart" id="foundationStart" />
+                        <input type="text" class="uniform datepicker" name="foundationStart" id="foundationStart" />
                         <label for="foundationEnd">Date Range End</label>
-                        <input type="text" class="uniform" name="foundationEnd" id="foundationEnd" />
+                        <input type="text" class="uniform datepicker" name="foundationEnd" id="foundationEnd" />
                         <input type="submit" name="submitFoundation" class="btnStyle blue" id="submitFoundation" value="Export .csv" style="float:none" />
                         <input type="hidden" name="nonce" value="<?php echo Quipp()->config('security.nonce');?>" />
                     </form>
@@ -47,7 +48,60 @@ $foundationLog = $rpt->getLastReportLog('foundation');
                 </div>
         </div>
 </div>
-
+<div class="boxStyle">
+        <div class="boxStyleContent">
+                <div class="boxStyleHeading">
+                        <h2>Intermediate Session Cards</h2>
+                        <div class="boxStyleHeadingRight">
+                            <input type="button" class="btnStyle blue" onclick="window.open('../../../registration/assets/sessioncards.pdf')" value="Print Cards"/>
+                        </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <div id="template">
+                    <form target="_blank" name="frmSessionCards" id="frmSessionCards" action="/src/LondonFencing/registration/assets/intSessionAttendance.php" method="post">
+                        <label for="sessionStart">Date Range Start</label>
+                        <input type="text" class="uniform datepicker" name="sessionStart" id="sessionStart" />
+                        <label for="sessionEnd">Date Range End</label>
+                        <input type="text" class="uniform datepicker" name="sessionEnd" id="sessionEnd" />
+                        <input type="submit" name="submitSession" class="btnStyle blue" id="submitSession" value="Attendance List" style="float:none" />
+                        <input type="hidden" name="nonce" value="<?php echo Quipp()->config('security.nonce');?>" />
+                    </form>
+                </div>
+        </div>
+</div>
+<!--
+<div class="boxStyle">
+    <div class="boxStyleContent">
+                <div class="boxStyleHeading">
+                        <h2>Tax Receipts</h2>
+                        <div class="boxStyleHeadingRight">
+                            <?php
+                /*            if (!empty($taxLog)){
+                                echo '<p style="text-align:right">&nbsp;<br />Last Report: '.date('F j, Y', $taxLog['sysDateCreated']).' '.$taxLog['options'].'</em>';
+                            }*/
+                            ?>
+                        </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <div id="template">
+                    <form name="frmReceipts" id="frmReceipts" action="/src/LondonFencing/reports/assets/taxesReport.php" method="post">
+                        <label for="taxesGroup">Tax Group</label>
+                        <select name="taxesGroup" id="taxesGroup">
+                            <option value="beginner">Beginner</option>
+                            <option value="club">Club</option>
+                            <option value="intermediate">Intermediate</option>
+                        </select>
+                        <label for="taxesStart">Date Range Start</label>
+                        <input type="text" class="uniform datepicker" name="taxesStart" id="taxesStart" />
+                        <label for="taxesEnd">Date Range End</label>
+                        <input type="text" class="uniform datepicker" name="taxesEnd" id="taxesEnd" />
+                        <input type="submit" name="submitReceipts" class="btnStyle blue" id="submitFoundation" value="Send Receipts" style="float:none" />
+                        <input type="hidden" name="nonce" value="<?php /*echo Quipp()->config('security.nonce');*/?>/" />
+                    </form>
+                </div>
+        </div>
+</div>
+-->
 <?php
 //end of display logic
 

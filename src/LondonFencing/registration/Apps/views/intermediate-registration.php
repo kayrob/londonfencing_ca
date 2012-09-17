@@ -32,7 +32,7 @@ if ($hasPermission) {
 
     $provs = array("AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT");
     $gender = array("F" => "Female", "M" => "Male");
-
+    $payOpts = array("monthly" => "Monthly", "drop-in" => "Drop-In", "card" => "Session Card");
     //editable fields
     $fields[] = array(
         'label' => "First Name",
@@ -302,7 +302,7 @@ if ($hasPermission) {
 
                 if ($db->affected_rows($res) == 1) {
                     $insID = $db->insert_id();
-                    if ($aReg->validatePayments($_POST["payment"][0], $_POST["payment"][1]) === true){
+                    if ($aReg->validatePayments($_POST["payment"][0], $_POST["payment"][1], $_POST['payment'][2]) === true){
                         $aReg->createIntermediatePayment($_POST["payment"], $insID, $user->id);
                     }
                    header('Location:/admin/apps/registration/intermediate-registration?Insert=true');
@@ -360,7 +360,7 @@ if ($hasPermission) {
                 $res = $db->query($qry);
 
                 if ($db->affected_rows($res) == 1 || $db->error() === false) {
-                    if ((int)strtotime($_POST["payment"][0]) > 0 && preg_match('%^\d+(\.\d{2})?$%', $_POST["payment"][1], $matches)){
+                    if ($aReg->validatePayments($_POST["payment"][0], $_POST["payment"][1], $_POST['payment'][2]) === true){
                         $aReg->createIntermediatePayment($_POST["payment"], (int)$_POST['id'], $user->id);
                     }
                     if (isset($_POST['radioPayment'])){
@@ -441,7 +441,7 @@ if ($hasPermission) {
 
                     $dbaction = "update";
                     
-                    $qryP = sprintf("SELECT `paymentAmount`, `paymentDate`, `itemID` FROM `tblIntermediatePayments` 
+                    $qryP = sprintf("SELECT `paymentAmount`, `paymentDate`, `paymentType`, `itemID` FROM `tblIntermediatePayments` 
                         WHERE `sysOpen` = '1' AND `registrationID` = '%d'",
                             (int)$_GET['id'] 
                      );
@@ -450,7 +450,8 @@ if ($hasPermission) {
                         while ($rowP = $db->fetch_assoc($resP)){
                             $payments[trim($rowP["itemID"])] = array(
                                 'date'      => trim($rowP["paymentDate"]), 
-                                'amount' => trim($rowP["paymentAmount"])
+                                'amount' => trim($rowP["paymentAmount"]),
+                                'type'      => trim($rowP["paymentType"])
                                 );
                         }
                     }
@@ -545,6 +546,7 @@ if ($hasPermission) {
             $formBuffer .=  '<table id="payments">';
             $formBuffer .= '<tr><td width="30%"><label for="paymentDate">New Payment Date</label></td><td><input type="text" name="payment[]" id="paymentDate" class="uniform datepicker" style="width:300px" /></td></tr>';
             $formBuffer .= '<tr><td><label for="paymentAmount">New Payment Amount</label></td><td><input type="text" name="payment[]" id="paymentAmount" class="uniform" style="width:300px" /></td></tr>';
+            $formBuffer .= '<tr><td><label for="paymentType">New Payment Type</label></td><td><select name="payment[]" id="paymentType"><option value="monthly">Monthly</option><option value="card">Session Card</option><option value="drop-in">Drop-In</option></select></td></tr>';
             $formBuffer .= '</table><p>&nbsp;</p><table id="history"><tr><td colspan="2"><strong>Payment History</strong></td></tr>';
             if (!empty($payments)){
                 foreach($payments as $pID => $nfo){
@@ -553,7 +555,12 @@ if ($hasPermission) {
                     $formBuffer .= '<input type="radio" name="radioPayment['.$pID.']" value="delete" id="deletePayment_'.$pID.'" /><label for="deletePayment_'.$pID.'">Delete</label>';
                     $formBuffer .= '<input type="radio" name="resetPayment_'.$pID.'" id="resetPayment_'.$pID.'" /><label for="resetPayment_'.$pID.'">Reset</label></td>';
                     $formBuffer .= '<td><label for="editDate_'.$pID.'">Date</label>&nbsp;<input type="text" name="editPayment['.$pID.'][]" id="editDate_'.$pID.'" class="uniform datepicker" style="width:150px" disabled="disabled" value="'.date("Y-m-d",$nfo["date"]).'"/>';
-                    $formBuffer .= '&nbsp;<label for="editAmount_'.$pID.'">Amount</label>&nbsp;<input type="text" name="editPayment['.$pID.'][]" id="editAmount_'.$pID.'" class="uniform" style="width:150px" disabled="disabled" value="'.number_format($nfo['amount'],2).'"/></td></tr>';
+                    $formBuffer .= '&nbsp;<label for="editAmount_'.$pID.'">Amount</label>&nbsp;<input type="text" name="editPayment['.$pID.'][]" id="editAmount_'.$pID.'" class="uniform" style="width:150px" disabled="disabled" value="'.number_format($nfo['amount'],2).'"/>';
+                    $formBuffer .= '<label for="editType_'.$pID.'">Type</label><select name="editPayment['.$pID.'][]" id="editType_'.$pID.'" disabled="disabled">';
+                    foreach($payOpts as $pType => $pLabel){
+                        $formBuffer .= '<option value="'.$pType.'"'.($pType == $nfo['type'] ? 'selected="selected"' : '').'>'.$pLabel.($pType == $nfo['type'] ? '*' : '').'</option>';
+                    }
+                    $formBuffer .= '</select></td></tr>';
                 }
             }
             else{

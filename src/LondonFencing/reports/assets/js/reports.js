@@ -34,10 +34,7 @@ var checkErrors = function(){
 
 jQuery(document).ready(function($){
     
-    $('#foundationStart').datepicker({
-        dateFormat: 'yy-mm-dd'
-    });
-    $('#foundationEnd').datepicker({
+    $('.datepicker').datepicker({
         dateFormat: 'yy-mm-dd'
     });
     

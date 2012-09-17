@@ -35,18 +35,21 @@ jQuery(document).ready(function($){
                     var rID = $(this).attr('id').replace('editPayment_','');
                     $('#editDate_'+rID).attr('disabled',false);
                     $('#editAmount_'+rID).attr('disabled',false);
+                    $('#editType_'+rID).attr('disabled',false);
                     $('#resetPayment_'+rID).attr('checked', false);
                 });
                 $(':input:eq(1)', this).change(function(){
                     var rID = $(this).attr('id').replace('deletePayment_','');
                     $('#editDate_'+rID).attr('disabled',true);
                     $('#editAmount_'+rID).attr('disabled',true);
+                    $('#editType_'+rID).attr('disabled',true);
                      $('#resetPayment_'+rID).attr('checked', false);
                 });
                 $(':input:eq(2)', this).change(function(){
                     var rID = $(this).attr('id').replace("resetPayment_",'');
                     $('#editDate_'+rID).attr('disabled',true);
                     $('#editAmount_'+rID).attr('disabled',true);
+                    $('#editType_'+rID).attr('disabled',true);
                     $('#deletePayment_'+rID).attr('checked', false);
                     $('#editPayment_'+rID).attr('checked', false);
                 });
