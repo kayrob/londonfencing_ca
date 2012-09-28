@@ -170,7 +170,7 @@ if ($hasPermission) {
             $res = $db->query($qry);
             $insID = $db->insert_id();
             if ($db->affected_rows($res) == 1){
-                if (AReg\AdminRegister::validatePayments($_POST["payment"][0], $_POST["payment"][1]) === true){
+                if (AReg\AdminRegister::validatePayments($_POST["payment"][0], $_POST["payment"][1],"cash") === true){
                         $mem->createMemberPayment($_POST["payment"], $insID, $user->id);
                 }
                 header('Location:' . dirname($_SERVER['REQUEST_URI']) . '/index?Insert=true');
@@ -226,7 +226,7 @@ if ($hasPermission) {
             $res = $db->query($qry);
             if ($db->affected_rows($res) == 1|| $db->error() == 0){
                 
-                if (AReg\AdminRegister::validatePayments($_POST["payment"][0], $_POST["payment"][1]) === true){
+                if (AReg\AdminRegister::validatePayments($_POST["payment"][0], $_POST["payment"][1], "cash") === true){
                     $mem->createMemberPayment($_POST["payment"], (int)$_POST['id'], $user->id);
                 }
                 if (isset($_POST['radioPayment'])){
