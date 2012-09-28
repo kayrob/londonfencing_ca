@@ -96,10 +96,10 @@ class members {
                 
                     $membershipType = "--";
                     $mRes = $this->_db->query(sprintf(
-                            "SELECT `membershipType` FROM `tblMemberRegistrations` WHERE `userID` = %d ORDER BY `itemID` LIMIT 1",
+                            "SELECT `membershipType` FROM `tblMembersRegistration` WHERE `userID` = %d ORDER BY `itemID` LIMIT 1",
                             trim($row['userID'])
                     ));
-                    if ($mRes->num_rows == 1){
+                    if ($this->_db->valid($mRes) && $mRes->num_rows == 1){
                         $mem = $this->_db->fetch_assoc($mRes);
                         $membershipType = $mem["membershipType"];
                     }

@@ -8,7 +8,7 @@ class notificationManager{
     protected $_db;
     public $mailer;
     public $errs = array();
-    protected $_from = 'info@londonfencing.ca';
+    protected $_from = 'info@londonfencing.ca'; 
     
     /** Create class properties for db connection and the php mailer
      * @access public
@@ -20,6 +20,12 @@ class notificationManager{
         if (is_object($db)){
             $this->_db = $db;
             $this->mailer = new PHPMailer\PHPMailer();
+            $this->mailer->Host = "mail.londonfencing.ca";
+            $this->mailer->Port  = 587;
+            $this->mailer->SMTPAuth = true;
+            $this->mailer->Username = "info@londonfencing.ca";
+            $this->mailer->Password = "05epeeFTW50";
+            $this->mailer->IsSMTP();
         }
         else{
             throw new Exception("You are not connected to a database");
@@ -221,10 +227,10 @@ class notificationManager{
             $aListID = implode(",",$aList);
             $aRes = $this->getEmailMemberAddresses($aListID);
         }
-        if ((isset($eRes) && $eRes->num_rows > 0) || (isset($aRes) && $aRes->num_rows > 0)){
+        if (isset($eRes) || isset($aRes) || isset($iRes)){
             $body = $this->initEmailContent($subject, $content, $format);
             $body = "<p>".$body."</p>";
-            if (isset($eRes) && $eRes->num_rows > 0){
+            if (isset($eRes) && $this->_db->valid($eRes) && $eRes->num_rows > 0){
                 while ($row = $this->_db->fetch_assoc($eRes)){
                     if ($batch == "single"){
                          $send = (trim($row["parentName"]) != "") ? str_replace('%NAME%',trim($row["parentName"]),$body): str_replace('%NAME%',trim($row["firstName"]),$body);
@@ -236,7 +242,7 @@ class notificationManager{
                     $addr[] = trim($row['email']);
                 }
             }
-            if (isset($iRes) && $iRes->num_rows > 0){
+            if (isset($iRes) && $this->_db->valid($iRes) && $iRes->num_rows > 0){
                 while ($irow = $this->_db->fetch_assoc($iRes)){
                     if ($batch == "single"){
                          $send = (trim($irow["parentName"]) != "") ? str_replace('%NAME%',trim($irow["parentName"]),$body): str_replace('%NAME%',trim($irow["firstName"]),$body);
@@ -248,7 +254,7 @@ class notificationManager{
                     $addr[] = trim($irow['email']);
                 }
             }
-            if (isset($aRes) && $aRes->num_rows > 0){
+            if (isset($aRes) && $this->_db->valid($aRes) && $aRes->num_rows > 0){
                 while ($arow = $this->_db->fetch_assoc($aRes)){
                     $aData = explode(",", $arow["meta"]);
                     if ($batch == "single" && !empty($aData[2])){

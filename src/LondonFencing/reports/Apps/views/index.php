@@ -69,16 +69,15 @@ $taxLog             = $rpt->getLastReportLog('taxReceipts');
                 </div>
         </div>
 </div>
-<!--
 <div class="boxStyle">
     <div class="boxStyleContent">
                 <div class="boxStyleHeading">
                         <h2>Tax Receipts</h2>
                         <div class="boxStyleHeadingRight">
                             <?php
-                /*            if (!empty($taxLog)){
+                            if (!empty($taxLog)){
                                 echo '<p style="text-align:right">&nbsp;<br />Last Report: '.date('F j, Y', $taxLog['sysDateCreated']).' '.$taxLog['options'].'</em>';
-                            }*/
+                            }
                             ?>
                         </div>
                 </div>
@@ -95,13 +94,12 @@ $taxLog             = $rpt->getLastReportLog('taxReceipts');
                         <input type="text" class="uniform datepicker" name="taxesStart" id="taxesStart" />
                         <label for="taxesEnd">Date Range End</label>
                         <input type="text" class="uniform datepicker" name="taxesEnd" id="taxesEnd" />
-                        <input type="submit" name="submitReceipts" class="btnStyle blue" id="submitFoundation" value="Send Receipts" style="float:none" />
-                        <input type="hidden" name="nonce" value="<?php /*echo Quipp()->config('security.nonce');*/?>/" />
+                        <input type="submit" name="submitReceipts" class="btnStyle blue" id="submitReceipts" value="Send Receipts" style="float:none" />
+                        <input type="hidden" name="nonce" value="<?php echo Quipp()->config('security.nonce');?>" />
                     </form>
                 </div>
         </div>
 </div>
--->
 <?php
 //end of display logic
 
