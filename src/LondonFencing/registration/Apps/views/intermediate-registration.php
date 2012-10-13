@@ -442,7 +442,7 @@ if ($hasPermission) {
                     $dbaction = "update";
                     
                     $qryP = sprintf("SELECT `paymentAmount`, `paymentDate`, `paymentType`, `itemID` FROM `tblIntermediatePayments` 
-                        WHERE `sysOpen` = '1' AND `registrationID` = '%d' ORDER BY `paymentDate` ASC",
+                        WHERE `sysOpen` = '1' AND `registrationID` = '%d' ORDER BY `paymentDate` DESC",
                             (int)$_GET['id'] 
                      );
                     $resP = $db->query($qryP);
@@ -594,7 +594,8 @@ if ($hasPermission) {
                 UNIX_TIMESTAMP(cr.`sysDateCreated`) as dateReg, 
                     (SELECT MAX(p.`paymentDate`) FROM `tblIntermediatePayments` AS p WHERE p.`registrationID` = cr.`itemID`) AS paymentDate, 
                     cr.`registrationKey`, 
-                    cr.`sysStatus` 
+                    cr.`sysStatus`,
+                    cr.`parentName`
                 FROM $primaryTableName AS cr 
                 WHERE cr.`sysOpen` = '1' %s
                 ORDER BY cr.`sysStatus`, cr.`itemID` ASC", 
@@ -607,22 +608,23 @@ if ($hasPermission) {
                 $titles[0] = "Name";
                 $titles[1] = "Registration Number";
                 $titles[2] = "Email Address";
-                $titles[3] = "Date Registered";
-                $titles[4] = "Last Payment Date";
-                $titles[5] = "Form Submitted";
+                $titles[3] = "Parent/Guardian";
+                $titles[4] = "Date Registered"; //temp removed <td>' . date('Y-m-d', $dt["dateReg"]) . '</td><td>' . date('Y-m-d', $dt["dateReg"]) . '</td>
+                $titles[5] = "Last Payment Date";
+                $titles[6] = "Form Submitted";
 
                 while ($rs = $db->fetch_assoc($resqry)) {
                         $registered[] = $rs;
                 }
                 echo '<form name="frmSendEmail" action="/admin/apps/notificationManager/emailer" method="post" enctype="multipart/form-data">';
                 echo '<table id="adminTableList_reg" class="adminTableList tablesorter" width="100%" cellpadding="5" cellspacing="0" border="1">';
-                echo '<thead><tr><th>' . $titles[0] . '</th><th>' . $titles[1] . '</th><th>' . $titles[2] . '</th><th>' . $titles[3] . '</th><th>' . $titles[4] . '</th><th>' . $titles[5] . '</th><th>Status</th>
+                echo '<thead><tr><th>' . $titles[0] . '</th><th>' . $titles[1] . '</th><th>' . $titles[2] . '</th><th>' . $titles[3] . '</th><th>' . $titles[5] . '</th><th>' . $titles[6] . '</th><th>Status</th>
                 <th>Email<input type="checkbox" id="emailAll" name="emailAll" value="all" /></th><th>&nbsp;</th><th>&nbsp;</th></tr></thead>';
                 echo '<tbody>';
                 foreach ($registered as $dt) {
                     $paymentDate = (trim($dt["paymentDate"]) != '' && $dt["paymentDate"] > 0) ? date('Y-m-d', $dt["paymentDate"]) : "Due";
                     $formDate = (trim($dt["formDate"]) != '' && $dt["formDate"] > 0) ? date('Y-m-d', $dt["formDate"]) : "Due";
-                    echo '<tr><td>' . $dt['name'] . '</td><td>' . $dt["registrationKey"] . '</td><td>' . $dt["email"] . '</td><td>' . date('Y-m-d', $dt["dateReg"]) . '</td><td>' . $paymentDate . '</td><td>' . $formDate . '</td><td>'.$dt["sysStatus"].'</td>';
+                    echo '<tr><td>' . $dt['name'] . '</td><td>' . $dt["registrationKey"] . '</td><td>' . $dt["email"] . '</td><td>'.$dt["parentName"].'</td><td>' . $paymentDate . '</td><td>' . $formDate . '</td><td>'.$dt["sysStatus"].'</td>';
                     echo '<td style="width:70px;"><input type="checkbox" name="eList[]" id="eList_' . trim($dt['itemID']) . '" value="' . trim($dt['itemID']) . '" /></td>';
                     echo '<td style="width:40px;"><input class="btnStyle red noPad" id="btnDelete_' . $dt['itemID'] . '" type="button" onclick="javascript:confirmDelete(\'?action=delete&amp;id=' . $dt['itemID'] . '\');" value="Delete"></td>';
                     echo '<td style="width:40px;"><input class="btnStyle blue noPad" id="btnEdit_' . $dt['itemID'] . '" type="button" onclick="javascript:window.location=\'?view=edit&amp;id=' . $dt['itemID'] . '\';" value="Edit"></td></tr>';

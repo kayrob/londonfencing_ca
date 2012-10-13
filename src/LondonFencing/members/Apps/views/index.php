@@ -317,7 +317,7 @@ to generate reports</p>
                 
                 
                 $qryP = sprintf("SELECT `paymentAmount`, `paymentDate`, `itemID` FROM `tblMembersPayments` 
-                        WHERE `sysOpen` = '1' AND `registrationID` = '%d'",
+                        WHERE `sysOpen` = '1' AND `registrationID` = '%d' ORDER BY `paymentDate` DESC",
                             (int)$_GET['id'] 
                      );
                     $resP = $db->query($qryP);
