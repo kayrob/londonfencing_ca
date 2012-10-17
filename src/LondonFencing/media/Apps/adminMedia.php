@@ -87,7 +87,7 @@ class adminMedia {
                       {$clause}
              GROUP BY m.itemID
              ORDER BY l.`isCover` DESC, m.itemID DESC 
-                LIMIT {$page}, {$limit}
+                
              ; SELECT FOUND_ROWS()
         ";
 
@@ -364,7 +364,8 @@ class adminMedia {
                     $root = dirname(dirname(dirname(dirname(__DIR__))));
                     if (isset($mInfo['fileItem']) && file_exists($root."/uploads/media/med/".$mInfo['fileItem'])){
                         unlink($root.'/uploads/media/med/'.$mInfo['fileItem']);
-                        unlink($root.'/uploads/media/large/'.$mInfo['fileItem']);
+                        unlink($root.'/uploads/media/home/'.$mInfo['fileItem']);
+                        unlink($root.'/uploads/media/banner/'.$mInfo['fileItem']);
                          unlink($root.'/uploads/media/'.$mInfo['fileItem']);
                     }
                     return 1;
