@@ -4,9 +4,9 @@ require_once dirname(__DIR__).'/registration.php';
 
 use LondonFencing\registration as REG;
 
-if (isset($_GET['s']) && is_numeric($_GET['s']) && isset($_GET['r'])){
+if (isset($_GET['s']) && preg_match('%^(I|\d+)$%', $_GET['s'], $match) && isset($_GET['r'])){
     $reg = new REG\Registration($db);
-    $regNfo = $reg->getSavedRegistration($_GET['s'],$_GET['r']);
+    $regNfo = ($match[0] == "I") ? $reg->getIntRegRecord($_GET['r']) : $reg->getSavedRegistration($_GET['s'],$_GET['r']);
     
     if (isset($regNfo['isRegistered']) && (int)$regNfo['isRegistered'] == 1){
 ?>
@@ -120,7 +120,13 @@ if (isset($_GET['s']) && is_numeric($_GET['s']) && isset($_GET['r'])){
     </div>
     </div>
     <div class="sig">
+        <?php 
+        if (is_numeric($match[0]) && (int)$match[0] > 0 ){
+        ?>
         <label>Fee: </label>$<?php echo number_format($regNfo['fee'],2);?><br /><br />Please make cheques payable to: London Fencing Club
+        <?php
+        }
+        ?>
     </div>
     <div id="footer"><img src="/src/LondonFencing/registration/assets/img/printLogo.png" /></div>
     </body>

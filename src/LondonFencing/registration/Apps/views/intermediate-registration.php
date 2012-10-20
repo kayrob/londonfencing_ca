@@ -269,14 +269,14 @@ if ($hasPermission) {
                         
                         $requestFieldID = $dbField['valCode'] . str_replace(" ", "_", $dbField['label']);
                         if ($dbField['dbColName'] == 'sysStatus') {
-
-                            if (isset($_POST[$requestFieldID])) {
+                            $fieldColValues .= "'active',"; //by default
+                            /*if (isset($_POST[$requestFieldID])) {
                                 $fieldColValues .= "'active',";
                             } else {
                                 $fieldColValues .= "'inactive',";
-                            }
+                            }*/
                             $fieldColNames .= "" . $dbField['dbColName'] . ",";
-                        } else if ($dbField['dbColName'] == 'birthDate') {
+                        } else if ($dbField['dbColName'] == 'birthDate' && false !== strtotime(trim($_POST[$requestFieldID]))) {
                             $fieldColValues .= strtotime($_POST[$requestFieldID]) . ",";
                             $fieldColNames .= "" . $dbField['dbColName'] . ", ";
                         } else if ($dbField['dbColName'] == 'paymentDate' || $dbField['dbColName'] == 'formDate') {
@@ -298,6 +298,7 @@ if ($hasPermission) {
                 //$regKey = strtoupper(substr(str_replace("'", "", $_POST["RQvalALPHLast_Name"]), 0, 2)) . "-000I-" . $newCount;
                 $regKey = $aReg->createIntermediateRegKey($_POST["RQvalALPHLast_Name"]);
                 $qry = sprintf("INSERT INTO %s (%s, sysDateCreated, sysOpen, membershipType, registrationKey, sessionID, beginnerID) VALUES (%s, NOW(),  '1', 'foundation','%s', 'I', 0)", (string) $primaryTableName, (string) $fieldColNames, (string) $fieldColValues, $regKey);
+                
                 $res = $db->query($qry);
 
                 if ($db->affected_rows($res) == 1) {
@@ -333,7 +334,7 @@ if ($hasPermission) {
                             }
 
                             $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
-                        } else if ($dbField['dbColName'] == 'birthDate') {
+                        } else if ($dbField['dbColName'] == 'birthDate' && !empty($_POST[$requestFieldID])) {
                             $fieldColValue = strtotime($_POST[$requestFieldID]) . ",";
                             $fieldColNames .= "" . $dbField['dbColName'] . " = " . $fieldColValue;
                         } else if ($dbField['dbColName'] == 'paymentDate' && trim($_POST[$requestFieldID]) != "") {
@@ -577,6 +578,9 @@ if ($hasPermission) {
         default: //(list)
             //list table query:
 ?>
+               <p><strong>To send a link to the registration form via the emailer:</strong><br />http://londonfencing.ca/intermediate-registration/%REGKEY%<br />&nbsp;</p>
+               <p><strong>To send a link to the printable consent form via emailer:</strong><br />http://londonfencing.ca/print-reg/I/%REGKEY%</p>
+               <p>&nbsp;</p>
                <form action="<?php echo $_SERVER["REQUEST_URI"];?>">
                       <select name="filter" >
                       <option value="">Choose Filter</option>

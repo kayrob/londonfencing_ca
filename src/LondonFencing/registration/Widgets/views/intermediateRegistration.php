@@ -4,22 +4,23 @@ use LondonFencing\registration as Reg;
 
 $reg = new Reg\registration($db);
 
-$sessionNfo = $reg->getRegistrationSession("intermediate");
+if (isset($_GET['token']) && preg_match('%^[A-Z]{2}\-000I\-\d+$%', $_GET['token'], $matches)){
 
-if (isset($sessionNfo['isOpen'])){
-
-    if ($sessionNfo['isOpen'] === true){
+    $regNfo = $reg->getIntRegRecord($_GET['token']);
+    if (!empty($regNfo)){
         global $message;
         $sent = 0;
-        $body = '';
-
+        if (!empty($_POST) && !empty($_POST["RQvalNUMBsessionID"])){
+            $_POST['RQvalALPHsessionID'] = $_POST["RQvalNUMBsessionID"];
+            $_POST["RQvalNUMBsessionID"] = 1;
+        }
         if (!empty($_POST) && isset($_POST["nonce"]) && validate_form($_POST)) {
-
+                
                 $valid = 1;
-                $regAge = ($sessionNfo["eventStart"] - strtotime($_POST['RQvalDATEbirthDate']))/(60*60*24*365);
+                $regAge = (date("U") - strtotime($_POST['RQvalDATEbirthDate']))/(60*60*24*365);
 
-                if ($regAge < (int)$sessionNfo['ageMin']){
-                    $message .= "<li>You must be a minimum age of ".trim($sessionNfo['ageMin']." by the time the session starts to register</li>");
+                if ($regAge < 9){
+                    $message .= "<li>You must be a minimum age of nine (9) to participate in the fencing class</li>";
                     $valid = 0;
                 }
                 if ($regAge < 18 && trim($_POST['OPvalALPHparentName']) == ""){
@@ -27,33 +28,33 @@ if (isset($sessionNfo['isOpen'])){
                     $valid = 0;
                 }
                 if ($valid == 1){
-                    list($sent, $message) = $reg->saveRegistration($_POST, "intermediate");
+                    list($sent, $message) = $reg->saveIntermediateRegistration($_POST);
+                    $regKey = $_GET['token'];
                 }
         }
         if ($sent == 1){
-                include_once __DIR__ ."/registrationConfirm.php";
+                //change this to intRegistrationConfirm (create new file) need a new link to the printable form also 
+                //or! modify the reg confirm to look for intermediate
+                include_once __DIR__ ."/intermediateConfirm.php";
             }
         else{
-                if (isset($sessionNfo['regMax']) && isset($sessionNfo['count']) && (int)$sessionNfo['count'] >= (int)$sessionNfo['regMax']){
-                    print alert_box("This session is currently full<br />Please complete the form to be put on the waitlist. You will be notified by email if a space becomes available", 3);
-                }
-
+                $sessionNfo['itemID'] = trim($_GET['token']);
                 $post = array(
-                "RQvalALPHfirstName"                 => "",
-                "RQvalALPHlastName"                  => "",
-                "RQvalDATEbirthDate"                  => "",
-                "RQvalALPHgender"                     => "",
-                "RQvalALPHaddress"                     => "",
-                "OPvalALPHaddress2"                   => "",
-                "RQvalALPHcity"                           => "",
-                "RQvalALPHprovince"                    => "ON",
-                "RQvalPOSTpostalCode"                => "",
-                "RQvalPHONphoneNumber"          => "",
-                "RQvalMAILemail"                         => "",
-                "OPvalALPHparentName"              => "",
-                "RQvalALPHemergencyContact"    => "",
-                "RQvalPHONemergencyPhone"      => "",
-                    "OPvalALPHnotes"                        => ""
+                "RQvalALPHfirstName"        => $regNfo['firstName'],
+                "RQvalALPHlastName"         => $regNfo['lastName'],
+                "RQvalDATEbirthDate"        => "",
+                "RQvalALPHgender"           => "",
+                "RQvalALPHaddress"          => "",
+                "OPvalALPHaddress2"         => "",
+                "RQvalALPHcity"             => "",
+                "RQvalALPHprovince"         => "ON",
+                "RQvalPOSTpostalCode"       => "",
+                "RQvalPHONphoneNumber"      => "",
+                "RQvalMAILemail"            => $regNfo['email'],
+                "OPvalALPHparentName"       => "",
+                "RQvalALPHemergencyContact" => "",
+                "RQvalPHONemergencyPhone"   => "",
+                "OPvalALPHnotes"            => ""
                 ); 
                 include_once __DIR__ ."/registrationFormFields.php";
                 global $quipp;
@@ -61,6 +62,9 @@ if (isset($sessionNfo['isOpen'])){
         }
     }
     else{
-            print alert_box("The next intermediate session starts on ".date('F j, Y',$sessionNfo['eventStart'])."<br />Registration will be open on  ".date('F j, Y',$sessionNfo['regOpen']), 3);
+            print alert_box("It looks like you already completed your registration! Please speak with Brannon Kelly if you have any issues with your registration", 3);
     }
+}
+else{
+        print alert_box("You do not have permission to view this page", 2);
 }

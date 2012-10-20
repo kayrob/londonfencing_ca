@@ -295,14 +295,15 @@ FileETag None
  
 #  RewriteRule ^logout$ /auth.php?mode=logout [NC,L]
 #  RewriteRule ^login$ /auth.php?mode=login [QSA,NC,L]
-  RewriteRule ^news/(.*)$ /index.php?p=news&slug=$1 [QSA,NC,L]
-  RewriteRule ^feed/blog$ /src/LondonFencing/posts/assets/rss/blog.php [NC,L]
-RewriteRule ^print-reg/(.*)/(.*)$ /src/LondonFencing/registration/assets/printRegistration.php?s=$1&r=$2 [NC,L]
-RewriteRule ^club-consent/(.*)/(.*)$ /src/LondonFencing/registration/assets/clubConsent.php?s=$1&r=$2 [NC,L]
-  RewriteRule ^admin/assets/(.*)/ajax/(.*)$ /src/LondonFencing/$1/assets/ajax/$2 [NC,L]
+    RewriteRule ^news/(.*)$ /index.php?p=news&slug=$1 [QSA,NC,L]
+    RewriteRule ^feed/blog$ /src/LondonFencing/posts/assets/rss/blog.php [NC,L]
+    RewriteRule ^intermediate-registration/(.*)$ /index.php?p=intermediate-registration&token=$1 [NC,L]
+    RewriteRule ^print-reg/(.*)/(.*)$ /src/LondonFencing/registration/assets/printRegistration.php?s=$1&r=$2 [NC,L]
+    RewriteRule ^club-consent/(.*)/(.*)$ /src/LondonFencing/registration/assets/clubConsent.php?s=$1&r=$2 [NC,L]
+    RewriteRule ^admin/assets/(.*)/ajax/(.*)$ /src/LondonFencing/$1/assets/ajax/$2 [NC,L]
     RewriteRule ^admin/apps/(.*)/([^\?]*)\?(.*)$ /src/LondonFencing/$1/Apps/views/$2.php?$3 [NC,L]
-  RewriteRule ^admin/apps/(.*)/(.*)$ /src/LondonFencing/$1/Apps/views/$2.php [NC,L]
-RewriteRule ^photo-gallery/(\d+)$ /index.php?p=photo-gallery&t=$1 [NC,L]
+    RewriteRule ^admin/apps/(.*)/(.*)$ /src/LondonFencing/$1/Apps/views/$2.php [NC,L]
+    RewriteRule ^photo-gallery/(\d+)$ /index.php?p=photo-gallery&t=$1 [NC,L]
   
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
