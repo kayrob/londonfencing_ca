@@ -133,6 +133,52 @@ class registration{
         return array(0,"An Error Occured and your Registration could not be completed. Please retry or contact <a href='mailto:\"info@londonfencing.ca\"'>info@londonfencing.ca</a>");
     }
     
+    public function getIntRegRecord($regKey){
+        if (preg_match('%^[A-Z]{2}\-000I\-\d+$%', $regKey, $matches)){
+            //psuedo field for print reg form
+            $sessionDate = (date('n') > 8) ? mktime(0,0,0, 10, 1,date("Y")) : mktime(0,0,0, 10, 1,(date("Y")-1));
+            $qry = sprintf("SELECT *, '1' AS isRegistered, 'Intermediate' AS sessionName, '%s' AS eventStart  
+                FROM `tblIntermediateRegistration`
+                WHERE `registrationKey` = '%s' AND (`formDate` = 0 OR `formDate` IS NULL)", 
+                    $sessionDate,
+                    $this->_db->escape($regKey,true)
+             );
+            $res = $this->_db->query($qry);
+            if (is_object($res) && $res->num_rows == 1){
+                return $this->_db->fetch_assoc($res);
+            }
+        }
+        return array();
+    }
+    
+    public function saveIntermediateRegistration($post){
+        unset($post["sub-reg"]); 
+        unset($post["nonce"]);
+        unset($post["RQvalNUMBsessionID"]);
+        if (isset($post["RQvalALPHsessionID"]) && preg_match('%^[A-Z]{2}\-000I\-\d+$%', $post["RQvalALPHsessionID"], $matches)){
+            $fieldCols = array();
+            unset($post["RQvalALPHsessionID"]);
+            
+            foreach($post as $key => $value){
+                $val = (strstr($key,'birthDate') === false) ?"'".$this->_db->escape($value,true)."'":strtotime($value);
+                $fieldCols[] = "`".preg_replace("%(OP|RQ)val([A-Z]{4})%","",$key)."` = ".$val;
+            }
+            $regKey = $matches[0];
+            
+            $qry = sprintf("UPDATE `tblIntermediateRegistration` SET %s WHERE `registrationKey` = '%s'",
+                        implode(", ", $fieldCols),
+                        $this->_db->escape($regKey, true)
+                    );
+ 
+            $this->_db->query($qry);
+            $saved = $this->_db->affected_rows();
+            if ($saved == 1){
+                return array(1, $regKey);
+            }
+        }
+        return array(0,"An Error Occured and your Registration could not be completed. Please retry or contact <a href='mailto:\"info@londonfencing.ca\"'>info@londonfencing.ca</a>");
+    }
+    
     public function getAdvancedSeason(){
             $details = array();
             $filter = ((int)date('n') == 8 || (int)date('n') == 9) ? '`seasonStart` >'.date('U') : '`seasonStart` <= '.date('U').' AND `seasonEnd` >= '.date('U') ;
