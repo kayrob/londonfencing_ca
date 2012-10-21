@@ -810,3 +810,8 @@ margin-right: 2px; }
     border-collapse: separate;
     border-spacing: 5px;
 }
+
+/* Reports
+--------------------------------------------------------------------------------*/
+.moreReports{margin:10px 0 10px 0;padding:10px 0 10px 0;width:100%;background-color:#ccc;}
+#moreTax{cursor:pointer;color:#000066}

@@ -8,23 +8,28 @@ if (isset($_POST['submitReceipts']) && isset($_POST['taxesStart']) && isset($_PO
         && isset($_POST['taxesGroup']) && !empty($_POST['taxesGroup'])){
     
     $rpts = new RPT\reports($db);
-    $recipients = array();
+    $created = "fail";
     switch($_POST['taxesGroup']){
         case 'beginner':
-            $recipients = $rpts->getBeginnerReceipts(strtotime($_POST['taxesStart']), strtotime($_POST['taxesEnd']));
+            $created = $rpts->getBeginnerReceipts(strtotime($_POST['taxesStart']), strtotime($_POST['taxesEnd']));
             break;
         case 'club':
-            $recipients = $rpts->getClubReceipts(strtotime($_POST['taxesStart']), strtotime($_POST['taxesEnd']));
+            $created = $rpts->getClubReceipts(strtotime($_POST['taxesStart']), strtotime($_POST['taxesEnd']), $user);
             break;
-        
         case 'intermediate':
-            $recipients = $rpts->getIntermediateReceipts(strtotime($_POST['taxesStart']), strtotime($_POST['taxesEnd']));
+            $created = $rpts->getIntermediateReceipts(strtotime($_POST['taxesStart']), strtotime($_POST['taxesEnd']));
             break;
-        
         default:
-            header('location:/admin/apps/reports/index?rpt=Tax%20Receipts&e=2');
+            header('location:/admin/apps/reports/index?rpt=TaxReceipts&e=2');
+            break;
+    }
+    if ($created == 'success'){
+        header('location:/admin/apps/reports/index?rpt=Tax_Receipts&s=1');
+    }
+    else{
+        header('location:/admin/apps/reports/index?rpt=Tax_Receipts&e=0');
     }
 }
 else{
-   header('location:/admin/apps/reports/index?rpt=Tax%20Receipts&e=1');
+   header('location:/admin/apps/reports/index?rpt=Tax_Receipts&e=1');
 }

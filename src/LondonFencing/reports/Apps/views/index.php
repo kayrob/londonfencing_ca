@@ -17,8 +17,8 @@ if ($hasPermission) {
     
 include $root. "/admin/templates/header.php";   
 
-$foundationLog = $rpt->getLastReportLog('foundation');
-$taxLog             = $rpt->getLastReportLog('taxReceipts');
+$foundationLog = $rpt->getLastReportLog('foundation', 1);
+$taxLog        = $rpt->getLastReportLog('taxReceipts', 10);
 ?>
 <h1>Reporting Tools</h1>
 <p>Allows the creation/download of reports using simple input options</p>
@@ -76,14 +76,17 @@ $taxLog             = $rpt->getLastReportLog('taxReceipts');
                         <div class="boxStyleHeadingRight">
                             <?php
                             if (!empty($taxLog)){
-                                echo '<p style="text-align:right">&nbsp;<br />Last Report: '.date('F j, Y', $taxLog['sysDateCreated']).' '.$taxLog['options'].'</em>';
+                                if (!isset($taxLog[0])){
+                                    $taxLog[0] = $taxLog;
+                                }
+                                echo '<p style="text-align:right">&nbsp;<br />Last Report: '.date('F j, Y', $taxLog[0]['sysDateCreated']).' '.$taxLog[0]['options'];
                             }
                             ?>
                         </div>
                 </div>
                 <div class="clearfix">&nbsp;</div>
                 <div id="template">
-                    <form name="frmReceipts" id="frmReceipts" action="/src/LondonFencing/reports/assets/taxesReport.php" method="post">
+                    <form name="frmReceipts" id="frmReceipts" action="/src/LondonFencing/reports/assets/receipts.php" method="post">
                         <label for="taxesGroup">Tax Group</label>
                         <select name="taxesGroup" id="taxesGroup">
                             <option value="beginner">Beginner</option>
@@ -97,6 +100,17 @@ $taxLog             = $rpt->getLastReportLog('taxReceipts');
                         <input type="submit" name="submitReceipts" class="btnStyle blue" id="submitReceipts" value="Send Receipts" style="float:none" />
                         <input type="hidden" name="nonce" value="<?php echo Quipp()->config('security.nonce');?>" />
                     </form>
+<?php
+                    if (isset($taxLog[1])){
+                        echo '<p class="moreReports"><span id="moreTax">&#9660;More</span></p>';
+                        echo '<div id="dvMoreTax" style="display:none">';
+                        for ($t = 1; $t < count($taxLog); $t++){
+                            echo 'Report Info: '.date('F j, Y', $taxLog[$t]['sysDateCreated']).' '.$taxLog[$t]['options'].'<br /><br />';
+                        }
+                        echo '</div>';
+                    }
+?>
+
                 </div>
         </div>
 </div>
