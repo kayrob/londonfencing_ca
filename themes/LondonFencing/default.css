@@ -677,7 +677,7 @@ ul.banner{margin-top: 310px}
 }
 .blue:hover, .gray:hover { background: #4a762b; }
 .green:hover { background: #2e567f; }
-
+.tourneysNav {margin-bottom: 70px;}
 .tourneysNav ul{
     margin: 0;
     padding: 0;
