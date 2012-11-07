@@ -32,11 +32,47 @@ jQuery(document).ready(function($) {
     }
     function afterCycle(){
         $('.banner img').each(function(imgIndex){
-            if (imgIndex > 0 && imgIndex < 7){
+            if (imgIndex > 0 && imgIndex < ($('.banner li').length - 1)){
                 $(this).removeClass().addClass('homeThumb');
             }
         });
         $('.banner img:eq('+($(this).index() +1)+')').removeClass('homeThumb').addClass('homeThumbB');
+        $('.banner li:eq('+($(this).index() +1)+')').show();
+        //get siblings prior to current li index where class <> 'next' and class <> 'prev'
+        if ($('.banner li').length > 8){
+            var visible = 1;
+            var imgLen = $('.banner li').length - 1;
+            var stInd = ($(this).index() + 1) + 1;
+            var prvInd = $(this).index();
+            for (var s = stInd; s < imgLen; s++){
+                if (visible < 6){
+                    var cycleInd = (-1 + s);
+                    $('.banner img:eq('+s+')').addClass('homeThumb').bind('click', function(){
+                        $('.primeImg').cycle($(this).data('index'));
+                    });
+                    $('.banner li:eq('+s+')').show();
+                    visible++;
+                }
+                else{
+                    $('.banner img:eq('+s+')').removeClass('homeThumb').unbind('click');
+                    $('.banner li:eq('+s+')').hide();
+                }
+            }
+            for (s = prvInd; s > 0; s--){
+                if (visible < 6){
+                    cycleInd = (-1 + s);
+                    $('.banner img:eq('+s+')').addClass('homeThumb').bind('click', function(){
+                        $('.primeImg').cycle($(this).data('index'));
+                    });
+                    $('.banner li:eq('+s+')').show();
+                    visible++;
+                }
+                else{
+                    $('.banner img:eq('+s+')').removeClass('homeThumb').unbind('click');
+                    $('.banner li:eq('+s+')').hide();
+                }
+            }
+        }
     }
     
  /*   $('#momenu').click(function(){

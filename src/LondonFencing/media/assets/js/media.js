@@ -34,9 +34,8 @@ $(document).ready(function(){
             });
     });
     
-    $('.homeThumb').click(function(){
+    $('.homeThumb').bind('click', function(){
         $('.primeImg').cycle(($(this).parent().index()-1));
-        
     });
     
 });
