@@ -8,7 +8,7 @@ $(document).ready(function(){
         $(this).attr('height',$(this).parent().height());
     });
     
-    $('.homeThumb').each(function(){
+    $('.resize img').each(function(){
         //full size width = 960;
         //full size thumb = 100 x 100
         //scale based on width b/c thumbnails are square

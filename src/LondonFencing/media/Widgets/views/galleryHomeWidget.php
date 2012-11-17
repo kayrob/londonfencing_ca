@@ -38,7 +38,7 @@ if ($this instanceof Page && isset($props[0])) {
                 for ($a = 0; $a < $limit; $a++) {
                     $style = ($a >= 6) ? ' style="display:none"' : '';
                     $imgStyle = ($a < 6) ? ' class="homeThumb"' : '';
-                    echo '<li' . $style . '><img'.$imgStyle.' src="/uploads/media/med/' . $album[$a]['img'] . '" width="100px" height="100px" data-title="' . $album[$a]['title'] . '" data-src="' . $album[$a]['img'] . '" data-index="'.$a.'"/></li>';
+                    echo '<li' . $style . ' class="resize"><img'.$imgStyle.' src="/uploads/media/med/' . $album[$a]['img'] . '" width="100px" height="100px" data-title="' . $album[$a]['title'] . '" data-src="' . $album[$a]['img'] . '" data-index="'.$a.'"/></li>';
                 }
                 break;
             }
