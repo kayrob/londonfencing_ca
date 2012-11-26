@@ -25,9 +25,9 @@ $provID = array(
     "8" => "NU",
     "9" => "ON",
     "10" => "PE",
-    "11"    => "QC",
-    "12"    => "SK",
-    "13"    => "YT"               
+    "11" => "QC",
+    "12" => "SK",
+    "13" => "YT"               
     ) ;
 
 if (!empty($sessionNfo)){
@@ -68,23 +68,23 @@ if (!empty($sessionNfo)){
         }
     else{
             $post = array(
-            "RQvalALPHfirstName"                 => $user->get_meta("First Name"),
-            "RQvalALPHlastName"                  => $user->get_meta("Last Name"),
-            "RQvalDATEbirthDate"                  => $user->get_meta("Birthdate"),
-            "RQvalALPHgender"                     => $user->get_meta("Gender"),
-            "RQvalALPHaddress"                     => $user->get_meta("Address"),
-            "OPvalALPHaddress2"                   => $user->get_meta("Unit/Apt"),
-            "RQvalALPHcity"                           => $user->get_meta("City"),
-            "RQvalALPHprovince"                    => $provID[$user->get_meta("Province")],
-            "RQvalPOSTpostalCode"                => $user->get_meta("Postal Code"),
-            "RQvalPHONphoneNumber"          => $user->get_meta("Phone Number"),
-            "RQvalMAILemail"                         => $user->get_meta("E-Mail"),
-            "OPvalMAILaltEmail"                     => $user->get_meta("Alternate E-Mail"),
-            "OPvalALPHparentName"              => $user->get_meta("Parent/Guardian"),
-            "RQvalALPHemergencyContact"    => $user->get_meta("Emergency Contact"),
-            "RQvalPHONemergencyPhone"      => $user->get_meta("Emergency Phone Number"),
-            "OPvalALPHnotes"                        => $user->get_meta("Notes"),
-            "OPvalALPHcffNumber"                => $user->get_meta("CFF Number")
+            "RQvalALPHfirstName"          => $user->get_meta("First Name"),
+            "RQvalALPHlastName"           => $user->get_meta("Last Name"),
+            "RQvalDATEbirthDate"          => $user->get_meta("Birthdate"),
+            "RQvalALPHgender"             => $user->get_meta("Gender"),
+            "RQvalALPHaddress"            => $user->get_meta("Address"),
+            "OPvalALPHaddress2"           => $user->get_meta("Unit/Apt"),
+            "RQvalALPHcity"               => $user->get_meta("City"),
+            "RQvalALPHprovince"           => $provID[$user->get_meta("Province")],
+            "RQvalPOSTpostalCode"         => $user->get_meta("Postal Code"),
+            "RQvalPHONphoneNumber"        => $user->get_meta("Phone Number"),
+            "RQvalMAILemail"              => $user->get_meta("E-Mail"),
+            "OPvalMAILaltEmail"           => $user->get_meta("Alternate E-Mail"),
+            "OPvalALPHparentName"         => $user->get_meta("Parent/Guardian"),
+            "RQvalALPHemergencyContact"   => $user->get_meta("Emergency Contact"),
+            "RQvalPHONemergencyPhone"     => $user->get_meta("Emergency Phone Number"),
+            "OPvalALPHnotes"              => $user->get_meta("Notes"),
+            "OPvalALPHcffNumber"          => $user->get_meta("CFF Number")
             ); 
             $feeTypes = array("annually" => "Annual (one-time)", "quarterly" => "Quarterly (4-times)", "monthly" => "Monthly");
             $membershipTypes = array("Excellence", "Foundation","Transition");
@@ -92,7 +92,7 @@ if (!empty($sessionNfo)){
             if ($regID == 0){
                 $regPost = array(
                 "RQvalALPHmembershipType" => "",
-                "RQvalALPHfeeType"                => ""   
+                "RQvalALPHfeeType"        => ""   
                  );
             }
             

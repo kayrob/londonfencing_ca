@@ -253,6 +253,27 @@ if ($hasPermission) {
                     echo '<p>All Inserts Did Not Work</p>';
                 }
                 break;
+                
+            case "addClub":
+                //add beginners to intermediate class automatically
+                $valid = true;
+                if (isset($_POST['clubList'])){
+                    foreach($_POST['clubList'] as $intID){
+                        if ((int)$intID > 0){
+                           $isValid = $aReg->intermediateToClub($intID, $user);
+                           if ($valid === true && $isValid === false){
+                               $valid = false;
+                           }
+                        }
+                    }
+                }
+                if ($valid === true){
+                    header("location: /admin/apps/registration/intermediate-registration");
+                }
+                else{
+                    echo '<p>All Inserts Did Not Work</p>';
+                }
+                break;
             
             case "insert":
 
@@ -399,8 +420,9 @@ if ($hasPermission) {
             <div class="boxStyleHeading">
                 <h2>Edit</h2>
                 <div class="boxStyleHeadingRight">
-    <?php print "<input class='btnStyle blue' type=\"button\" name=\"newItem\" id=\"newItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration?view=edit';\" value=\"New Member\" />"; 
-            print "<input class='btnStyle blue' type=\"button\" name=\"begItem\" id=\"begItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration?view=beg';\" value=\"Add Beginner\" />";
+    <?php print "<input class='btnStyle blue' type=\"button\" name=\"newItem\" id=\"newItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration?view=edit';\" value=\"New Member\" title=\"Add a New Intermediate Member\"/>"; 
+            print "<input class='btnStyle blue' type=\"button\" name=\"begItem\" id=\"begItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration?view=beg';\" value=\"Add Beginner\" title=\"Register Beginners to the Intermediate Class\"/>";
+            print "<input class='btnStyle blue' type=\"button\" name=\"clubItem\" id=\"begItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/intermediate-registration?view=club';\" value=\"Advance Members\" title=\"Register Intermediates as Club Members\"/>";
     ?>
                 </div>
             </div>
@@ -418,6 +440,11 @@ if ($hasPermission) {
             //include new file to show beginner list
             //class is over and beginnerID not in  `tblIntermediateRegistrations`
             include_once(__DIR__."/beginnerToIntermediate.php");
+            break;
+        case "club":
+            //include new file to show beginner list
+            //class is over and beginnerID not in  `tblIntermediateRegistrations`
+            include_once(__DIR__."/intermediateToClub.php");
             break;
         case "edit": //show an editor for a row (existing or new)
             //determine if we are editing an existing record, otherwise this will be a 'new'
