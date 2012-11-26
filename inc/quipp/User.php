@@ -60,10 +60,8 @@ class User
 	
 	function set_meta($fieldLabel, $value)
 	{
-		global $db;
 		//determine the keyID of this field
 		$fieldID = $this->db->return_specific_item(false, "sysUGFields", "itemID", "--", "fieldLabel = '".$fieldLabel."'");
-
 		if(is_numeric($fieldID)) {
 			if(array_key_exists($fieldLabel, $this->info)) {
 
@@ -78,11 +76,10 @@ class User
 				//user does not have this value, insert the link first
 
 				$qry = sprintf("INSERT INTO sysUGFValues (userID, fieldID, value, sysStatus, sysOpen) VALUES ('%d', '%d', '%s', 'active', '1');",
-					(int) $userID,
+					(int) $this->id,
 					(int) $fieldID,
 					$this->db->escape($value));
 				$this->db->query($qry);
-
 
 			}
 			return true;
@@ -138,7 +135,7 @@ class User
 
 		$qry = sprintf("SELECT f.fieldLabel, v.value
 			FROM sysUGFields f
-			LEFT JOIN sysUGFValues v ON f.itemID=v.fieldID
+			INNER JOIN sysUGFValues v ON f.itemID=v.fieldID
 			WHERE v.sysOpen='1'
 			AND v.userID='%d'",
 			(int) $userID);
