@@ -34,10 +34,18 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
         $body .= '<p>&nbsp;</p><p>Next Steps:</p>';
         $body .= '<ol>
         <li>Read the Terms and Conditions listed on the printable registration sheet</li>
-        <li>Print this form out, sign it, and bring it with payment to the first class.<br />This form MUST be signed by the participant (if over the age of 18) 
+        <li>Print this form out, sign it, and submit it with your payment.<br />This form MUST be signed by the participant (if over the age of 18) 
             OR by the Parent/Guardian listed on the form (if the participant is under the age of 18)</li>
         <li>Make cheques payable to <strong>The London Fencing Club</strong> for the value of $'.number_format($sessionNfo['fee'],2).'</li>
+        <li>Submit your payment on or before '.date('F j, Y', strtotime('+7 days')).' by one of the following methods:
+            <ol>
+            <li>Mail to: 1037 Viscount Road, London, ON N6K 1H5</li>
+            <li>Deliver to: 1037 Viscount Road, London, ON</li>
+            <li>Drop off at practice: Thursdays 7:00pm - 9:00pm, Sundays 9:00am - 12:00am</li>
+            </ol>
+        </li>
     </ol>';
+        $body .= '<p><strong>To confirm your space in the class, payment must be received no later than '.date('F j, Y', strtotime('+7 days')).'</strong>. After this date, your space will become available to persons on the wait list.</p>';
         $body .= '<p>&nbsp;</p><p>Come dressed to move! All fencers are required to wear:</p>';
         $body .= '<ol><li>Athletic shoes with non-marking soles</li><li>Track pants (no shorts, jeans, khakis)</li></ol>';
         $body .= '<p>All other fencing equipment will be provided by the Club</p>';
@@ -88,7 +96,15 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
         <li>Print this form out, sign it, and bring it with payment to the first class.<br />This form MUST be signed by the participant (if over the age of 18) 
             OR by the Parent/Guardian listed on the form (if the participant is under the age of 18)</li>
         <li>Make cheques payable to <strong>The London Fencing Club</strong> for the value of $<?php echo number_format($sessionNfo['fee'],2);?></li>
+        <li>Submit your payment on or before <?php echo date('F j, Y', strtotime('+7 days'));?> by one of the following methods:
+            <ol>
+            <li>Mail to: 1037 Viscount Road, London, ON N6K 1H5</li>
+            <li>Deliver to: 1037 Viscount Road, London, ON</li>
+            <li>Drop off at practice: Thursdays 7:00pm - 9:00pm, Sundays 9:00am - 12:00am</li>
+            </ol>
+        </li>
     </ol>
+    <p><strong>To confirm your space in the class, payment must be received no later than <?php echo date('F j, Y', strtotime('+7 days'));?></strong>. After this date, your space will become available to persons on the wait list.</p>
     <h3>Come dressed to move! All fencers are required to wear:</h3>
     <ol><li>Athletic shoes with non-marking soles</li><li>Track pants (no shorts, jeans, khakis)</li></ol>
     <p>All other fencing equipment will be provided by the Club</p>
