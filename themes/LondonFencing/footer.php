@@ -3,7 +3,7 @@
 
     <footer>
         <?php print $nav->build_nav($nav->get_nav_items_under_bucket('footer'), $slug, true, false);  ?>
-        <div>Copy Write 2012 &bull; London Fencing Club &bull;
+        <div>Copyright 2012 &bull; London Fencing Club &bull;
         London, Ontario, Canada&nbsp;
         <a href="http://www.fencingontario.ca" target="_blank"><img src="/themes/LondonFencing/img/ofa-trans.png" alt="OFA" width="38px" height="38px"/></a>&nbsp;
         <a href="http://www.fencing.ca" target="_blank"><img src="/themes/LondonFencing/img/cff.png" alt="CFF" width="24px" height="38px"/></a>

@@ -20,7 +20,7 @@ if ($this instanceof Page && isset($props[0])){
         $a = 0;
         foreach($images as $tagID => $album){
             if ($a < 6 ){
-                echo '<li><a href="/uploads/media/'.$album['img'].'" class="fbGallery" rel="'.$props[0].'"><img class="homeThumb" src="/uploads/media/med/'.$album['img'].'" width="100px" height="100px" data-title="'.$album['title'].'" data-src="'.$album['img'].'"/></a></li>';
+                echo '<li class="resize"><a href="/uploads/media/'.$album['img'].'" class="fbGallery" rel="'.$props[0].'"><img class="homeThumb" src="/uploads/media/med/'.$album['img'].'" width="100px" height="100px" data-title="'.$album['title'].'" data-src="'.$album['img'].'"/></a></li>';
                 
             }
             else{
