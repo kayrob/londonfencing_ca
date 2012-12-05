@@ -283,6 +283,7 @@ class AdminRegister {
                     $user->set_meta("Emergency Phone Number", $regNfo['emergencyPhone']);
                     $user->set_meta("Registration Key", $clubRegKey);
                     $user->set_meta("Notes", $regNfo['notes']);
+                    $user->set_meta("Alternate E-Mail", $regNfo['altEmail']);
                     $this->completeIntermediateToAdvanced($intermediateID, $clubID);
                     //add to sysUSites
                     $this->_db->query(sprintf("INSERT INTO `sysUSites` (`userID`, `siteID`, `sysDateCreated`) VALUES (%d, 1, NOW())",

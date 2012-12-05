@@ -51,6 +51,7 @@ if (isset($_GET['token']) && preg_match('%^[A-Z]{2}\-000I\-\d+$%', $_GET['token'
                 "RQvalPOSTpostalCode"       => "",
                 "RQvalPHONphoneNumber"      => "",
                 "RQvalMAILemail"            => $regNfo['email'],
+                "OPvalMAILaltEmail"         => "",
                 "OPvalALPHparentName"       => "",
                 "RQvalALPHemergencyContact" => "",
                 "RQvalPHONemergencyPhone"   => "",

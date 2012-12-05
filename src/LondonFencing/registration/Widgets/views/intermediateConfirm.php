@@ -21,6 +21,7 @@ if (isset($regKey) && isset($message) && isset($reg) && $reg instanceof LondonFe
         $body .= '<label>Address: </label>&nbsp;'.$address.'<br />';
         $body .= '<label>Phone Number: </label>&nbsp;'.$phone.'<br />';
         $body .= '<label>Email Address: </label>&nbsp;'.$sessionSaved["email"].'<br />';
+        $body .= '<label>Additional Email: </label>&nbsp;'.(trim($sessionSaved["altEmail"]) != "" ?$sessionSaved["altEmail"]:"N/A").'<br />';
         $body .= '<label>Parent/Guardian: </label>&nbsp;'.(trim($sessionSaved["parentName"]) != "" ?$sessionSaved["parentName"]:"N/A").'<br />';
         $body .= '<label>Emergency Contact: </label>&nbsp;'.$sessionSaved["emergencyContact"].'<br />';
         $body .= '<label>Emergency Phone: </label>&nbsp;'.$ePhone.'<br />';
@@ -51,6 +52,9 @@ if (isset($regKey) && isset($message) && isset($reg) && $reg instanceof LondonFe
         $mail->IsHTML(true);
         $mail->SetFrom($from);
         $mail->AddAddress($sessionSaved['email']);
+        if (!empty($sessionSaved['altEmail'])){
+            $mail->AddAddress($sessionSaved['altEmail']);
+        }
         $mail->AddBCC($admEmail);
         $mail->Subject = $subject;
         $mail->Body = $emailBody;

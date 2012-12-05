@@ -8,12 +8,12 @@ class registration{
     protected $_db;
     
     public function __construct($db){
-            if (is_object($db)){
-                $this->_db = $db;
-            }
-            else{
-                throw new Exception("You are not connected");
-            }
+        if (is_object($db)){
+            $this->_db = $db;
+        }
+        else{
+            throw new Exception("You are not connected");
+        }
     }
     protected function notifyAdmin($application, $regID, $regName){
         
@@ -35,44 +35,44 @@ class registration{
         return false;
     }
     public function getFutureRegSession($level){
-            if ($level == "beginner" || $level == "intermediate"){
-                $qry = sprintf("SELECT c.*, (SELECT count(cr.`itemID`) as count FROM `tblClassesRegistration` AS cr WHERE cr.`sessionID` = c.`itemID`) as count, UNIX_TIMESTAMP(ce.`eventStartDate`) as eventStart, 
-                    UNIX_TIMESTAMP(ce.`eventEndDate`) as eventEnd, UNIX_TIMESTAMP(ce.`recurrenceEnd`) as endDate 
-                    FROM `tblClasses` AS c INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID` 
-                    WHERE c.`sysStatus` = 'active' AND c.`sysOpen` = '1' AND c.`level` = '%s'  AND c.`regOpen` > UNIX_TIMESTAMP() ORDER BY c.`regOpen` 
-                    LIMIT 1",
-                (string)$this->_db->escape($level,true)
-                );
-                
-                $res = $this->_db->query($qry);
-                if (is_object($res) && $res->num_rows == 1){
-                    $session = $this->_db->fetch_assoc($res);
-                    $session['isOpen'] = false;
-                    return $session;
-                }
+        if ($level == "beginner" || $level == "intermediate"){
+            $qry = sprintf("SELECT c.*, (SELECT count(cr.`itemID`) as count FROM `tblClassesRegistration` AS cr WHERE cr.`sessionID` = c.`itemID`) as count, UNIX_TIMESTAMP(ce.`eventStartDate`) as eventStart, 
+                UNIX_TIMESTAMP(ce.`eventEndDate`) as eventEnd, UNIX_TIMESTAMP(ce.`recurrenceEnd`) as endDate 
+                FROM `tblClasses` AS c INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID` 
+                WHERE c.`sysStatus` = 'active' AND c.`sysOpen` = '1' AND c.`level` = '%s'  AND c.`regOpen` > UNIX_TIMESTAMP() ORDER BY c.`regOpen` 
+                LIMIT 1",
+            (string)$this->_db->escape($level,true)
+            );
+
+            $res = $this->_db->query($qry);
+            if (is_object($res) && $res->num_rows == 1){
+                $session = $this->_db->fetch_assoc($res);
+                $session['isOpen'] = false;
+                return $session;
             }
-            return false;
+        }
+        return false;
     }
     public function getRegistrationSession($level){
-            if ($level == "beginner" || $level == "intermediate"){
-                $qry = sprintf("SELECT c.*, (SELECT count(cr.`itemID`) AS count FROM `tblClassesRegistration` AS cr WHERE cr.`sessionID` = c.`itemID` AND cr.`sysStatus` = 'active' AND cr.`sysOpen` = '1') as count, UNIX_TIMESTAMP(ce.`eventStartDate`) as eventStart, 
-                    UNIX_TIMESTAMP(ce.`eventEndDate`) as eventEnd, UNIX_TIMESTAMP(ce.`recurrenceEnd`) as endDate 
-                    FROM `tblClasses` AS c INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
-                    WHERE c.`sysStatus` = 'active' AND c.`sysOpen` = '1' AND c.`level` = '%s'  AND c.`regOpen` <= UNIX_TIMESTAMP() AND c.`regClose` 
-                    >= UNIX_TIMESTAMP() ORDER BY c.`regOpen` LIMIT 1",
-                (string)$this->_db->escape($level,true)
-                );
-                $res = $this->_db->query($qry);
-                if (is_object($res) && $res->num_rows == 1){
-                    $session = $this->_db->fetch_assoc($res);
-                    $session['isOpen'] = true;
-                    return $session;
-                }
-                else{
-                    return $this->getFutureRegSession($level);
-                }
+        if ($level == "beginner" || $level == "intermediate"){
+            $qry = sprintf("SELECT c.*, (SELECT count(cr.`itemID`) AS count FROM `tblClassesRegistration` AS cr WHERE cr.`sessionID` = c.`itemID` AND cr.`sysStatus` = 'active' AND cr.`sysOpen` = '1') as count, UNIX_TIMESTAMP(ce.`eventStartDate`) as eventStart, 
+                UNIX_TIMESTAMP(ce.`eventEndDate`) as eventEnd, UNIX_TIMESTAMP(ce.`recurrenceEnd`) as endDate 
+                FROM `tblClasses` AS c INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
+                WHERE c.`sysStatus` = 'active' AND c.`sysOpen` = '1' AND c.`level` = '%s'  AND c.`regOpen` <= UNIX_TIMESTAMP() AND c.`regClose` 
+                >= UNIX_TIMESTAMP() ORDER BY c.`regOpen` LIMIT 1",
+            (string)$this->_db->escape($level,true)
+            );
+            $res = $this->_db->query($qry);
+            if (is_object($res) && $res->num_rows == 1){
+                $session = $this->_db->fetch_assoc($res);
+                $session['isOpen'] = true;
+                return $session;
             }
-            return false;
+            else{
+                return $this->getFutureRegSession($level);
+            }
+        }
+        return false;
     }
     protected function previouslyRegistered($lastName, $birthDate, $firstName, $email, $sessionID){
         $qry = sprintf("SELECT `itemID` FROM `tblClassesRegistration` WHERE `sessionID` = %d AND `lastName` = '%s' AND `firstName` = '%s' AND `email` = '%s' 

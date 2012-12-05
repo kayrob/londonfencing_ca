@@ -77,11 +77,15 @@ class notificationManager{
      * @return object
      */
     protected function getEmailIntermediates($emailID){
-        $qry = sprintf("SELECT cr.`firstName`, cr.`lastName`, cr.`email`,cr.`parentName`, cr.`registrationKey` 
-                FROM `tblIntermediateRegistration` AS cr WHERE cr.`itemID` IN (%s) AND `sysOpen` = '1'",
+        $qry = sprintf("(SELECT cr.`firstName`, cr.`lastName`, cr.`email`, cr.`parentName`, cr.`registrationKey` 
+                FROM `tblIntermediateRegistration` AS cr WHERE cr.`itemID` IN (%s) AND `sysOpen` = '1')",
                     $this->_db->escape($emailID,true)
             );
-        return $this->_db->query($qry);
+        $qryAlt = sprintf("(SELECT cr.`firstName`, cr.`lastName`, cr.`altEmail` as email, cr.`parentName`, cr.`registrationKey` 
+                FROM `tblIntermediateRegistration` AS cr WHERE cr.`itemID` IN (%s) AND `sysOpen` = '1')",
+                    $this->_db->escape($emailID,true)
+            );
+        return $this->_db->query($qry." UNION ".$qryAlt);
     }
      /**
      * Get email list for advanced (regular) class members. This can be used for multiple mailing options

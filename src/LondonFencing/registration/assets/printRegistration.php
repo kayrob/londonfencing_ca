@@ -1,14 +1,14 @@
 <?php
 require_once('../../../../inc/init.php');
-require_once dirname(__DIR__).'/registration.php';
+require_once dirname(__DIR__) . '/registration.php';
 
 use LondonFencing\registration as REG;
 
-if (isset($_GET['s']) && preg_match('%^(I|\d+)$%', $_GET['s'], $match) && isset($_GET['r'])){
+if (isset($_GET['s']) && preg_match('%^(I|\d+)$%', $_GET['s'], $match) && isset($_GET['r'])) {
     $reg = new REG\Registration($db);
-    $regNfo = ($match[0] == "I") ? $reg->getIntRegRecord($_GET['r']) : $reg->getSavedRegistration($_GET['s'],$_GET['r']);
-    
-    if (isset($regNfo['isRegistered']) && (int)$regNfo['isRegistered'] == 1){
+    $regNfo = ($match[0] == "I") ? $reg->getIntRegRecord($_GET['r']) : $reg->getSavedRegistration($_GET['s'], $_GET['r']);
+
+    if (isset($regNfo['isRegistered']) && (int) $regNfo['isRegistered'] == 1) {
 ?>
 <!doctype html>
 <html>
@@ -23,21 +23,21 @@ if (isset($_GET['s']) && preg_match('%^(I|\d+)$%', $_GET['s'], $match) && isset(
             #footer{margin-top:20px;text-align:center}
             .termsTitle, .termsForm{text-transform: uppercase; font-weight: bold; text-align: center}
             #aprint{text-align: center;
-                background: #4a762b; 
-                border: none;
-                 -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
-                -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
-                box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
-                font-size: 12px;
-                color: #FFF;
-                padding: 8px 20px;
-                border-radius: 3px;
-                -moz-border-radius: 3px;
-                -webkit-border-radius: 3px;
-                font-style: italic;
-                margin-top: 10px;
-                line-height: normal; 
-                cursor:pointer}
+                    background: #4a762b; 
+                    border: none;
+                    -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
+                    -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
+                    box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
+                    font-size: 12px;
+                    color: #FFF;
+                    padding: 8px 20px;
+                    border-radius: 3px;
+                    -moz-border-radius: 3px;
+                    -webkit-border-radius: 3px;
+                    font-style: italic;
+                    margin-top: 10px;
+                    line-height: normal; 
+                    cursor:pointer}
             #printHead{display:none}
         </style>
         <style type="text/css"media="print">
@@ -55,88 +55,94 @@ if (isset($_GET['s']) && preg_match('%^(I|\d+)$%', $_GET['s'], $match) && isset(
     </head>    
     <body>
         <a id="aprint" onclick="window.print()" class="btnStyle">Print</a>
-        <div id="head">London Fencing Club Registration: <?php echo $regNfo['sessionName'];?></div>
+        <div id="head">London Fencing Club Registration: <?php echo $regNfo['sessionName']; ?></div>
         <div id="termsRefs">
-    <?php
-    if ((date('U') - $regNfo["birthDate"])/(60*60*24*365) < 18 || trim($regNfo["parentName"]) != ''){
-        $terms = str_replace('%DATE%', date('F j, Y', $regNfo['eventStart']), file_get_contents(__DIR__.'/minorTerms.php'));
-        $terms = str_replace('%MINORNAME%', $regNfo['firstName'].' '.$regNfo['lastName'], $terms);
-        echo str_replace('%PARENTNAME%', $regNfo['parentName'], $terms);
-    }
-    else{
-        $terms = str_replace('%DATE%', date('F j, Y', $regNfo['eventStart']), file_get_contents(__DIR__.'/adultTerms.php'));
-        echo str_replace('%NAME%', $regNfo['firstName'].' '.$regNfo['lastName'], $terms);
-    }
-    ?>
-    </div>
-        <div id="printHead">London Fencing Club Registration: <?php echo $regNfo['sessionName'];?></div>
-    <div>
-        <label>First Name: </label><?php echo $regNfo["firstName"];?>
-    </div>
-    <div>
-        <label>Last Name: </label><?php echo $regNfo["lastName"];?>
-    </div>
-    <div>
-        <label>Birth Date: </label><?php echo date('Y-m-d',$regNfo["birthDate"]);?>
-    </div>
-    <div>
-        <label>Gender: </label><?php echo $regNfo["gender"];?>
-    </div>
-    <div>
-        <label>Address: </label><?php echo $regNfo["address"];?>
-    </div>
-    <div>
-        <label>Unit/Apt: </label><?php echo $regNfo["address2"];?>
-    </div>
-    <div>
-        <label>City: </label><?php echo $regNfo["city"];?>
-    </div>
-    <div>
-        <label>Province: </label><?php  echo $regNfo["province"]; ?>
-    </div>
-    <div>
-        <label>Postal Code: </label><?php echo $regNfo["postalCode"];?>
-    </div>
-    <div>
-        <label>Phone Number: </label><?php echo $regNfo["phoneNumber"];?>
-    </div>
-    <div>
-        <label>Email: </label><?php echo $regNfo["email"];?>
-    </div>
-    <div>
-        <label>Parent/Guardian: </label><?php echo (trim($regNfo["parentName"]) == '' ? 'N/A' : $regNfo["parentName"]); ?>
-    </div>
-    <div>
-        <label>Emergency Contact: </label><?php echo $regNfo["emergencyContact"];?>
-    </div>
-    <div>
-        <label>Emergency Phone: </label><?php echo $regNfo["emergencyPhone"];?>
-    </div>
-    <div class="sig">
-        <label>Signature: </label>_____________________________________________
-    </div>
-        <div class="sig">
-        <label>Date Signed: </label>______________________________________________
-    </div>
-    </div>
-    <div class="sig">
-        <?php 
-        if (is_numeric($match[0]) && (int)$match[0] > 0 ){
-        ?>
-        <label>Fee: </label>$<?php echo number_format($regNfo['fee'],2);?><br /><br />Please make cheques payable to: London Fencing Club
+            <?php
+            if ((date('U') - $regNfo["birthDate"]) / (60 * 60 * 24 * 365) < 18 || trim($regNfo["parentName"]) != '') {
+                $terms = str_replace('%DATE%', date('F j, Y', $regNfo['eventStart']), file_get_contents(__DIR__ . '/minorTerms.php'));
+                $terms = str_replace('%MINORNAME%', $regNfo['firstName'] . ' ' . $regNfo['lastName'], $terms);
+                echo str_replace('%PARENTNAME%', $regNfo['parentName'], $terms);
+            } else {
+                $terms = str_replace('%DATE%', date('F j, Y', $regNfo['eventStart']), file_get_contents(__DIR__ . '/adultTerms.php'));
+                echo str_replace('%NAME%', $regNfo['firstName'] . ' ' . $regNfo['lastName'], $terms);
+            }
+            ?>
+        </div>
+        <div id="printHead">London Fencing Club Registration: <?php echo $regNfo['sessionName']; ?></div>
+        <div>
+            <label>First Name: </label><?php echo $regNfo["firstName"]; ?>
+        </div>
+        <div>
+            <label>Last Name: </label><?php echo $regNfo["lastName"]; ?>
+        </div>
+        <div>
+            <label>Birth Date: </label><?php echo date('Y-m-d', $regNfo["birthDate"]); ?>
+        </div>
+        <div>
+            <label>Gender: </label><?php echo $regNfo["gender"]; ?>
+        </div>
+        <div>
+            <label>Address: </label><?php echo $regNfo["address"]; ?>
+        </div>
+        <div>
+            <label>Unit/Apt: </label><?php echo $regNfo["address2"]; ?>
+        </div>
+        <div>
+            <label>City: </label><?php echo $regNfo["city"]; ?>
+        </div>
+        <div>
+            <label>Province: </label><?php echo $regNfo["province"]; ?>
+        </div>
+        <div>
+            <label>Postal Code: </label><?php echo $regNfo["postalCode"]; ?>
+        </div>
+        <div>
+            <label>Phone Number: </label><?php echo $regNfo["phoneNumber"]; ?>
+        </div>
+        <div>
+            <label>Email: </label><?php echo $regNfo["email"]; ?>
+        </div>
         <?php
+        if (isset($regNfo["altEmail"])) {
+            ?>
+            <div>
+                <label>Additional Email: </label><?php echo (!empty($regNfo["altEmail"]) ?$regNfo["altEmail"] : 'N/A' ); ?>
+            </div>
+            <?php
+        }
+        ?>
+        <div>
+            <label>Parent/Guardian: </label><?php echo (trim($regNfo["parentName"]) == '' ? 'N/A' : $regNfo["parentName"]); ?>
+        </div>
+        <div>
+            <label>Emergency Contact: </label><?php echo $regNfo["emergencyContact"]; ?>
+        </div>
+        <div>
+            <label>Emergency Phone: </label><?php echo $regNfo["emergencyPhone"]; ?>
+        </div>
+        <div class="sig">
+            <label>Signature: </label>_____________________________________________
+        </div>
+        <div class="sig">
+            <label>Date Signed: </label>______________________________________________
+        </div>
+    </div>
+    <div class="sig">
+        <?php
+        if (is_numeric($match[0]) && (int) $match[0] > 0) {
+            ?>
+            <label>Fee: </label>$<?php echo number_format($regNfo['fee'], 2); ?><br /><br />Please make cheques payable to: London Fencing Club
+            <?php
         }
         ?>
     </div>
     <div id="footer"><img src="/src/LondonFencing/registration/assets/img/printLogo.png" /></div>
-    </body>
+</body>
 </html>
 <?php
+    } else {
+        header('location:http://' . $_SERVER["SERVER_NAME"]);
     }
-    else{
-        header('location:http://'.$_SERVER["SERVER_NAME"]);
-    }
-}
-else{
-    header('location:http://'.$_SERVER["SERVER_NAME"]);
+} else {
+    header('location:http://' . $_SERVER["SERVER_NAME"]);
 }

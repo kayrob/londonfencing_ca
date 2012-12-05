@@ -161,6 +161,16 @@ if ($hasPermission) {
         'stripTags' => true
     );
     $fields[] = array(
+        'label' => "Alternate Email Address",
+        'dbColName' => "altEmail",
+        'tooltip' => "A secondary email address e.g user@domain.com",
+        'writeOnce' => false,
+        'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
+        'valCode' => "OPvalMAIL",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+    $fields[] = array(
         'label' => "Emergency Contact",
         'dbColName' => "emergencyContact",
         'tooltip' => "The name of the emergency contact person",
