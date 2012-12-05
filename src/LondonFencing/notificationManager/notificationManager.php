@@ -78,11 +78,11 @@ class notificationManager{
      */
     protected function getEmailIntermediates($emailID){
         $qry = sprintf("(SELECT cr.`firstName`, cr.`lastName`, cr.`email`, cr.`parentName`, cr.`registrationKey` 
-                FROM `tblIntermediateRegistration` AS cr WHERE cr.`itemID` IN (%s) AND `sysOpen` = '1')",
+                FROM `tblIntermediateRegistration` AS cr WHERE cr.`itemID` IN (%s) AND cr.`sysOpen` = '1')",
                     $this->_db->escape($emailID,true)
             );
         $qryAlt = sprintf("(SELECT cr.`firstName`, cr.`lastName`, cr.`altEmail` as email, cr.`parentName`, cr.`registrationKey` 
-                FROM `tblIntermediateRegistration` AS cr WHERE cr.`itemID` IN (%s) AND `sysOpen` = '1')",
+                FROM `tblIntermediateRegistration` AS cr WHERE cr.`itemID` IN (%s) AND cr.`sysOpen` = '1' AND cr.`altEmail` <> '')",
                     $this->_db->escape($emailID,true)
             );
         return $this->_db->query($qry." UNION ".$qryAlt);
