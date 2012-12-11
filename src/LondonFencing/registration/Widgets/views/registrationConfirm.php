@@ -41,7 +41,7 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
             <ol>
             <li>Mail to: 1037 Viscount Road, London, ON N6K 1H5</li>
             <li>Deliver to: 1037 Viscount Road, London, ON</li>
-            <li>Drop off at practice: Thursdays 7:00pm - 9:00pm, Sundays 9:00am - 12:00am</li>
+            <li>Drop off at practice: Thursdays 7:00pm - 9:00pm, Sundays 9:00am - 12:00pm</li>
             </ol>
         </li>
     </ol>';
@@ -100,7 +100,7 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
             <ol>
             <li>Mail to: 1037 Viscount Road, London, ON N6K 1H5</li>
             <li>Deliver to: 1037 Viscount Road, London, ON</li>
-            <li>Drop off at practice: Thursdays 7:00pm - 9:00pm, Sundays 9:00am - 12:00am</li>
+            <li>Drop off at practice: Thursdays 7:00pm - 9:00pm, Sundays 9:00am - 12:00pm</li>
             </ol>
         </li>
     </ol>
