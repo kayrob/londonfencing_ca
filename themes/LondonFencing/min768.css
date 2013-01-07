@@ -18,7 +18,7 @@ nav ul li {
 .four-column #colD { width: 344px; margin-left: 34px; }
 
 .two-column #colB {width:444px; }
-.two-column #colC { width:230px;}
+.two-column #colC { width:233px;}
 
 .alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty{
     width: 420px;
@@ -38,3 +38,5 @@ ul.banner{
 #colA ul li {
     padding: 10px 7px 10px 8px;
 }
+.two-column .main{background-position-x: 768px;}
+hr{width:auto !important}
