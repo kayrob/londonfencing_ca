@@ -121,12 +121,12 @@ class members {
     public function getClassesEmailList($active) {
         $members = array();
         $sysActive = " AND cr.`sysStatus` = 'active'";
-        $sessionEnd = " AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) >= NOW()";
+        $sessionEnd = " AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) >= UNIX_TIMESTAMP()";
         switch ($active) {
             case 'all':
                 $sessionEnd = '';
             case 'inactive':
-                $sessionEnd = " AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) < NOW()";
+                $sessionEnd = " AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) < UNIX_TIMESTAMP()";
                 break;
             default:
                 break;

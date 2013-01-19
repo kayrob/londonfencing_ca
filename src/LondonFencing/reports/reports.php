@@ -370,25 +370,25 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
     public function getClassesEmergencyList() {
         $members = array();
         $sysActive = " AND cr.`sysStatus` = 'active'";
-        $sessionEnd = " AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) >= NOW()";
+        $sessionEnd = " AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) >= UNIX_TIMESTAMP()";
 
         //real query
-        $qryBeg = sprintf("(SELECT DISTINCT cr.`itemID`, cr.`email`, concat(cr.`lastName`,', ',cr.`firstName`) as name, cr.`emergencyContact`, cr.`emergencyPhone`
+        $qryBeg = sprintf("(SELECT DISTINCT cr.`itemID`, cr.`email`, concat(cr.`firstName`,' ',cr.`lastName`) as name, cr.`emergencyContact`, cr.`emergencyPhone`, 'beginner' as level
             FROM `tblClassesRegistration` AS cr 
             INNER JOIN `tblClasses` as c ON cr.`sessionID` = c.`itemID`
             LEFT JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
-            WHERE (c.`sysOpen` = '1'  AND cr.`sysOpen` = '1' AND c.`regClose` <= UNIX_TIMESTAMP() %s%s))", 
+            WHERE (cr.`isRegistered` = '1' AND c.`sysOpen` = '1'  AND cr.`sysOpen` = '1' AND c.`regClose` <= UNIX_TIMESTAMP() %s%s))", 
                 $sysActive, 
                 $sessionEnd
         );
         
-        $qryInt = sprintf("(SELECT DISTINCT cr.`itemID`, cr.`email`, concat(cr.`lastName`,', ',cr.`firstName`) as name, cr.`emergencyContact`, cr.`emergencyPhone`
+        $qryInt = sprintf("(SELECT DISTINCT cr.`itemID`, cr.`email`, concat(cr.`firstName`,' ',cr.`lastName`) as name, cr.`emergencyContact`, cr.`emergencyPhone`, 'intermediate' as level
             FROM `tblIntermediateRegistration` AS cr 
             WHERE cr.`sysOpen` = '1' %s)", 
                 $sysActive
         );
         
-        $qry = $qryBeg." UNION ".$qryInt;
+        $qry = $qryBeg." UNION ".$qryInt. "ORDER BY name";
         
         $res = $this->_db->query($qry);
         if (is_object($res) && $res->num_rows > 0) {
@@ -399,7 +399,7 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
                         "name"              => trim($row['name']),
                         "contact"           => trim($row['emergencyContact']),
                         "phone"             => trim($row['emergencyPhone']),
-                        "level"             => (trim($row["sessionID"]) != "I") ? "beginner" : "intermediate"
+                        "level"             => trim($row["level"])
                     );
                 }
             }
