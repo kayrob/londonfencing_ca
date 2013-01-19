@@ -114,6 +114,17 @@ $taxLog        = $rpt->getLastReportLog('taxReceipts', 10);
                 </div>
         </div>
 </div>
+<div class="boxStyle">
+    <div class="boxStyleContent">
+                <div class="boxStyleHeading">
+                        <h2>Emergency Contact Sheet</h2>
+                        <div class="boxStyleHeadingRight">
+                            <input type="button" class="btnStyle blue" value="Print" id="btnEmergency"/>
+                        </div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+        </div>
+</div>
 <?php
 //end of display logic
 

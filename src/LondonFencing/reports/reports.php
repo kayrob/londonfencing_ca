@@ -331,4 +331,79 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
             return "fail";
         }
     }
+    public function getMembersEmergencyList() {
+        $members = array();
+        $qry = sprintf("SELECT v.`userID`, group_concat(v.`value` ORDER BY myOrder ASC) as data, u.`sysStatus` 
+            FROM `sysUGFValues` AS v 
+            INNER JOIN `sysUsers` AS u ON v.`userID` = u.`itemID`
+            INNER JOIN `sysUGFields` AS f ON v.`fieldID` = f.`itemID`
+            INNER JOIN `sysUGLinks` AS gl ON v.`userID` =gl.`userID`
+            INNER JOIN `sysUGroups` AS g ON gl.`groupID` = g.`itemID` 
+            INNER JOIN `tblMembersRegistration` AS r ON v.`userID` = r.`userID`
+            INNER JOIN `tblSeasons` AS s ON s.`itemID` = r.`seasonID`
+            WHERE u.`sysOpen` ='1' AND g.`nameSystem` = 'publicusers' 
+            AND f.`slug` IN ('lastName','firstName','emergencyPhone','emergencyContact')
+            AND s.`sysStatus` = 'active' AND s.`seasonEND` > UNIX_TIMESTAMP()
+            GROUP BY v.`userID`
+            ORDER BY data");
+        
+        $res = $this->_db->query($qry);
+        
+        if (is_object($res) && $res->num_rows > 0) {
+            while ($row = $this->_db->fetch_assoc($res)) {
+                $info = explode(',', $row['data']);
+                if (isset($info[2])){
+                
+                $members[trim($row['userID'])] = array(
+                    "id"            => trim($row['userID']),
+                    "name"          => trim($info[0])." ".trim($info[1]),
+                    "contact"       => trim($info[2]),
+                    "phone"         => trim($info[3]),
+                    "level"         => 'advanced'
+                );
+                }
+            }
+        }
+        return $members;
+    }
+
+    public function getClassesEmergencyList() {
+        $members = array();
+        $sysActive = " AND cr.`sysStatus` = 'active'";
+        $sessionEnd = " AND UNIX_TIMESTAMP(ce.`recurrenceEnd`) >= NOW()";
+
+        //real query
+        $qryBeg = sprintf("(SELECT DISTINCT cr.`itemID`, cr.`email`, concat(cr.`lastName`,', ',cr.`firstName`) as name, cr.`emergencyContact`, cr.`emergencyPhone`
+            FROM `tblClassesRegistration` AS cr 
+            INNER JOIN `tblClasses` as c ON cr.`sessionID` = c.`itemID`
+            LEFT JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
+            WHERE (c.`sysOpen` = '1'  AND cr.`sysOpen` = '1' AND c.`regClose` <= UNIX_TIMESTAMP() %s%s))", 
+                $sysActive, 
+                $sessionEnd
+        );
+        
+        $qryInt = sprintf("(SELECT DISTINCT cr.`itemID`, cr.`email`, concat(cr.`lastName`,', ',cr.`firstName`) as name, cr.`emergencyContact`, cr.`emergencyPhone`
+            FROM `tblIntermediateRegistration` AS cr 
+            WHERE cr.`sysOpen` = '1' %s)", 
+                $sysActive
+        );
+        
+        $qry = $qryBeg." UNION ".$qryInt;
+        
+        $res = $this->_db->query($qry);
+        if (is_object($res) && $res->num_rows > 0) {
+            while ($row = $this->_db->fetch_assoc($res)) {
+                if (!isset($members[trim($row['email']).'_'.trim($row['name'])])){
+                    $members[trim($row['email']).'_'.trim($row['name'])] = array(
+                        "id"                => trim($row['itemID']),
+                        "name"              => trim($row['name']),
+                        "contact"           => trim($row['emergencyContact']),
+                        "phone"             => trim($row['emergencyPhone']),
+                        "level"             => (trim($row["sessionID"]) != "I") ? "beginner" : "intermediate"
+                    );
+                }
+            }
+        }
+        return $members;
+    }
 }

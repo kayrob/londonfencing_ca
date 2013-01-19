@@ -79,5 +79,7 @@ jQuery(document).ready(function($){
             $(this).html('&#9660;More');
         }
     });
-    
+    $('#btnEmergency').click(function(){
+       window.open('/src/LondonFencing/reports/assets/emergencyContacts.php'); 
+    });
 });
