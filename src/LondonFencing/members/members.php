@@ -154,11 +154,11 @@ class members {
             while ($row = $this->_db->fetch_assoc($res)) {
                 if (!isset($members[trim($row['email'])])){
                     $members[trim($row['email'])] = array(
-                        "id"                        => trim($row['itemID']),
-                        "name"                 => trim($row['name']),
-                        "parent"                => trim($row['parentName']),
-                        "status"                 => trim($row['sysStatus']),
-                        "level"                   => (trim($row["sessionID"]) != "I") ? "beginner" : "intermediate",
+                        "id"                => trim($row['itemID']),
+                        "name"              => trim($row['name']),
+                        "parent"            => trim($row['parentName']),
+                        "status"            => trim($row['sysStatus']),
+                        "level"             => (trim($row["sessionID"]) != "I") ? "beginner" : "intermediate",
                         "membership"        => 'foundation',
                         "inputName"         => (trim($row["sessionID"]) != "I") ?'eList[]' : 'iList[]'
                     );
