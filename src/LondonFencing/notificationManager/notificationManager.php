@@ -260,8 +260,8 @@ class notificationManager{
             }
             if (isset($aRes) && $this->_db->valid($aRes) && $aRes->num_rows > 0){
                 while ($arow = $this->_db->fetch_assoc($aRes)){
-                    $aData = explode(",", $arow["meta"]);
-                    if ($batch == "single" && !empty($aData[2])){
+                    $aData = explode(",", $arow["meta"]);//check that it's an email
+                    if ($batch == "single" && !empty($aData[2]) && strstr($aData[2], '@') !== false){
                          $send = (trim($aData[3]) != "") ? str_replace('%NAME%',trim($aData[3]),$body): str_replace('%NAME%',trim($aData[0]),$body);
                          //replace user data as supplied
                          $send = str_replace('%REGKEY%',trim($aData[4]),$send);
@@ -270,7 +270,7 @@ class notificationManager{
                          $this->sendMailSingle(trim($aData[2]), stripslashes($send));
                     }
                     else{
-                        if (!empty($aData[2])){
+                        if (!empty($aData[2]) && strstr($aData[2], '@') !== false){
                             $this->mailer->addAddress(trim($aData[2]));
                         }
                     }
