@@ -1,4 +1,5 @@
 <?php
+require_once dirname(dirname(dirname(__DIR__))) . "/registration/Apps/AdminRegister.php";
 require_once dirname(dirname(__DIR__))."/members.php";
 require_once dirname(dirname(dirname(__DIR__))) . "/registration/registration.php";
 
@@ -402,7 +403,7 @@ to generate reports</p>
 
             }
             //write in the html
-            $formBuffer .= "<td valign=\"top\"><label for=\"".$newFieldID."\">" . $field['label'] . "</label></td><td>" . $field['widgetHTML'] . " <p>" . $field['tooltip'] . "</p></td>";
+            $formBuffer .= "<td valign=\"top\"><label for=\"".$newFieldID."\">" . $field['label'] . "</label></td><td>" . $field['widgetHTML'] . (isset($field['tooltip']) ? " <p>" . $field['tooltip'] . "</p>" : '')."</td>";
             $formBuffer .= "</tr>";
         }
 

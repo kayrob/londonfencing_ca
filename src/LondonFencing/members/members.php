@@ -1,16 +1,17 @@
 <?php
-
 namespace LondonFencing\members;
-
+use LondonFencing\registration\Apps AS regApp;
 use \Exception as Exception;
 
 class members {
 
     protected $_db;
+    protected $_app;
 
     public function __construct($db) {
         if (is_object($db)) {
             $this->_db = $db;
+            $this->_app = new regApp\AdminRegister(false, $db);
         } else {
             throw new Exception("You are not connected");
         }
@@ -52,7 +53,7 @@ class members {
                 if ($editType == "delete") {
                     $this->deleteMemberPayment($paymentID);
                 } else {
-                    if (isset($paymentInfo[$paymentID][0]) && isset($paymentInfo[$paymentID][1]) && $this->validatePayments($paymentInfo[$paymentID][0], $paymentInfo[$paymentID][1]) === true) {
+                    if (isset($paymentInfo[$paymentID][0]) && isset($paymentInfo[$paymentID][1]) && $this->_app->validatePayments($paymentInfo[$paymentID][0], $paymentInfo[$paymentID][1] ,'cash') === true) {
                         $this->_db->query(sprintf("UPDATE `tblMembersPayments` SET `paymentDate` = %d, `paymentAmount` = %f 
                             WHERE `itemID` = %d AND `registrationID` = %d", strtotime($paymentInfo[$paymentID][0]), (float)$paymentInfo[$paymentID][1], (int)$paymentID, (int)$regID
                                 ));
