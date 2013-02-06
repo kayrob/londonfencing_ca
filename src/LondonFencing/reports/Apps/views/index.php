@@ -53,7 +53,7 @@ $taxLog        = $rpt->getLastReportLog('taxReceipts', 10);
                 <div class="boxStyleHeading">
                         <h2>Intermediate Session Cards</h2>
                         <div class="boxStyleHeadingRight">
-                            <input type="button" class="btnStyle blue" onclick="window.open('../../../registration/assets/sessioncards.pdf')" value="Print Cards"/>
+                            <input type="button" class="btnStyle blue" onclick="window.open('/src/LondonFencing/registration/assets/sessioncards.pdf')" value="Print Cards"/>
                         </div>
                 </div>
                 <div class="clearfix">&nbsp;</div>
@@ -97,6 +97,8 @@ $taxLog        = $rpt->getLastReportLog('taxReceipts', 10);
                         <input type="text" class="uniform datepicker" name="taxesStart" id="taxesStart" />
                         <label for="taxesEnd">Date Range End</label>
                         <input type="text" class="uniform datepicker" name="taxesEnd" id="taxesEnd" />
+                        <label for="taxesSingle" title="Use this to send a single receipt" style="border-bottom:2px dotted #4A762B">Reg ID</label>
+                        <input type="text" class="uniform" name="taxesSingle" id="taxesSingle" /><br />
                         <input type="submit" name="submitReceipts" class="btnStyle blue" id="submitReceipts" value="Send Receipts" style="float:none" />
                         <input type="hidden" name="nonce" value="<?php echo Quipp()->config('security.nonce');?>" />
                     </form>

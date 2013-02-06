@@ -188,10 +188,14 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
             unlink($this->_fileDir."/".$fileName);
         }
     }
-    public function getBeginnerReceipts($startDate, $endDate){
+    public function getBeginnerReceipts($startDate, $endDate, $regKey){
         //where age < 18 as of $startDate
         //session start >= $startDate
         //session start <= $endDate
+        $regFilter = '';
+        if (!empty($regKey) && preg_match('%^[A-Z]{2}-\d{4,}-\d+$%', $regKey, $matches)){
+            $regFilter = "AND cr.`registrationKey` = '". $this->_db->escape($regKey) ."'";
+        }
         $qry = sprintf("SELECT cr.`email`, cr.`parentName`, 
             concat(cr.`firstName`,' ', cr.`lastName`) as childName, 
             cr.`birthDate`, cr.`paymentDate`, cr.`paymentAmount`, cr.`address`, cr.`address2`, cr.`city`, 
@@ -201,10 +205,12 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
             INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID` 
             WHERE cr.`isRegistered` = '1' AND cr.`paymentDate` > 0 AND
             UNIX_TIMESTAMP(ce.`eventStartDate`) >= %d AND UNIX_TIMESTAMP(ce.`eventStartDate`) <= %d AND 
-            ((UNIX_TIMESTAMP(ce.`eventStartDate`)- cr.`birthDate`)/(60*60*24*365)) < 18",
+            ((UNIX_TIMESTAMP(ce.`eventStartDate`)- cr.`birthDate`)/(60*60*24*365)) < 18 %s",
                 $startDate,
-                $endDate
+                $endDate,
+                $regFilter
                 );
+        
         $res = $this->_db->query($qry);
         $recipients = $this->setTaxRecipients($res, "Beginner Fencing Class", date("Y", $startDate));
         if (!empty($recipients)){
@@ -219,8 +225,12 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
             return "fail";
         }
     }
-    public function getIntermediateReceipts($startDate, $endDate){
+    public function getIntermediateReceipts($startDate, $endDate, $regKey){
         //where age < 18 as of payment date
+        $regFilter = '';
+        if (!empty($regKey) && preg_match('%^[A-Z]{2}-\d{4,}-\d+$%', $regKey, $matches)){
+            $regFilter = "AND cr.`registrationKey` = '". $this->_db->escape($regKey) ."'";
+        }
         $qry = sprintf("SELECT cr.`email`, cr.`parentName`, 
             concat(cr.`firstName`,' ', cr.`lastName`) as childName, 
             cr.`birthDate`, p.`paymentDate`, cr.`address`, cr.`address2`, cr.`city`, 
@@ -228,9 +238,10 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
             FROM `tblIntermediateRegistration` AS cr 
             INNER JOIN `tblIntermediatePayments` AS p ON cr.`itemID` = p.`registrationID` 
             WHERE p.`paymentDate` >= %d AND p.`paymentDate` <= %d AND 
-            ((p.`paymentDate`- cr.`birthDate`)/(60*60*24*365)) < 18",
+            ((p.`paymentDate`- cr.`birthDate`)/(60*60*24*365)) < 18 %s",
                 $startDate,
-                $endDate
+                $endDate,
+                $regFilter
                 );
         $res = $this->_db->query($qry);
         $recipients = $this->setTaxRecipients($res, "Intermediate Fencing Class", date("Y", $startDate));
@@ -252,7 +263,7 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
      * @param integer $endDate
      * @param Object $user 
      */
-    public function getClubReceipts($startDate, $endDate, $user){
+    public function getClubReceipts($startDate, $endDate, $user, $recipientKey){
         //where age < 18 as of payment date
         $recipients = array();
         $qry = sprintf("SELECT p.`paymentAmount`, p.`paymentDate`, m.`userID`
@@ -271,23 +282,25 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
                 //may have more than one child registered so key is regkey
                 $memID = (int)$row["userID"];
                 $regKey = $user->get_meta("Registration Key", $memID);
-                if (!isset($recipients[$regKey]) && !empty($regKey)){
-                    $province = $this->_provs[$user->get_meta("Province", $memID)];
-                    $address2 = $user->get_meta("Address 2", $memID);
-                    $recipients[$regKey] = array(
-                        "%DOI%"       => date("Y-m-d"),
-                        "%AMT%"       => trim($row["paymentAmount"]),
-                        "%YEAR%"      => date("Y", $startDate),
-                        "%CHILD%"     => $user->get_meta("First Name", $memID)." ".$user->get_meta("Last Name", $memID),
-                        "%DOB%"       => $user->get_meta("Birthdate", $memID),
-                        "%NAME%"      => $user->get_meta("Parent/Guardian", $memID),
-                        "%ADDRESS%"   => (!empty($address2) ? trim($address2)."-":"").$user->get_meta("Address", $memID).", ".$user->get_meta("City", $memID).", ".$province." ".strtoupper($user->get_meta("Postal Code", $memID)),
-                        "%EMAIL%"     => $user->get_meta('E-Mail', $memID),
-                        "%FEETYPE%"   => "Club Membership Fees"
-                    );
-                }
-                else{
-                    $recipients[$regKey]['%AMT%'] += trim($row["paymentAmount"]);
+                if (empty($recipientKey) || $recipientKey == $regKey){  
+                    if (!isset($recipients[$regKey]) && !empty($regKey)){
+                        $province = $this->_provs[$user->get_meta("Province", $memID)];
+                        $address2 = $user->get_meta("Address 2", $memID);
+                        $recipients[$regKey] = array(
+                            "%DOI%"       => date("Y-m-d"),
+                            "%AMT%"       => trim($row["paymentAmount"]),
+                            "%YEAR%"      => date("Y", $startDate),
+                            "%CHILD%"     => $user->get_meta("First Name", $memID)." ".$user->get_meta("Last Name", $memID),
+                            "%DOB%"       => $user->get_meta("Birthdate", $memID),
+                            "%NAME%"      => $user->get_meta("Parent/Guardian", $memID),
+                            "%ADDRESS%"   => (!empty($address2) ? trim($address2)."-":"").$user->get_meta("Address", $memID).", ".$user->get_meta("City", $memID).", ".$province." ".strtoupper($user->get_meta("Postal Code", $memID)),
+                            "%EMAIL%"     => $user->get_meta('E-Mail', $memID),
+                            "%FEETYPE%"   => "Club Membership Fees"
+                        );
+                    }
+                    else{
+                        $recipients[$regKey]['%AMT%'] += trim($row["paymentAmount"]);
+                    }
                 }
             }
         }
