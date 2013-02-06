@@ -177,7 +177,7 @@ class Auth {
 					$this->quipp->system_log($loginUserRS['userIDField'] . ' was booted out because their session expired');
 					$this->boot_em_out(2); // Session Expired
 				}
-			} elseif (strpos($_SERVER['PHP_SELF'], "admin") && !($_SESSION['userID'])) {
+			} elseif (strpos($_SERVER['PHP_SELF'], "admin") && !(isset($_SESSION['userID']))) {
 				$this->boot_em_out(1);//No Session
 			} 
 		}
