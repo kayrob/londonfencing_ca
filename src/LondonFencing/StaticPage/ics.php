@@ -22,7 +22,7 @@ $output .= "END:VCALENDAR";
 
 preg_match("/(www.)?(.*)(.com|.ca)/",$_SERVER['SERVER_NAME'],$matches);
 $fileName = str_replace(".","",$matches[2])."Events";
-header('Content-Type: text/Calendar');
+header('Content-Type: text/calendar; METHOD:REQUEST;charset=UTF-8');
 header("Content-Disposition: inline; filename=$fileName.ics");
 
 echo $output;
