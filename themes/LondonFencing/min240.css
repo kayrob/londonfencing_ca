@@ -36,5 +36,6 @@ ul.banner{margin-top: 78px;}
 #colA ul{padding: 0 0 20px 15px;}
 #beginner #colA ul, #intermediate #colA ul, #advanced #colA ul, #tournaments #colA ul{padding-left: 10px;}
 #colA ul li {padding: 5px 4px 5px 4px;}
+#beginner #colA ul li:first-child, #intermediate #colA ul li:first-child, #advanced #colA ul li:first-child, #tournaments #colA ul li:first-child { padding: 10px 0 10px 15px; }
 #colA .homeThumb, #colA .homeThumbB{border-width: 2px;}
 .banner li#arrow{ display:none;}
