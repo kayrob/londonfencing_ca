@@ -34,7 +34,7 @@ footer div{float:none;display:block;margin:10px 0 0 20px;}
 #homeGallery .primeImg{width: 238px;height: 78px;}
 ul.banner{margin-top: 78px;}
 #colA ul{padding: 0 0 20px 15px;}
-#beginner #colA ul, #intermediate #colA ul{padding-left: 10px;}
+#beginner #colA ul, #intermediate #colA ul, #advanced #colA ul, #tournaments #colA ul{padding-left: 10px;}
 #colA ul li {padding: 5px 4px 5px 4px;}
 #colA .homeThumb, #colA .homeThumbB{border-width: 2px;}
 .banner li#arrow{ display:none;}

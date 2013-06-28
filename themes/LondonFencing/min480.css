@@ -74,7 +74,7 @@ ul.banner{
 #colA ul{
     padding: 0 0 20px 12px;
 }
-#beginner #colA ul, #intermediate #colA ul {
+#beginner #colA ul, #intermediate #colA ul, #advanced #colA ul, #tournaments #colA ul{
     padding-left: 40px;
 }
 #colA ul li {

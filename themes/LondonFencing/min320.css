@@ -25,7 +25,7 @@ footer div{ float:none; display:block; margin:10px 0 0 20px;}
 #homeGallery .primeImg{ width: 318px; height: 103px;}
 ul.banner{ margin-top: 103px;}
 #colA ul{padding: 0 0 20px 25px;}
-#beginner #colA ul, #intermediate #colA ul { padding-left: 25px;}
+#beginner #colA ul, #intermediate #colA ul, #advanced #colA ul, #tournaments #colA ul { padding-left: 25px;}
 #colA ul li { padding: 5px 4px 5px 4px;}
 #colA .homeThumb, #colA .homeThumbB{border-width: 3px;}
 .banner li#arrow{ display:none;}
