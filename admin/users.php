@@ -522,6 +522,7 @@
                 
 				    <tr>
 				        <th>Username</th>
+                                        <th>Name</th>
 				        <th>Last Login Date</th>
 				        <th>Status</th>
 				        <th>Groups</th>
@@ -561,11 +562,12 @@
                     
                     if (is_object($res) && $qcore->db()->num_rows($res) > 0) { 
                         while ($u = $qcore->db()->fetch_assoc($res)) {
-                            
+                        $mem = $qcore->getModule('AccountManagement')->getAccount($u["itemID"]);
                     ?>
                     
                     <tr>
                         <td><?php echo $u['userIDField']; ?></td>
+                        <td><?php echo $mem->{"First Name"}." ".$mem->{"Last Name"};?></td>
                         <td><?php echo $u['lastLoginDate']; ?></td>
                         <td><?php echo ucwords($u['sysStatus']); ?></td>
                         <td><?php echo $u['groups']; ?></td>
