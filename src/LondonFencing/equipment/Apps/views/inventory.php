@@ -168,8 +168,8 @@ if (!empty($_POST) && isset($error) && $error === true){
         }
     }
     echo '<tr><td colspan="7">Add New</td>';
-    echo '<tr><td colspan="2"><input type="text" name="RQvalALPHtype[0]" value="" class="uniform" />*</td>
-        <td colspan="2"><input type="text" name="RQvalALPHcompany[0]" value="" id="RQvalALPHcompany0" class="uniform"/>*</td>
+    echo '<tr><td colspan="2"><input type="text" name="RQvalALPHtype[0]" value="" class="uniform" placeholder="Equipment Type" />*</td>
+        <td colspan="2"><input type="text" name="RQvalALPHcompany[0]" value="" id="RQvalALPHcompany0" class="uniform" placeholder="Company/Make" />*</td>
         <td colspan="3"><select name="RQvalNUMBfunctionStatus[0]">
             <option value="0">Not Working</option>
             <option value="1">Working</option>
