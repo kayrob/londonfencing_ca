@@ -74,6 +74,6 @@
           , 'from_name'  => 'londonfencing.ca'
           , 'send_using' => 'sendmail'
         )
-
+      , 'upload_dir' => dirname(__DIR__) ."/uploads"
       , 'mc' => array()
     );

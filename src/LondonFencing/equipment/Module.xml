@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+<module name="equipment">
+    <ns>\Apps\Equipment</ns>
+    <label>Equipment</label>
+    <admin enabled="1">equipment/Apps/views/inventory.php</admin>
+    <icon>equipment/assets/img/dashboard_icon.png</icon>
+    <help>Use this tool to manage equipment inventory.</help>
+</module>
+</modules>
