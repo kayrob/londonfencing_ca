@@ -130,7 +130,7 @@ class registration{
                 return array(1, $regKey);
             }
         }
-        return array(0,"An Error Occured and your Registration could not be completed. Please retry or contact <a href='mailto:\"info@londonfencing.ca\"'>info@londonfencing.ca</a>");
+        return array(0,"An Error Occured and your Registration could not be completed. Please retry or contact <a href='mailto:\"".Quipp()->config('mailer.from_email')."\"'>".Quipp()->config('mailer.from_email')."</a>");
     }
     
     public function getIntRegRecord($regKey){
@@ -176,7 +176,7 @@ class registration{
                 return array(1, $regKey);
             }
         }
-        return array(0,"An Error Occured and your Registration could not be completed. Please retry or contact <a href='mailto:\"info@londonfencing.ca\"'>info@londonfencing.ca</a>");
+        return array(0,"An Error Occured and your Registration could not be completed. Please retry or contact <a href='mailto:\"".Quipp()->config('mailer.from_email')."\"'>".Quipp()->config('mailer.from_email')."</a>");
     }
     
     public function getAdvancedSeason(){

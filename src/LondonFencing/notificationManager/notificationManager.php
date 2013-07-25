@@ -8,7 +8,7 @@ class notificationManager{
     protected $_db;
     public $mailer;
     public $errs = array();
-    protected $_from = 'info@londonfencing.ca'; 
+    protected $_from = ""; 
     
     /** Create class properties for db connection and the php mailer
      * @access public
@@ -20,12 +20,13 @@ class notificationManager{
         if (is_object($db)){
             $this->_db = $db;
             $this->mailer = new PHPMailer\PHPMailer();
-            $this->mailer->Host = "mail.londonfencing.ca";
+            $this->mailer->Host = "smtp.gmail.com";
             $this->mailer->Port  = 587;
             $this->mailer->SMTPAuth = true;
-            $this->mailer->Username = "info@londonfencing.ca";
+            $this->mailer->Username = "londonfencingca@gmail.com";
             $this->mailer->Password = "05epeeFTW50";
             $this->mailer->IsSMTP();
+            $this->_from = Quipp()->config('mailer.from_email');
         }
         else{
             throw new Exception("You are not connected to a database");
