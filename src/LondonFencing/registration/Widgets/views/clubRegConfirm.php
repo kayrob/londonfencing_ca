@@ -56,8 +56,8 @@ if (isset($user->id) && isset($regID) && (int)$regID > 0 && isset($reg) && $reg 
 
         $emailBody = str_replace('%SERVERNAME%',$_SERVER['SERVER_NAME'],str_replace('%BODY%',$body,str_replace('%TITLE%',$title,$emailTemplate)));
         $subject = "London Fencing Session Registration";
-        $from = "info@londonfencing.ca";
-        $admEmail = 'info@londonfencing.ca';
+        $from = Quipp()->config('mailer.from_email');
+        $admEmail = Quipp()->config('mailer.from_email');
 
         $mail = new PHPMailer\PHPMailer();
         $mail->IsHTML(true);
@@ -70,7 +70,7 @@ if (isset($user->id) && isset($regID) && (int)$regID > 0 && isset($reg) && $reg 
                 print alert_box("Thank you!<br />Please follow the steps below in order to complete your registration", 1);
         }
         else{
-            print alert_box("An Email could not be sent.<br />Please use the print button below or contact <a href='mailto:\"info@londonfencing.ca\"'>info@londonfencing.ca</a>", 2);
+            print alert_box("An Email could not be sent.<br />Please use the print button below or contact <a href='mailto:\"".Quipp()->config('mailer.from_email')."\"'>".Quipp()->config('mailer.from_email')."</a>", 2);
         }
 ?>
 <div>
@@ -90,6 +90,6 @@ if (isset($user->id) && isset($regID) && (int)$regID > 0 && isset($reg) && $reg 
 <?php
     }
     else{
-        print alert_box("An Error Occured and your Registration information could not be displayed.<br />Please contact <a href='mailto:\"info@londonfencing.ca\"'>info@londonfencing.ca</a>", 2);
+        print alert_box("An Error Occured and your Registration information could not be displayed.<br />Please contact <a href='mailto:\"".Quipp()->config('mailer.from_email')."\"'>".Quipp()->config('mailer.from_email')."</a>", 2);
     }
 }
