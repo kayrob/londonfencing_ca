@@ -70,7 +70,7 @@
 
       , 'mailer' => array(
             'class'      => '\\PHPMailer\\PHPMailer'
-          , 'from_email' => 'info@londonfencing_ca'
+          , 'from_email' => 'info@londonfencing.ca'
           , 'from_name'  => 'London Fencing Club'
           , 'send_using' => 'sendmail'
           , 'password'   => '05epee_FTW50'
