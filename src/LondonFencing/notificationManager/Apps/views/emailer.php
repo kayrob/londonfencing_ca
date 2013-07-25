@@ -129,7 +129,7 @@ if ((isset($_POST['eList']) && is_array($_POST['eList'])) || (isset($_POST['aLis
         
         ?>
         <h1>Emailer (* <?php echo (count($addresses) + count($a_addresses));?> Recipients)</h1>
-        <p>This allows the ability to send pre-selected users an email from London Fencing Club.<br />Email will be sent from <strong>info@londonfencing.ca</strong></p>
+        <p>This allows the ability to send pre-selected users an email from London Fencing Club.<br />Email will be sent from <strong><?php echo Quipp()->config('mailer.from_email');?></strong></p>
         <div class="boxStyle">
 	<div class="boxStyleContent">
 		<div class="boxStyleHeading">

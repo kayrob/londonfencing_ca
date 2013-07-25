@@ -42,10 +42,10 @@ if (isset($regKey) && isset($message) && isset($reg) && $reg instanceof LondonFe
 
         $emailBody = str_replace('%SERVERNAME%',$_SERVER['SERVER_NAME'],str_replace('%BODY%',$body,str_replace('%TITLE%',$title,$emailTemplate)));
         $subject = "London Fencing ".ucwords($sessionSaved['level'])." Session Registration";
-        $from = "info@londonfencing.ca";
+        $from = Quipp()->config('mailer.from_email');
         $admEmail = $db->return_specific_item(false, 'sysStorageTable', 'value', '--', "application='intermediate-registration'");
         if ($admEmail == "--"){
-            $admEmail = 'info@londonfencing.ca';
+            $admEmail = Quipp()->config('mailer.from_email');
             //$admEmail = 'robertsonkaren@rogers.com';
         }
         $mail = new PHPMailer\PHPMailer();
@@ -62,11 +62,11 @@ if (isset($regKey) && isset($message) && isset($reg) && $reg instanceof LondonFe
             print alert_box("Thank you!<br />Please follow the steps below in order to complete your registration", 1);
         }
         else{
-            print alert_box("An Email could not be sent.<br />Please use the print button below or contact <a href='mailto:\"info@londonfencing.ca\"'>info@londonfencing.ca</a>", 2);
+            print alert_box("An Email could not be sent.<br />Please use the print button below or contact <a href='mailto:\"".Quipp()->config('mailer.from_email')."\"'>".Quipp()->config('mailer.from_email')."</a>", 2);
         }
     }
     else{
-        print alert_box("An Error Occured and your Registration information could not be displayed.<br />Please contact <a href='mailto:\"info@londonfencing.ca\"'>info@londonfencing.ca</a>", 2);
+        print alert_box("An Error Occured and your Registration information could not be displayed.<br />Please contact <a href='mailto:\"".Quipp()->config('mailer.from_email')."\"'>".Quipp()->config('mailer.from_email')."</a>", 2);
     }
 }
 ?>

@@ -16,9 +16,9 @@ if (!empty($_POST) && isset($_POST["sub-contact-us"]) && validate_form($_POST)) 
         }
         $body .= "\n\n-------\nSent from ".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
 		
-	$from = ($_POST['RQvalMAILEmail_Address'] != "") ? $_POST['RQvalMAILEmail_Address'] : "no-reply@londonfencing.ca";
-	$email = $db->return_specific_item(false, 'sysStorageTable', 'value', '--', "application='contact-us'");
-	
+	$from = ($_POST['RQvalMAILEmail_Address'] != "") ? $_POST['RQvalMAILEmail_Address'] : "info@londonfencing.ca";
+	//$email = $db->return_specific_item(false, 'sysStorageTable', 'value', '--', "application='contact-us'");
+	$email = Quipp()->config('mailer.from_email');
         $mail = new PHPMailer\PHPMailer();
         $mail->IsHTML(false);
         $mail->SetFrom($from);

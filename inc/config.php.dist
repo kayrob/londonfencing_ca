@@ -70,9 +70,10 @@
 
       , 'mailer' => array(
             'class'      => '\\PHPMailer\\PHPMailer'
-          , 'from_email' => 'no-reply@londonfencing_ca'
-          , 'from_name'  => 'londonfencing.ca'
+          , 'from_email' => 'info@londonfencing_ca'
+          , 'from_name'  => 'London Fencing Club'
           , 'send_using' => 'sendmail'
+          , 'password'   => '05epee_FTW50'
         )
       , 'upload_dir' => dirname(__DIR__) ."/uploads"
       , 'mc' => array()
