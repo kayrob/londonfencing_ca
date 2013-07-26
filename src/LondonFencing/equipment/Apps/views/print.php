@@ -34,7 +34,7 @@ if ($hasPermission && isset($_GET['id']) && (int) $_GET['id'] > 0) {
         <table>
             <tr>
                 <td><?php echo $row["itemID"];?></td>
-                <td><img src="/uploads/equipment/<?php echo $row["qrcode"];?>" width="200px" height="200px" /></td></tr>
+                <td><img src="/uploads/equipment/<?php echo $row["qrcode"];?>" width="100px" height="100px" /></td></tr>
         </table>   
 <?php
         }
