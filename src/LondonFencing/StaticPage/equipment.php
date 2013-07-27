@@ -37,10 +37,12 @@ if (isset($_GET["eqt"]) && preg_match('%^[a-fA-F0-9]{40}$%', $_GET['eqt'], $matc
         <style type="text/css">
             .alertBoxFunctionBad{width: 280px;float: none;margin-top: 0px;}
             #loginBox{width: 90%; text-align:center}
+            #loginBox img{margin-left: 105px;}
+            td{padding-bottom: 20px;}
             td:nth-child(odd){text-align:right;padding-right: 20px}
             td:nth-child(even){text-align:left;padding-left: 20px}
-            body{font-size: 14px}
-            .btnStyle {font-size: 14px}
+            body{font-size: 28px}
+            .btnStyle {font-size: 28px}
         </style>
     </head>
 <body>
@@ -60,8 +62,8 @@ if (isset($_GET["eqt"]) && preg_match('%^[a-fA-F0-9]{40}$%', $_GET['eqt'], $matc
                 }
 ?>
                 <table width="100%">
-                    <tr><td width="50%">Equipment ID:</td><td><?php echo $row["itemID"];?></td></tr>
-                    <tr><td>Status:</td><td><?php echo $statuses[$row["functionStatus"]];?></td></tr>
+                    <tr><td width="50%">Equipment ID:</td><td><strong><?php echo $row["itemID"];?></strong></td></tr>
+                    <tr><td>Status:</td><td><strong><?php echo $statuses[$row["functionStatus"]];?></strong></td></tr>
                     <tr><td>Equipment Type:</td><td><?php echo $row["type"];?></td></tr>
                     <tr><td>Company:</td><td><?php echo $row["company"];?></td></tr>
                     <tr><td>Last Updated:</td><td><?php echo date("Y-m-d g:i a", $row["dateLastUpdated"]);?></td></tr>
@@ -73,7 +75,7 @@ if (isset($_GET["eqt"]) && preg_match('%^[a-fA-F0-9]{40}$%', $_GET['eqt'], $matc
                 if ((int) $row["functionStatus"] < 2){
    ?>
                 <div id="loginBoxButtons">
-                    <label>&nbsp;</label><input type="submit"  value="Mark as <?php echo $statuses[$newStatus];?>" class="btnStyle" />
+                    <input type="submit"  value="Mark as <?php echo $statuses[$newStatus];?>" class="btnStyle" />
                 </div>
    <?php
                 }
