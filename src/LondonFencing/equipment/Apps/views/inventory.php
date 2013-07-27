@@ -123,7 +123,9 @@ if (!empty($_POST) && isset($error) && $error === true){
 	<div class="boxStyleContent">
 		<div class="boxStyleHeading">
 			<h2>Edit</h2>
-			<div class="boxStyleHeadingRight"></div>
+			<div class="boxStyleHeadingRight">
+                            <a href="print?id=0" class="btnStyle blue">Print All</a>
+                        </div>
 		</div>
 		<div class="clearfix">&nbsp;</div>
 		<div id="template">

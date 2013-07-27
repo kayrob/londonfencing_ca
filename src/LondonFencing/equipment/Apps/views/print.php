@@ -7,37 +7,58 @@ if ($auth->has_permission("canEditEquipment")){
     $hasPermission = true;
 }
 
-if ($hasPermission && isset($_GET['id']) && (int) $_GET['id'] > 0) {
+if ($hasPermission && isset($_GET['id']) && is_numeric($_GET['id'])) {
 ?>    
 <!DOCTYPE>   
 <html>
     <head>
         <title>Quipp &bull; London Fencing Club &bull; Equipment</title>
         <style type="text/css">
+            body{
+                width: 700px;
+                margin: 0 auto;
+            }
             td {
                 vertical-align: top;
                 font-size: 96px;
-                padding-right: 10px
+                padding-right: 10px;
+                text-align: center;
+            }
+            table{
+                width: 100%;
+                margin-top: 40px;
             }
         </style>
     </head>
     <body>
 <?php
+    $where = ((int) $_GET['id'] > 0) ? sprintf("`itemID` = %d AND", (int) $_GET["id"]): "";
     $res = $db->query(sprintf("SELECT `itemID`,`qrcode` FROM `tblEquipment` 
-            WHERE `itemID` = %d AND `sysStatus` = 'active' AND `sysStatus` = 'active'", 
-        (int) $_GET['id']));
-   
+            WHERE %s `sysStatus` = 'active'", 
+        $where));
+
     if ($db->valid($res) !== false){
-        $row = $db->fetch_assoc($res);
-        if (file_exists(Quipp()->config('upload_dir').'/equipment/'.$row["qrCode"])){
 ?>
         <table>
             <tr>
-                <td><?php echo $row["itemID"];?></td>
-                <td><img src="/uploads/equipment/<?php echo $row["qrcode"];?>" width="100px" height="100px" /></td></tr>
-        </table>   
 <?php
+        $j = 0;
+        while ($row = $db->fetch_assoc($res)){
+            if (file_exists(Quipp()->config('upload_dir').'/equipment/'.$row["qrCode"])){
+                if ($j % 2 == 0 && $j > 0){
+                    echo "</tr><tr>";
+                }
+?>
+                    <td width="50%"><?php echo $row["itemID"];?>
+                    <img src="/uploads/equipment/<?php echo $row["qrcode"];?>" width="100px" height="100px" /></td>
+<?php
+                $j++;
+            }
         }
+?>
+        </tr>
+     </table>   
+<?php
     }
     else{
         echo '<p>This equipment is no longer in use</p>';
