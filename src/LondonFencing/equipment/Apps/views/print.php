@@ -28,6 +28,7 @@ if ($hasPermission && isset($_GET['id']) && is_numeric($_GET['id'])) {
                 width: 100%;
                 margin-top: 40px;
             }
+            .breaker{ page-break-after: always;}
         </style>
     </head>
     <body>
@@ -45,7 +46,12 @@ if ($hasPermission && isset($_GET['id']) && is_numeric($_GET['id'])) {
         $j = 0;
         while ($row = $db->fetch_assoc($res)){
             if (file_exists(Quipp()->config('upload_dir').'/equipment/'.$row["qrCode"])){
-                if ($j % 2 == 0 && $j > 0){
+                if ($j > 0 && $j % 14 == 0){
+                    echo '</tr></table>';
+                    echo '<div class="breaker"></div>';
+                    echo '<table><tr>';
+                }
+                else if ($j % 2 == 0 && $j > 0){
                     echo "</tr><tr>";
                 }
 ?>
@@ -54,6 +60,10 @@ if ($hasPermission && isset($_GET['id']) && is_numeric($_GET['id'])) {
 <?php
                 $j++;
             }
+            
+        }
+        if ($j % 2 > 0){
+            echo "<td>&nbsp;</td>";
         }
 ?>
         </tr>
