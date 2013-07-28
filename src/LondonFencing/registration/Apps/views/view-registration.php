@@ -30,6 +30,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
     $provs = array("AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT");
     $regStatus = array("1" => "Registered", "0" => "Wait Listed");
     $gender = array("F" => "Female", "M" => "Male");
+    $handedness = array("Left", "Right");
 
     //editable fields
     $fields[] = array(
@@ -175,6 +176,16 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
         'writeOnce' => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
         'valCode' => "RQvalPHON",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+    $fields[] = array(
+        'label' => "Handedness",
+        'dbColName' => "handedness",
+        'tooltip' => "Left or Right Handed",
+        'writeOnce' => false,
+        'widgetHTML' => "",
+        'valCode' => "RQvalALPH",
         'dbValue' => false,
         'stripTags' => true
     );
@@ -475,6 +486,13 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                             $field['widgetHTML'] .= '<option value="' . $gAbbr . '"' . ($field['dbValue'] == $gAbbr ? 'selected="selected"' : '') . '>' . $sex . ($field['dbValue'] == $gAbbr ? '*' : '') . '</option>';
                         }
                         $field['widgetHTML'] .= '</select>';
+                    } else if ($field['dbColName'] == "handedness") {
+                        $field['dbValue'] = (isset($_POST[$newFieldID]) && $message != '') ? $_POST[$newFieldID] : $field['dbValue'];
+                        $field['widgetHTML'] = '<select name="' . $newFieldID . '" id="' . $newFieldID . '">';
+                        foreach ($handedness as $hand) {
+                            $field['widgetHTML'] .= '<option value="' . $hand . '"' . ($field['dbValue'] == $hand ? 'selected="selected"' : '') . '>' . $hand . ($field['dbValue'] == $hand ? '*' : '') . '</option>';
+                        }
+                        $field['widgetHTML'] .= '</select>';
                     } else if ($field['dbColName'] == 'isRegistered') {
                         $field['widgetHTML'] = '<select name="' . $newFieldID . '" id="' . $newFieldID . '">';
                         foreach ($regStatus as $regOpt => $regVal) {
@@ -527,7 +545,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
             //list table query:
 
             $listqry = sprintf("SELECT cr.`itemID`, concat(cr.`lastName`, ', ' ,cr.`firstName`) AS name, cr.`email`, cr.`formDate`, 
-                UNIX_TIMESTAMP(cr.`sysDateCreated`) as dateReg, cr.`isRegistered`, cr.`waitlist`, cr.`paymentDate`, cr.`registrationKey` 
+                UNIX_TIMESTAMP(cr.`sysDateCreated`) as dateReg, cr.`isRegistered`, cr.`waitlist`, cr.`paymentDate`, cr.`registrationKey`, cr.`handedness`
                 FROM $primaryTableName AS cr 
                 WHERE cr.`sessionID` = %d 
                 AND (cr.`isRegistered` > 0 || cr.`waitlist` > 0) 
@@ -539,62 +557,73 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
             if (is_object($resqry) && $resqry->num_rows > 0) {
                 //list table field titles
                 ?>
-                            <p>How to send a link to the registration/waiver page for registered participants:<br /><br />
-                                Emailer (1+ recipients): <?php echo "http://" . $_SERVER["SERVER_NAME"] . "/print-reg/" . $_GET['sid'] . "/%REGKEY%"; ?><br />
-                                Gmail (or one recipient): <?php echo "http://" . $_SERVER["SERVER_NAME"] . "/print-reg/" . $_GET['sid'] . "/xx-####-##"; ?>
-                                <br /><br />
-                                %REGKEY% will automatically be replaced by the emailer with the user's registration number. Make sure to select "Individual"
-                                <br />xx-####-## represents the value in the Registration Number column. You will have to replace this manually<br /><br /></p>
-                            <?php
-                            $titles[0] = "Name";
-                            $titles[1] = "Registration Number";
-                            $titles[2] = "Email Address";
-                            $titles[3] = "Date Registered";
-                            $titles[4] = "Payment Date";
-                            $titles[5] = "Form Submitted";
+                <p>How to send a link to the registration/waiver page for registered participants:<br /><br />
+                    Emailer (1+ recipients): <?php echo "http://" . $_SERVER["SERVER_NAME"] . "/print-reg/" . $_GET['sid'] . "/%REGKEY%"; ?><br />
+                    Gmail (or one recipient): <?php echo "http://" . $_SERVER["SERVER_NAME"] . "/print-reg/" . $_GET['sid'] . "/xx-####-##"; ?>
+                    <br /><br />
+                    %REGKEY% will automatically be replaced by the emailer with the user's registration number. Make sure to select "Individual"
+                    <br />xx-####-## represents the value in the Registration Number column. You will have to replace this manually<br /><br /></p>
+                <?php
+                $titles[0] = "Name";
+                $titles[1] = "Registration Number";
+                $titles[2] = "Email Address";
+                $titles[3] = "Date Registered";
+                $titles[4] = "Payment Date";
+                $titles[5] = "Form Submitted";
+                
+                $left = 0;
+                $right = 0;
 
-                            while ($rs = $db->fetch_assoc($resqry)) {
-                                if ((int) $rs["isRegistered"] == 1) {
-                                    $registered[] = $rs;
-                                } else if ((int) $rs["waitlist"] > 0) {
-                                    $waitlist[(int) $rs["waitlist"]] = $rs;
-                                }
-                            }
-                            echo '<form name="frmSendEmail" action="/admin/apps/notificationManager/emailer" method="post" enctype="multipart/form-data">';
-                            echo '<table id="adminTableList_reg" class="adminTableList tablesorter" width="100%" cellpadding="5" cellspacing="0" border="1">';
-                            echo '<thead><tr><th>' . $titles[0] . '</th><th>' . $titles[1] . '</th><th>' . $titles[2] . '</th><th>' . $titles[3] . '</th><th>' . $titles[4] . '</th><th>' . $titles[5] . '</th><th>Status</th>
+                while ($rs = $db->fetch_assoc($resqry)) {
+                    if ((int) $rs["isRegistered"] == 1) {
+                        $registered[] = $rs;
+                    } else if ((int) $rs["waitlist"] > 0) {
+                        $waitlist[(int) $rs["waitlist"]] = $rs;
+                    }
+                }
+                echo '<form name="frmSendEmail" action="/admin/apps/notificationManager/emailer" method="post" enctype="multipart/form-data">';
+                echo '<table id="adminTableList_reg" class="adminTableList tablesorter" width="100%" cellpadding="5" cellspacing="0" border="1">';
+                echo '<thead><tr><th>' . $titles[0] . '</th><th>' . $titles[1] . '</th><th>' . $titles[2] . '</th><th>' . $titles[3] . '</th><th>' . $titles[4] . '</th><th>' . $titles[5] . '</th><th>Status</th>
                 <th>Email<input type="checkbox" id="emailAll" name="emailAll" value="all" /></th><th>&nbsp;</th><th>&nbsp;</th></tr></thead>';
-                            echo '<tbody>';
-                            foreach ($registered as $dt) {
-                                $paymentDate = (trim($dt["paymentDate"]) != '' && $dt["paymentDate"] > 0) ? date('Y-m-d', $dt["paymentDate"]) : "Due";
-                                $formDate = (trim($dt["formDate"]) != '' && $dt["formDate"] > 0) ? date('Y-m-d', $dt["formDate"]) : "Due";
-                                echo '<tr><td>' . $dt['name'] . '</td><td>' . $dt["registrationKey"] . '</td><td>' . $dt["email"] . '</td><td>' . date('Y-m-d', $dt["dateReg"]) . '</td><td>' . $paymentDate . '</td><td>' . $formDate . '</td><td>Registered</td>';
-                                echo '<td style="width:70px;"><input type="checkbox" name="eList[]" id="eList_' . trim($dt['itemID']) . '" value="' . trim($dt['itemID']) . '" /></td>';
-                                echo '<td style="width:40px;"><input class="btnStyle red noPad" id="btnDelete_' . $dt['itemID'] . '" type="button" onclick="javascript:confirmDelete(\'?sid=' . $_GET['sid'] . '&action=delete&amp;id=' . $dt['itemID'] . '\');" value="Delete"></td>';
-                                echo '<td style="width:40px;"><input class="btnStyle blue noPad" id="btnEdit_' . $dt['itemID'] . '" type="button" onclick="javascript:window.location=\'?sid=' . $_GET['sid'] . '&view=edit&amp;id=' . $dt['itemID'] . '\';" value="Edit"></td></tr>';
-                            }
-                            if (isset($waitlist)) {
-                                ksort($waitlist);
-                                echo '</tbody><tbody><tr><td colspan="10">&nbsp;</td></tr>';
-                                $w = 0;
-                                foreach ($waitlist as $dt) {
-                                    echo '<tr><td>' . $dt['name'] . '</td><td>' . $dt["registrationKey"] . '</td><td>' . $dt["email"] . '</td><td>' . date('Y-m-d', $dt["dateReg"]) . '</td><td>N/A</td><td>N/A</td><td>Waitlist (' . (++$w) . ')</td>';
-                                    echo '<td style="width:50px;"><input type="checkbox" name="eList[]" id="eList_' . trim($dt['itemID']) . '" value="' . trim($dt['itemID']) . '" /></td>';
-                                    echo '<td style="width:50px;"><input class="btnStyle red noPad" id="btnDelete_' . $dt['itemID'] . '" type="button" onclick="javascript:confirmDelete(\'?sid=' . $_GET['sid'] . '&action=delete&amp;id=' . $dt['itemID'] . '\');" value="Delete"></td>';
-                                    echo '<td style="width:50px;"><input class="btnStyle blue noPad" id="btnEdit_' . $dt['itemID'] . '" type="button" onclick="javascript:window.location=\'?sid=' . $_GET['sid'] . '&view=edit&amp;id=' . $dt['itemID'] . '\';" value="Edit"></td></tr>';
-                                }
-                            }
-                            echo '</tbody>
-            <tbody>
-            <tr><td colspan="10">
-            <input  style="float:right" class="btnStyle green noPad" id="btnPrint" type="button" onclick="javascript:window.open(\'/admin/apps/registration/print-reg-list?sid=' . $_GET['sid'] . '\');" value="Print">
-            <input  style="float:right" class="btnStyle blue noPad" id="btnSelect" type="submit" value="Send Email">
-            <input type="hidden" name="nonce" value="' . Quipp()->config('security.nonce') . '" />
-            <input type="hidden" name="etype" value="class-reg" />
-            </td>
-                </tr>
-            </tbody>
-            </table>';
+                echo '<tbody>';
+                foreach ($registered as $dt) {
+                    if ($dt["handedness"] == "Right"){
+                        $right++;
+                    }
+                    if ($dt["handedness"] == "Left"){
+                        $left++;
+                    }
+                    $paymentDate = (trim($dt["paymentDate"]) != '' && $dt["paymentDate"] > 0) ? date('Y-m-d', $dt["paymentDate"]) : "Due";
+                    $formDate = (trim($dt["formDate"]) != '' && $dt["formDate"] > 0) ? date('Y-m-d', $dt["formDate"]) : "Due";
+                    echo '<tr><td>' . $dt['name'] . '</td><td>' . $dt["registrationKey"] . '</td><td>' . $dt["email"] . '</td><td>' . date('Y-m-d', $dt["dateReg"]) . '</td><td>' . $paymentDate . '</td><td>' . $formDate . '</td><td>Registered</td>';
+                    echo '<td style="width:70px;"><input type="checkbox" name="eList[]" id="eList_' . trim($dt['itemID']) . '" value="' . trim($dt['itemID']) . '" /></td>';
+                    echo '<td style="width:40px;"><input class="btnStyle red noPad" id="btnDelete_' . $dt['itemID'] . '" type="button" onclick="javascript:confirmDelete(\'?sid=' . $_GET['sid'] . '&action=delete&amp;id=' . $dt['itemID'] . '\');" value="Delete"></td>';
+                    echo '<td style="width:40px;"><input class="btnStyle blue noPad" id="btnEdit_' . $dt['itemID'] . '" type="button" onclick="javascript:window.location=\'?sid=' . $_GET['sid'] . '&view=edit&amp;id=' . $dt['itemID'] . '\';" value="Edit"></td></tr>';
+                }
+                echo '<tr><td colspan="10">(Total: '.count($registered).', Left: '.$left.', Right: '.$right.')</td></tr>';
+                echo '</tbody><tbody>';
+                if (isset($waitlist)) {
+                    ksort($waitlist);
+                    echo '</tbody><tbody><tr><td colspan="10">&nbsp;</td></tr>';
+                    $w = 0;
+                    foreach ($waitlist as $dt) {
+                        echo '<tr><td>' . $dt['name'] . '</td><td>' . $dt["registrationKey"] . '</td><td>' . $dt["email"] . '</td><td>' . date('Y-m-d', $dt["dateReg"]) . '</td><td>N/A</td><td>N/A</td><td>Waitlist (' . (++$w) . ')</td>';
+                        echo '<td style="width:50px;"><input type="checkbox" name="eList[]" id="eList_' . trim($dt['itemID']) . '" value="' . trim($dt['itemID']) . '" /></td>';
+                        echo '<td style="width:50px;"><input class="btnStyle red noPad" id="btnDelete_' . $dt['itemID'] . '" type="button" onclick="javascript:confirmDelete(\'?sid=' . $_GET['sid'] . '&action=delete&amp;id=' . $dt['itemID'] . '\');" value="Delete"></td>';
+                        echo '<td style="width:50px;"><input class="btnStyle blue noPad" id="btnEdit_' . $dt['itemID'] . '" type="button" onclick="javascript:window.location=\'?sid=' . $_GET['sid'] . '&view=edit&amp;id=' . $dt['itemID'] . '\';" value="Edit"></td></tr>';
+                    }
+                }
+                echo '</tbody>
+                <tbody>
+                <tr><td colspan="10">
+                <input  style="float:right" class="btnStyle green noPad" id="btnPrint" type="button" onclick="javascript:window.open(\'/admin/apps/registration/print-reg-list?sid=' . $_GET['sid'] . '\');" value="Print">
+                <input  style="float:right" class="btnStyle blue noPad" id="btnSelect" type="submit" value="Send Email">
+                <input type="hidden" name="nonce" value="' . Quipp()->config('security.nonce') . '" />
+                <input type="hidden" name="etype" value="class-reg" />
+                </td>
+                    </tr>
+                </tbody>
+                </table>';
                             echo '</form>';
                         } else {
                             echo 'no data present';

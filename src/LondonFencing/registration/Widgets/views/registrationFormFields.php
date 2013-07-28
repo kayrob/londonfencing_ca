@@ -8,6 +8,7 @@ if (isset($message) && $message != '') {
 }
 $provs = array("AB","BC","MB","NB","NL","NS","NT","NU","ON","PE","QC","SK","YT");
 $gender = array("F" => "Female", "M" => "Male");
+$handedness = array("Left", "Right");
 ?>
 <h3>Please complete all fields marked with *</h3>
 <p><strong>Parent/Guardian is required for fencers under the age of 18</strong><br />&nbsp;</p>
@@ -122,6 +123,20 @@ $gender = array("F" => "Female", "M" => "Male");
         ?>
         </select> *
     </div>
+<?php
+    }
+    if (isset($post["RQvalALPHhandedness"])){
+?>
+        <div>
+        <label for="RQvalALPHhandedness" class="req">Handedness</label>
+        <select name="RQvalALPHhandedness" id="RQvalALPHhandedness">
+<?php
+            foreach ($handedness as $hand){
+                echo '<option value="'.$hand.'"'.($post["RQvalALPHhandedness"] == $hand ? 'selected="selected"':'').'>'.$hand.($post["RQvalALPHhandedness"] == $hand ? '*':'').'</option>';
+            }
+        ?>
+        </select>
+        </div>
 <?php
     }
 ?>

@@ -10,7 +10,7 @@ by The Club.
 I understand that all activities are VOLUNTARY and that I do not have to participate unless I choose to do so. I understand 
 that these activities are potentially dangerous or harmful to my person or property, and that by participating voluntarily 
 I accept and assume risk of injury to myself or damage to my property. I understand that The Club does NOT provide any 
-insurance coverate for my person or my property. I acknowledge that I am responsible for my safety and my own health care needs,
+insurance coverage for my person or my property. I acknowledge that I am responsible for my safety and my own health care needs,
 and for the protection of my property.
 </p>
 <p style="margin-top: 20px">

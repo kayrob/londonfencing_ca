@@ -120,6 +120,9 @@ if (isset($_GET['s']) && preg_match('%^(I|\d+)$%', $_GET['s'], $match) && isset(
         <div>
             <label>Emergency Phone: </label><?php echo $regNfo["emergencyPhone"]; ?>
         </div>
+        <div>
+            <label>Handedness: </label><?php echo $regNfo["handedness"]; ?>
+        </div>
         <div class="sig">
             <label>Signature: </label>_____________________________________________
         </div>

@@ -29,6 +29,6 @@ PARENT OR LEGAL GUARDIAN:
 I, <strong>%PARENTNAME%</strong>, state that I am the parent or legal guardian or the minor whose name appears above. I understand that the above 
 terms and conditions apply to said minor and to myself. I further understand that said minor cannot participate under ANY 
 circumstances in armoured martial arts or combat-related activities, without parental consent. The minor will not be able 
-to particpate in any Club activities without entering into this agreement. This document is binding unto myself, the said 
+to participate in any Club activities without entering into this agreement. This document is binding unto myself, the said 
 minor and any person suing on behalf of said minor.
 </p>

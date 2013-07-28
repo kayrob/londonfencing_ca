@@ -38,21 +38,22 @@ if ($sessionNfo['isOpen'] === true){
         }
         
         $post = array(
-        "RQvalALPHfirstName"                 => "",
-        "RQvalALPHlastName"                  => "",
-        "RQvalDATEbirthDate"                  => "",
-        "RQvalALPHgender"                     => "",
-        "RQvalALPHaddress"                     => "",
-        "OPvalALPHaddress2"                   => "",
-        "RQvalALPHcity"                           => "",
-        "RQvalALPHprovince"                    => "ON",
-        "RQvalPOSTpostalCode"                => "",
-        "RQvalPHONphoneNumber"          => "",
-        "RQvalMAILemail"                         => "",
-        "OPvalALPHparentName"              => "",
-        "RQvalALPHemergencyContact"    => "",
-        "RQvalPHONemergencyPhone"      => "",
-            "OPvalALPHnotes"                        => ""
+            "RQvalALPHfirstName"            => "",
+            "RQvalALPHlastName"             => "",
+            "RQvalDATEbirthDate"            => "",
+            "RQvalALPHgender"               => "",
+            "RQvalALPHaddress"              => "",
+            "OPvalALPHaddress2"             => "",
+            "RQvalALPHcity"                 => "",
+            "RQvalALPHprovince"             => "ON",
+            "RQvalPOSTpostalCode"           => "",
+            "RQvalPHONphoneNumber"          => "",
+            "RQvalMAILemail"                => "",
+            "OPvalALPHparentName"           => "",
+            "RQvalALPHemergencyContact"     => "",
+            "RQvalPHONemergencyPhone"       => "",
+            "RQvalALPHhandedness"           => "",
+            "OPvalALPHnotes"                => ""
         );        
         
         $sessionDate = date("F j, Y", $sessionNfo['eventStart']);

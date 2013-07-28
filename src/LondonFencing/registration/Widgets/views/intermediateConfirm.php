@@ -25,6 +25,7 @@ if (isset($regKey) && isset($message) && isset($reg) && $reg instanceof LondonFe
         $body .= '<label>Parent/Guardian: </label>&nbsp;'.(trim($sessionSaved["parentName"]) != "" ?$sessionSaved["parentName"]:"N/A").'<br />';
         $body .= '<label>Emergency Contact: </label>&nbsp;'.$sessionSaved["emergencyContact"].'<br />';
         $body .= '<label>Emergency Phone: </label>&nbsp;'.$ePhone.'<br />';
+        $body .= '<label>Handedness: </label>&nbsp;'.$sessionSaved["handedness"].'<br />';
         $body .= '<label>Confirmation Number: </label>&nbsp;'.$sessionSaved['registrationKey'].'<br />';
         $body .= '<label>Date Registered: </label>&nbsp;'.$sessionSaved['sysDateCreated'].'</p>';
         $body .= '<p>Print out your form to sign by clicking the link or copying it and pasting it into your browser: 

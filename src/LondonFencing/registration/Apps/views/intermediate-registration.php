@@ -33,6 +33,7 @@ if ($hasPermission) {
     $provs = array("AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT");
     $gender = array("F" => "Female", "M" => "Male");
     $payOpts = array("monthly" => "Monthly", "drop-in" => "Drop-In", "card" => "Session Card");
+    $handedness = array("Left", "Right");
     //editable fields
     $fields[] = array(
         'label' => "First Name",
@@ -187,6 +188,16 @@ if ($hasPermission) {
         'writeOnce' => false,
         'widgetHTML' => "<input style=\"width:300px;\" type=\"text\" class=\"uniform\" id=\"FIELD_ID\" name=\"FIELD_ID\" value=\"FIELD_VALUE\" />",
         'valCode' => "OPvalPHON",
+        'dbValue' => false,
+        'stripTags' => true
+    );
+    $fields[] = array(
+        'label' => "Handedness",
+        'dbColName' => "handedness",
+        'tooltip' => "Left or Right Handed",
+        'writeOnce' => false,
+        'widgetHTML' => "",
+        'valCode' => "RQvalALPH",
         'dbValue' => false,
         'stripTags' => true
     );
@@ -546,7 +557,14 @@ if ($hasPermission) {
                             $field['widgetHTML'] .= '<option value="' . $gAbbr . '"' . ($field['dbValue'] == $gAbbr ? 'selected="selected"' : '') . '>' . $sex . ($field['dbValue'] == $gAbbr ? '*' : '') . '</option>';
                         }
                         $field['widgetHTML'] .= '</select>';
-                    } else if (stristr($field['dbColName'], "date") !== false) {
+                    } else if ($field['dbColName'] == "handedness") {
+                        $field['dbValue'] = (isset($_POST[$newFieldID]) && $message != '') ? $_POST[$newFieldID] : $field['dbValue'];
+                        $field['widgetHTML'] = '<select name="' . $newFieldID . '" id="' . $newFieldID . '">';
+                        foreach ($handedness as $hand) {
+                            $field['widgetHTML'] .= '<option value="' . $hand . '"' . ($field['dbValue'] == $hand ? 'selected="selected"' : '') . '>' . $hand . ($field['dbValue'] == $hand ? '*' : '') . '</option>';
+                        }
+                        $field['widgetHTML'] .= '</select>';
+                    }else if (stristr($field['dbColName'], "date") !== false) {
                         if (isset($_POST[$newFieldID]) && $message != '') {
                             $field['dbValue'] = $_POST[$newFieldID];
                         }

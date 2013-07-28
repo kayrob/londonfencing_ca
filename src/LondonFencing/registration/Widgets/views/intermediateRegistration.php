@@ -40,22 +40,23 @@ if (isset($_GET['token']) && preg_match('%^[A-Z]{2}\-000I\-\d+$%', $_GET['token'
         else{
                 $sessionNfo['itemID'] = trim($_GET['token']);
                 $post = array(
-                "RQvalALPHfirstName"        => $regNfo['firstName'],
-                "RQvalALPHlastName"         => $regNfo['lastName'],
-                "RQvalDATEbirthDate"        => "",
-                "RQvalALPHgender"           => "",
-                "RQvalALPHaddress"          => "",
-                "OPvalALPHaddress2"         => "",
-                "RQvalALPHcity"             => "",
-                "RQvalALPHprovince"         => "ON",
-                "RQvalPOSTpostalCode"       => "",
-                "RQvalPHONphoneNumber"      => "",
-                "RQvalMAILemail"            => $regNfo['email'],
-                "OPvalMAILaltEmail"         => "",
-                "OPvalALPHparentName"       => "",
-                "RQvalALPHemergencyContact" => "",
-                "RQvalPHONemergencyPhone"   => "",
-                "OPvalALPHnotes"            => ""
+                "RQvalALPHfirstName"            => $regNfo['firstName'],
+                "RQvalALPHlastName"             => $regNfo['lastName'],
+                "RQvalDATEbirthDate"            => "",
+                "RQvalALPHgender"               => "",
+                "RQvalALPHaddress"              => "",
+                "OPvalALPHaddress2"             => "",
+                "RQvalALPHcity"                 => "",
+                "RQvalALPHprovince"             => "ON",
+                "RQvalPOSTpostalCode"           => "",
+                "RQvalPHONphoneNumber"          => "",
+                "RQvalMAILemail"                => $regNfo['email'],
+                "OPvalMAILaltEmail"             => "",
+                "OPvalALPHparentName"           => "",
+                "RQvalALPHemergencyContact"     => "",
+                "RQvalPHONemergencyPhone"       => "",
+                "RQvalALPHhandedness"           => "",
+                "OPvalALPHnotes"                => ""
                 ); 
                 include_once __DIR__ ."/registrationFormFields.php";
                 global $quipp;
