@@ -41,7 +41,7 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
         <li>Submit your payment on or before '.date('F j, Y', strtotime('+7 days')).' by one of the following methods:
             <ol>
             <li>Mail to: 1037 Viscount Road, London, ON N6K 1H5</li>
-            <li>Deliver to: 1037 Viscount Road, London, ON</li>
+            <li>Deliver to: 1037 Viscount Road, London, ON <strong>drop in mailbox only please</strong></li>
             <li>Drop off at practice: Thursdays 7:00pm - 9:00pm, Sundays 9:00am - 12:00pm</li>
             </ol>
         </li>
@@ -100,7 +100,7 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
         <li>Submit your payment on or before <?php echo date('F j, Y', strtotime('+7 days'));?> by one of the following methods:
             <ol>
             <li>Mail to: 1037 Viscount Road, London, ON N6K 1H5</li>
-            <li>Deliver to: 1037 Viscount Road, London, ON</li>
+            <li>Deliver to: 1037 Viscount Road, London, ON <strong>Drop in mailbox only please</strong></li>
             <li>Drop off at practice: Thursdays 7:00pm - 9:00pm, Sundays 9:00am - 12:00pm</li>
             </ol>
         </li>
