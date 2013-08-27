@@ -87,7 +87,7 @@ if (!empty($sessionNfo)){
             "OPvalALPHcffNumber"          => $user->get_meta("CFF Number")
             ); 
             $feeTypes = array("annually" => "Annual (one-time)", "quarterly" => "Quarterly (4-times)", "monthly" => "Monthly");
-            $membershipTypes = array("Excellence", "Foundation","Transition");
+            $membershipTypes = array("Competitive", "Recreation");
             
             if ($regID == 0){
                 $regPost = array(

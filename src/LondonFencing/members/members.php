@@ -97,7 +97,7 @@ class members {
                 
                     $membershipType = "--";
                     $mRes = $this->_db->query(sprintf(
-                            "SELECT `membershipType` FROM `tblMembersRegistration` WHERE `userID` = %d ORDER BY `itemID` LIMIT 1",
+                            "SELECT `membershipType` FROM `tblMembersRegistration` WHERE `userID` = %d ORDER BY `itemID` DESC LIMIT 1",
                             trim($row['userID'])
                     ));
                     if ($this->_db->valid($mRes) && $mRes->num_rows == 1){
@@ -105,11 +105,11 @@ class members {
                         $membershipType = $mem["membershipType"];
                     }
                 $members[trim($info[2])] = array(
-                    "id"                    => trim($row['userID']),
-                    "name"              => trim($info[0])." ".trim($info[1]),
-                    "status"             => trim($row['sysStatus']),
-                    "level"                => "advanced",
-                    "parent"             => (isset($info[3])? trim($info[3]) : ''),
+                    "id"            => trim($row['userID']),
+                    "name"          => trim($info[0])." ".trim($info[1]),
+                    "status"        => trim($row['sysStatus']),
+                    "level"         => "advanced",
+                    "parent"        => (isset($info[3])? trim($info[3]) : ''),
                     "membership"    => $membershipType,
                     "inputName"     => 'aList[]'
                 );

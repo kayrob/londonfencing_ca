@@ -32,7 +32,7 @@ if ($hasPermission) {
 
     $provs = array("AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT");
     $gender = array("F" => "Female", "M" => "Male");
-    $payOpts = array("monthly" => "Monthly", "drop-in" => "Drop-In", "card" => "Session Card");
+    $payOpts = array("monthly" => "Monthly", "drop-in" => "Drop-In", "card" => "Session Card", "OFA" => "OFA");
     $handedness = array("Left", "Right");
     //editable fields
     $fields[] = array(

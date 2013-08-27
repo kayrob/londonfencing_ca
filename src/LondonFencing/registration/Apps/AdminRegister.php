@@ -189,8 +189,8 @@ class AdminRegister {
                     $cols .= "`" . $key ."` ,";
                     $vals .= "'". addslashes($val) ."', ";
                 }
-                $this->_db->query(sprintf("INSERT INTO `tblIntermediateRegistration` (%s `beginnerID`,`sysDateCreated`, `sysStatus`, `sysOpen`, `sessionID`) 
-                    VALUES (%s %d, NOW(), 'active', '1', 'I')",
+                $this->_db->query(sprintf("INSERT INTO `tblIntermediateRegistration` (%s `beginnerID`,`sysDateCreated`, `sysStatus`, `sysOpen`, `sessionID`, `membershipType`) 
+                    VALUES (%s %d, NOW(), 'active', '1', 'I', 'recreation')",
                         $cols,
                         $vals,
                         (int)$beginnerID

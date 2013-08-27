@@ -7,6 +7,7 @@ if (isset($user->id) && isset($regID) && (int)$regID > 0 && isset($reg) && $reg 
     ));
     
     if ($sessRes->num_rows == 1){
+        
    
         $sessionSaved = $db->fetch_assoc($sessRes);
         $address = $user->get_meta("Address").", ".$user->get_meta("City")." ".$provID[$user->get_meta("Province")].", ".$user->get_meta("Postal Code");
@@ -53,7 +54,11 @@ if (isset($user->id) && isset($regID) && (int)$regID > 0 && isset($reg) && $reg 
     </ol>';
         $body .= '<p>&nbsp;</p><p>Come dressed to move! All fencers are required to wear:</p>';
         $body .= '<ol><li>Athletic shoes with non-marking soles</li><li>Track pants (no shorts, jeans, khakis)</li></ol>';
-
+        
+        if ($sessionSaved["membershipType"] == "Recreation"){
+            $body .= "<p><strong>RECREATION MEMBER: </p>Please bring the $20.00 OFA Fee with your registration fees and signed waiver</p>";
+        }
+        
         $emailBody = str_replace('%SERVERNAME%',$_SERVER['SERVER_NAME'],str_replace('%BODY%',$body,str_replace('%TITLE%',$title,$emailTemplate)));
         $subject = "London Fencing Session Registration";
         $from = Quipp()->config('mailer.from_email');
@@ -84,6 +89,15 @@ if (isset($user->id) && isset($regID) && (int)$regID > 0 && isset($reg) && $reg 
     <h3>Come dressed to move! All fencers are required to wear:</h3>
     <ol><li>Athletic shoes with non-marking soles</li><li>Track pants (no shorts, jeans, khakis)</li></ol>
     <p>&nbsp;</p>
+<?php
+    if ($sessionSaved["membershipType"] == "Recreation"){
+?> 
+        <h3>Recreation Member</h3>
+        <p>Please bring the $20.00 OFA Fee with your registration fees and signed waiver.</p>
+        <p>&nbsp;</p>
+<?php
+    }
+?>
     <p>You will receive an email at the address you provided along with the information you submitted and a link to the printable version of this form</p>
     <p><a href="/club-consent/<?php echo $sessionNfo['itemID'];?>/<?php echo $regKey;?>" class="btnStyle" target="_blank">Print Form</a></p>
 </div>

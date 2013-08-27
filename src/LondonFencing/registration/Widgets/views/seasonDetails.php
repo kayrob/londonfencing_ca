@@ -8,6 +8,9 @@ $reg = new Reg\registration($db);
 $sessionNfo = $reg->getAdvancedSeason();
 ?>
 <div id="regSideNav">
+<?php
+    if (!empty($sessionNfo)){
+?>
     <div class="blankMainHeader"><h2>Season: <?php echo date('Y', $sessionNfo['seasonStart']) . "-" . date('Y', $sessionNfo['seasonEnd']); ?></h2></div>
     <ul>
         <li><span>Start Date</span><br /><?php echo date('M j, Y', $sessionNfo['seasonStart']); ?></li>
@@ -18,6 +21,12 @@ $sessionNfo = $reg->getAdvancedSeason();
             Monthly:&nbsp;&nbsp;&nbsp;&nbsp;<?php echo sprintf('$%001.2f', trim($sessionNfo['monthlyFee'])); ?><br />
         </li>
     </ul>
+<?php
+    }
+    else{
+        echo "<p>Registration Information Coming Soon</p>";
+    }
+   ?>
 </div>
 <p style="margin-top: 30px">
     <?php
