@@ -40,6 +40,9 @@ if (isset($regKey) && isset($message) && isset($reg) && $reg instanceof LondonFe
         $body .= '<p>&nbsp;</p><p>Come dressed to move! All fencers are required to wear:</p>';
         $body .= '<ol><li>Athletic shoes with non-marking soles</li><li>Track pants (no shorts, jeans, khakis)</li></ol>';
         $body .= '<p>All other fencing equipment will be provided by the Club</p>';
+        $body .= '<p>&nbsp;</p>';
+        $body .= '<p><strong>Ontario Fencing Association (OFA) Fee:</strong> All fencers are required to register annually with the OFA and pay a Recreational Membership fee of $20.00<br />
+            Please bring this fee with you when you submit your signed waiver form.</p>';
 
         $emailBody = str_replace('%SERVERNAME%',$_SERVER['SERVER_NAME'],str_replace('%BODY%',$body,str_replace('%TITLE%',$title,$emailTemplate)));
         $subject = "London Fencing ".ucwords($sessionSaved['level'])." Session Registration";
@@ -84,5 +87,9 @@ if (isset($regKey) && isset($message) && isset($reg) && $reg instanceof LondonFe
     <p>All other fencing equipment will be provided by the Club</p>
     <p>&nbsp;</p>
     <p>You will receive an email at the address you provided along with the information you submitted and a link to the printable version of this form</p>
+    <h3><strong><a href="http://fencingontario.ca/membership/" target="_blank">Ontario Fencing Association (OFA) Fee:</a></h3>
+    <p>All fencers are required to register annually with the OFA and pay a Recreational Membership fee of $20.00<br />
+            Please bring this fee with you when you submit your signed waiver form.</p>
+    <p>&nbsp;</p>
     <p><a href="/print-reg/I/<?php echo $regKey;?>" class="btnStyle" target="_blank">Print Form</a></p>
 </div>
