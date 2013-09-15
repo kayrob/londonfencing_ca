@@ -21,12 +21,12 @@ class notificationManager{
             $this->_db = $db;
             $this->mailer = new PHPMailer\PHPMailer();
             $this->mailer->Host = "localhost";
-	   /* $this->mailer->CharSet="UTF-8"
+	    $this->mailer->CharSet="UTF-8";
             $this->mailer->Port  = 25;
             $this->mailer->SMTPAuth = true;
             $this->mailer->Username = Quipp()->config('mailer.from_email');
             $this->mailer->Password = Quipp()->config('mailer.password');
-            $this->mailer->IsSMTP();*/
+            $this->mailer->IsSMTP();
             $this->_from = Quipp()->config('mailer.from_email');
         }
         else{
