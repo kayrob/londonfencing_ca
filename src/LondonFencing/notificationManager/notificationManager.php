@@ -41,7 +41,7 @@ class notificationManager{
      */
     protected function sendMailSingle($to, $body){
         $this->mailer->addAddress($to);
-        $this->mailer->Body = str_replace("\'", "'",$body);
+        $this->mailer->Body = str_replace("\"", "", str_replace("\'", "'",$body));
         if (!$this->mailer->Send()){
             $this->errs[] = $to;
         }
@@ -53,7 +53,7 @@ class notificationManager{
      * @param string $body 
      */
     protected function sendMailBatch($body){
-        $this->mailer->Body = str_replace("\'", "'",$body);
+        $this->mailer->Body = str_replace("\"", "", str_replace("\'", "'",$body));
         if (!$this->mailer->Send()){
             $this->errs[] = $this->mailer->ErrorInfo;
         }
