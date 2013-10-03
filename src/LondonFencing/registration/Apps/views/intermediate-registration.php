@@ -602,7 +602,7 @@ if ($hasPermission) {
             $formBuffer .=  '<table id="payments">';
             $formBuffer .= '<tr><td width="30%"><label for="paymentDate">New Payment Date</label></td><td><input type="text" name="payment[]" id="paymentDate" class="uniform datepicker" style="width:300px" /></td></tr>';
             $formBuffer .= '<tr><td><label for="paymentAmount">New Payment Amount</label></td><td><input type="text" name="payment[]" id="paymentAmount" class="uniform" style="width:300px" /></td></tr>';
-            $formBuffer .= '<tr><td><label for="paymentType">New Payment Type</label></td><td><select name="payment[]" id="paymentType"><option value="monthly">Monthly</option><option value="card">Session Card</option><option value="drop-in">Drop-In</option></select></td></tr>';
+            $formBuffer .= '<tr><td><label for="paymentType">New Payment Type</label></td><td><select name="payment[]" id="paymentType"><option value="monthly">Monthly</option><option value="card">Session Card</option><option value="drop-in">Drop-In</option><option value="OFA">OFA</option></select></td></tr>';
             $formBuffer .= '</table><p>&nbsp;</p><table id="history"><tr><td colspan="2"><strong>Payment History</strong></td></tr>';
             if (!empty($payments)){
                 foreach($payments as $pID => $nfo){

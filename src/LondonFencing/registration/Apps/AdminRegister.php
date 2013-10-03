@@ -111,7 +111,7 @@ class AdminRegister {
 
     public function validatePayments($paymentDate, $paymentAmount, $paymentType) {
         if ((int) strtotime($paymentDate) > 0 && preg_match('%^\d+(\.\d{2})?$%', $paymentAmount, $matches) 
-                && preg_match('%^(monthly|card|drop-in|cash)$%',$paymentType, $matchT)) {
+                && preg_match('%^(monthly|card|drop-in|cash|OFA)$%',$paymentType, $matchT)) {
             return true;
         } else {
             return false;
