@@ -42,6 +42,7 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
     /** have to return this as a merge-able array b/c of the use of group concat*/
 
     protected function getFoundationsSysMembers($rangeStart, $rangeEnd){
+        $membershipType = "recreation";
         $members = array();
         $qry = sprintf("SELECT v.`userID`, group_concat(v.`value` ORDER BY myOrder ASC) as data, u.`sysStatus` 
         FROM `sysUGFValues` AS v 
@@ -49,19 +50,22 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
         INNER JOIN `sysUGFields` AS f ON v.`fieldID` = f.`itemID`
         INNER JOIN `sysUGLinks` AS gl ON v.`userID` =gl.`userID`
         INNER JOIN `sysUGroups` AS g ON gl.`groupID` = g.`itemID`
-        INNER JOIN `tblMembersRegistration` AS mr ON v.`userID` = mr.`userID` 
+        INNER JOIN `tblMembersRegistration` AS mr ON v.`userID` = mr.`userID`
         WHERE u.`sysOpen` ='1' AND g.`nameSystem` = 'publicusers' 
         AND f.`slug` IN ('email','lastName','firstName','gender','birthdate','address','address2','city','province','postalCode','phoneNumber') 
-        AND mr.`sysStatus` = 'active' AND mr.`membershipType` = 'Foundation' AND UNIX_TIMESTAMP(mr.`sysDateCreated`) >= %d 
+        AND mr.`sysStatus` = 'active' AND mr.`membershipType` = '%s' AND UNIX_TIMESTAMP(mr.`sysDateCreated`) >= %d 
         AND UNIX_TIMESTAMP(mr.`sysDateCreated`) <= %d
         GROUP BY v.`userID`", 
-            $rangeStart,
+                $membershipType,
+                $rangeStart,
                 $rangeEnd
                 );
         $res = $this->_db->query($qry);
         if ($res->num_rows > 0){
             while($row = $this->_db->fetch_assoc($res)){
                 $data = explode(",",$row["data"]);
+                $postal = str_replace(" ", "", trim($data[9]));
+                $phone = preg_replace("%[^\d]*%", "", trim($data[10]));
                 $members[] = array(
                     "email"         => trim($data[4]),
                     "lastName"      => trim($data[1]),
@@ -72,8 +76,8 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
                     "address2"      => trim($data[6]),
                     "city"          => trim($data[7]),
                     "province"      => $this->_provs[trim($data[8])],
-                    "postalCode"    => trim($data[9]),
-                    "phoneNumber"   => trim($data[10])
+                    "postalCode"    => substr($postal, 0, 3) ." ". substr($postal, 3),
+                    "phoneNumber"   => substr($phone, 0, 3) ."-". substr($phone, 3, 3) ."-". substr($phone, 6)
                 );
             }
         }
@@ -99,7 +103,7 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
                 i.`city`, i.`province`, i.`postalCode`, i.`phoneNumber` 
                 FROM `tblIntermediateRegistration` AS i 
                 INNER JOIN `tblIntermediatePayments` AS ip ON i.`itemID` = ip.`registrationID` 
-                WHERE ip.`paymentDate` >= %d AND ip.`paymentDate` <= %d)",
+                WHERE ip.`paymentDate` >= %d AND ip.`paymentDate` <= %d AND ip.`paymentType` = 'ofa')",
                     $rangeStart,
                     $rangeEnd
                     );
