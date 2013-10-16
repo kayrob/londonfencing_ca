@@ -11,9 +11,13 @@ if (isset($_POST['submitFoundation']) && isset($_POST['foundationStart']) && iss
         if (!empty($members)){
 $csv = "CFF Licence,Lastname,Firstname,Email,Gender,Club,Club - 2,Year of Birth,Address,City,Province,Postal Code,Country,Phone,Language,Fencer,Booster,CFF license ( please check -$18. will be added)\n";
         foreach($members as $mInfo){
+                $address = (!empty($mInfo["address2"]) ? $mInfo['address2']."-".$mInfo['address'] : $mInfo['address']);
+                $postal = str_replace(" ", "", $mInfo['postalCode']);
+                $postal = substr($postal, 0, 3) ." ". substr($postal, 3);
+                $phone = preg_replace("%[^\d]%", "-", $mInfo['phoneNumber']);
                 $csv .= ",\"".$mInfo['lastName']."\",\"".$mInfo['firstName']."\",".$mInfo["email"].",".$mInfo['gender'].",LFC,,".date("Y",$mInfo["birthDate"]).",";
-                $csv .= "\"".(trim($mInfo['address2']) != "" ? $mInfo['address2']."-".$mInfo['address'] : $mInfo['address'])."\",";
-                $csv .= "\"".$mInfo['city']."\",".$mInfo['province'].",".$mInfo['postalCode'].",Canada,".$mInfo['phoneNumber'].",";
+                $csv .= "\"".trim($address, "-")."\",";
+                $csv .= "\"".$mInfo['city']."\",".$mInfo['province'].",".$postal.",Canada,".$phone.",";
                 $csv .= ",1,,\n";
             }
 header("Content-type: application/csv; charset=utf-8");

@@ -52,7 +52,7 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
         INNER JOIN `sysUGroups` AS g ON gl.`groupID` = g.`itemID`
         INNER JOIN `tblMembersRegistration` AS mr ON v.`userID` = mr.`userID`
         WHERE u.`sysOpen` ='1' AND g.`nameSystem` = 'publicusers' 
-        AND f.`slug` IN ('email','lastName','firstName','gender','birthdate','address','address2','city','province','postalCode','phoneNumber') 
+        AND f.`slug` IN ('email','lastName','firstName','gender','birthDate','address','address2','city','province','postalCode','phoneNumber') 
         AND mr.`sysStatus` = 'active' AND mr.`membershipType` = '%s' AND UNIX_TIMESTAMP(mr.`sysDateCreated`) >= %d 
         AND UNIX_TIMESTAMP(mr.`sysDateCreated`) <= %d
         GROUP BY v.`userID`", 
@@ -71,7 +71,7 @@ class reports extends \LondonFencing\notificationManager\notificationManager{
                     "lastName"      => trim($data[1]),
                     "firstName"     => trim($data[0]),
                     "gender"        => trim($data[3]),
-                    "birthDate"     => trim($data[2]),
+                    "birthDate"     => strtotime(trim($data[2])),
                     "address"       => trim($data[5]),
                     "address2"      => trim($data[6]),
                     "city"          => trim($data[7]),
