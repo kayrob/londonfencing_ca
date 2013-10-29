@@ -48,7 +48,8 @@ if (!empty($tourns)){
                 echo '<h4'.$h4Class.'>'.preg_replace('%\(.*\)%' , '', $tourn["title"]);
                 echo '<a href="'.$icsHREF.'" class="iconsM green"><img src="/themes/LondonFencing/img/plus.png" alt="add to calendar" title="Add to Calendar" width="12px; height="12px" /></a>';
                 if  (isset($tourn['link']) && $tourn['link'] !== false){
-                    echo '<a href="'.$tourn['link'].'" target="_blank" class="iconsM blue"><img src="/themes/LondonFencing/img/extLink.png" alt="more info" width="12px; height="12px" title="More Info" /></a>';
+                    $tournLink = preg_replace("%http(s)?:\/\/", "", $tourn["link"]);
+                    echo '<a href="http://'.$tournLink.'" target="_blank" class="iconsM blue"><img src="/themes/LondonFencing/img/extLink.png" alt="more info" width="12px; height="12px" title="More Info" /></a>';
                 }           
                 echo '</h4>';
                 echo '<p>';
