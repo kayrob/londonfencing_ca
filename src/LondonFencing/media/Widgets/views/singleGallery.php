@@ -24,11 +24,9 @@ if ($this instanceof Page && isset($props[0])){
             else{
                  echo '<li><a href="/gallery/'.$tagID.'">View All</a></li>';
             }
-            if ($a == 5){
+            $a++;
+            if ($a == 6){
                 break;
-            }
-            else{
-                $a++;
             }
         }
 ?>
@@ -38,7 +36,5 @@ if ($this instanceof Page && isset($props[0])){
     $quipp->js['footer'][] = "/src/LondonFencing/media/assets/js/media.js";
     $quipp->js['footer'][] = "/js/jquery.cycle.min.js";
     }
-?>
 
-<?php
 }
