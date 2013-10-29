@@ -603,8 +603,8 @@ ul.banner{margin-top: 310px}
 }
 .banner .next, .banner .prev {cursor: pointer}
 
-#intermediate #colA li:first-child, #intermediate #colA li:last-child, 
-#beginner #colA li:first-child, #beginner #colA li:last-child { display: none; }
+/**#intermediate #colA li:first-child, #intermediate #colA li:last-child, 
+##beginner #colA li:first-child, #beginner #colA li:last-child { display: none; }*/
 
 #intermediate #colA ul, #beginner #colA ul { padding-left: 70px; }
 
