@@ -606,7 +606,7 @@ ul.banner{margin-top: 310px}
 /**#intermediate #colA li:first-child, #intermediate #colA li:last-child, 
 ##beginner #colA li:first-child, #beginner #colA li:last-child { display: none; }*/
 
-#intermediate #colA ul, #beginner #colA ul, #advanced #colA ul { padding-left: 70px; }
+#intermediate #colA ul, #beginner #colA ul, #advanced #colA ul, #tournaments #colA ul { padding-left: 70px; }
 
 /* Home callouts -------------------------------------------------------------*/
 
