@@ -10,7 +10,7 @@ if (!empty($_POST) && isset($_POST["sub-contact-us"]) && validate_form($_POST)) 
 	}
 	$body .= $_POST['RQvalALPHName']."\n";
 	$body .= "Email: ".$_POST['RQvalMAILEmail_Address']."\n";
-	$body .= "Phone: ".$_POST['RQvalPHONPhone_Number'];
+	$body .= "Phone: ".$_POST['OPvalPHONPhone_Number'];
 	if (isset($_POST['OPvalNUMBExtension']) && $_POST['OPvalNUMBExtension'] != ''){
 	   $body .= ' ext. ' . make_numeric($_POST['OPvalNUMBExtension']);
         }
