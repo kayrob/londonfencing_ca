@@ -4,7 +4,9 @@ use LondonFencing\notificationManager as NOTE;
 
 $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
 require $root . '/inc/init.php';
-if ((isset($_POST['eList']) && is_array($_POST['eList'])) || (isset($_POST['aList']) && is_array($_POST['aList']))){
+if ((isset($_POST['eList']) && is_array($_POST['eList'])) || (isset($_POST['aList']) && is_array($_POST['aList']))
+        || isset($_POST['iList']) && is_array($_POST['iList'])
+        ){
     
     $meta['title'] = 'Emailer';
     $meta['title_append'] = ' &bull; Quipp CMS';
@@ -35,7 +37,7 @@ if ((isset($_POST['eList']) && is_array($_POST['eList'])) || (isset($_POST['aLis
             }
         }
     }
-    if (!empty($addresses) || !empty($a_addresses)){
+    if (!empty($addresses) || !empty($a_addresses) || !empty($i_addresses)){
         
         $placeHolders = array("%NAME%" => "Name of Email Recipient");
 
@@ -128,7 +130,7 @@ if ((isset($_POST['eList']) && is_array($_POST['eList'])) || (isset($_POST['aLis
         include $root. "/admin/templates/header.php";
         
         ?>
-        <h1>Emailer (* <?php echo (count($addresses) + count($a_addresses));?> Recipients)</h1>
+        <h1>Emailer (* <?php echo (count($addresses) + count($a_addresses) + count($i_addresses));?> Recipients)</h1>
         <p>This allows the ability to send pre-selected users an email from London Fencing Club.<br />Email will be sent from <strong><?php echo Quipp()->config('mailer.from_email');?></strong></p>
         <div class="boxStyle">
 	<div class="boxStyleContent">
@@ -222,6 +224,11 @@ if ((isset($_POST['eList']) && is_array($_POST['eList'])) || (isset($_POST['aLis
             if (!empty($a_addresses)){
                 foreach ($a_addresses as $aAddr){
                     $formBuffer .= "<input type=\"hidden\" name=\"aList[]\" id=\"aList_".$aAddr."\" value=\"".$aAddr."\" />";
+                }
+            }
+            if (!empty($i_addresses)){
+                foreach ($i_addresses as $iAddr){
+                    $formBuffer .= "<input type=\"hidden\" name=\"iList[]\" id=\"iList_".$iAddr."\" value=\"".$iAddr."\" />";
                 }
             }
             
