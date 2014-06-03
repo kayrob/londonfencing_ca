@@ -10,7 +10,7 @@ $tournaments = $tournObj->getUpcomingTournaments();
 $tourns = multi_array_subval_sort($tournaments,'tdate');
 ?>
 
-<section class="callout">
+<section class="callout" id="tourneyWidget">
     <h2>Tournaments</h2>
 <?php
 if (!empty($tourns)){
@@ -28,19 +28,21 @@ if (!empty($tourns)){
                 $icsHREF = ($tourn["eID"] !== false) ? "/src/LondonFencing/calendar/assets/rss/icalEvents.php?event=".$tourn["eID"]:"/src/LondonFencing/StaticPage/ics.php?event=".urlencode($tourn["title"])."&start=".$tourn['tdate']."&end=".$tourn['tend'].'&location='.$location;
                 $h4Class = ($p > 0) ?' class="bordered"' : '';
                 echo '<h4'.$h4Class.'>'.preg_replace('%\(.*\)%' , '', $tourn["title"]).'</h4>';
-                echo '<p>';
-                echo '<a href="'.$icsHREF.'" class="icons green"><img src="/themes/LondonFencing/img/plus.png" alt="add to calendar" title="Add to Calendar" width="20px; height="20px" /></a>';
-                if  (isset($tourn['link']) && $tourn['link'] !== false){
-                    echo '<a href="'.$tourn['link'].'" target="_blank" class="icons blue"><img src="/themes/LondonFencing/img/extLink.png" alt="more info" width="20px; height="20px" title="More Info" /></a>';
-                }
-                echo'<span class="lowlight">Date:</span>&nbsp;&nbsp;&nbsp;&nbsp;'.$date.'<br />';
+                echo '<ul>';
+                echo'<li><span class="lowlight">Date:</span>&nbsp;&nbsp;&nbsp;&nbsp;'.$date.'<br />';
                 if ($location != ''){
                     echo '<span class="lowlight">Where:</span>&nbsp;&nbsp;'.$location.'<br />';
                 }
                 else{
                     echo '<span class="lowlight">&nbsp;</span>&nbsp;&nbsp;<br />';
                 }
-                echo '</p>';
+                echo '</li>';
+                echo '<li>';
+                if  (isset($tourn['link']) && $tourn['link'] !== false){
+                    echo '<a href="'.$tourn['link'].'" target="_blank" class="icons blue"><i class="icon-link" title="More Info"></i></a>';
+                }
+                echo '<a href="'.$icsHREF.'" class="icons green"><i class="icon-plus" title="Add to Calendar"></i></a></li>';
+                echo '</ul>';
                 $p++;
                 if ($p == 2){
                     break;

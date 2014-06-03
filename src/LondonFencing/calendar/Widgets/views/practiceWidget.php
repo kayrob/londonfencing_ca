@@ -40,12 +40,13 @@ if ($this instanceof Page && isset($db)){
            $map = "http://maps.google.com/maps/api/staticmap?zoom=15&markers=".$mapLoc."&size=600x400&sensor=false";
            $h4Class = ($p > 0) ?' class="bordered"' : '';
            echo '<h4'.$h4Class.'>' .$pData['type'].'</h4>';
-           echo '<p>';
-           echo '<a href="/src/LondonFencing/calendar/assets/rss/icalEvents.php?event='.$pData["eID"].'" class="icons green"><img src="/themes/LondonFencing/img/plus.png" alt="add to calendar" title="Add to Calendar" width="20px; height="20px" /></a>';
-           echo '<a href="#mapit_'.$pData["eID"].'" class="fbMap icons blue"><img src="/themes/LondonFencing/img/map.png" alt="view map" width="20px; height="20px" title="View Map" /></a>';    
-           echo'<span class="lowlight">Time:</span>&nbsp;&nbsp;'.date('g:i a',$pData['start']).' to  '.date('g:i a',$pData['end']).'<br />';
+           echo '<ul>';
+           echo'<li><span class="lowlight">Time:</span>&nbsp;&nbsp;'.date('g:i a',$pData['start']).' to  '.date('g:i a',$pData['end']).'<br />';
            echo '<span class="lowlight">Date:</span>&nbsp;&nbsp;&nbsp;'.date('D M j, Y',$pData['start']).'<br />';
-           echo '<span class="lowlight">Where:</span>&nbsp;'.stripslashes($pData['location']).'</p>';
+           echo '<span class="lowlight">Where:</span>&nbsp;'.stripslashes($pData['location']).'</li>';
+           echo '<li><a href="#mapit_'.$pData["eID"].'" class="fbMap icons blue"><i class="icon-location" title="View Map"></i></a>';
+           echo '<a href="/src/LondonFencing/calendar/assets/rss/icalEvents.php?event='.$pData["eID"].'" class="icons green"><i class="icon-plus" title="Add to Calendar"></i></a></li>';    
+           echo '</ul>';
            echo '<div style="display:none"><img src="'.$map.'" id="mapit_'.$pData["eID"].'" /></div>';
            $p++;
         }

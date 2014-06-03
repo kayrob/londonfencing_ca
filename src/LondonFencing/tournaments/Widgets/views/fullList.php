@@ -45,14 +45,9 @@ if (!empty($tourns)){
                 else{
                     $border = true;
                 }
-                echo '<h4'.$h4Class.'>'.preg_replace('%\(.*\)%' , '', $tourn["title"]);
-                echo '<a href="'.$icsHREF.'" class="iconsM green"><img src="/themes/LondonFencing/img/plus.png" alt="add to calendar" title="Add to Calendar" width="12px; height="12px" /></a>';
-                if  (isset($tourn['link']) && $tourn['link'] !== false){
-                    $tournLink = preg_replace("%http(s)?:\/\/%", "", $tourn["link"]);
-                    echo '<a href="http://'.$tournLink.'" target="_blank" class="iconsM blue"><img src="/themes/LondonFencing/img/extLink.png" alt="more info" width="12px; height="12px" title="More Info" /></a>';
-                }           
-                echo '</h4>';
-                echo '<p>';
+                echo '<h4'.$h4Class.'>'.preg_replace('%\(.*\)%' , '', $tourn["title"]).'</h4>';
+                echo '<ul>';
+                echo '<li>';
                 echo'<span class="lowlight">Date:</span>&nbsp;&nbsp;&nbsp;&nbsp;'.$date.'<br />';
                 if ($location != ''){
                     echo '<span class="lowlight">Where:</span>&nbsp;&nbsp;'.$location.'<br />';
@@ -60,7 +55,14 @@ if (!empty($tourns)){
                 if (!empty($tourn['about'])){
                     echo '<span class="lowlight">About:</span>&nbsp;&nbsp;'.str_replace('<br />',', ',nl2br($tourn['about'])).'<br />';
                 }
-                echo '</p>';
+                echo '</li><li>';
+                if  (isset($tourn['link']) && $tourn['link'] !== false){
+                    $tournLink = preg_replace("%http(s)?:\/\/%", "", $tourn["link"]);
+                    echo '<a href="http://'.$tournLink.'" target="_blank" class="icons blue"><i class="icon-link" title="More Info"></i></a>';
+                }
+                echo '<a href="'.$icsHREF.'" class="icons green"><i class="icon-plus" title="Add to Calendar"></i></a>';
+                echo '</li>';
+                echo '</ul>';
             }
             $p++;
             if ($p == $end){

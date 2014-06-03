@@ -22,8 +22,8 @@ if (!empty($tourns)){
             if ($tourn['tdate'] >= date('U') && $monthYr != date('Y-m', $tourn['tdate'])){
                 echo '<li>
                     <a href="/'.$_GET['p'].'&filter='.mktime(0,0,0, date('m',$tourn['tdate']),1, date('Y',$tourn['tdate'])).'">'.date('F Y', $tourn['tdate']).'</a>
-                    <a class="iconsM gray" href="/'.$_GET['p'].'&filter='.mktime(0,0,0, date('m',$tourn['tdate']),1, date('Y',$tourn['tdate'])).'">
-                        <img src="/themes/LondonFencing/img/arrowR.png" alt="" width="15px" height="15px" /></a>
+                    <a class="icons gray" href="/'.$_GET['p'].'&filter='.mktime(0,0,0, date('m',$tourn['tdate']),1, date('Y',$tourn['tdate'])).'">
+                        <i class="icon-arrow-right"></i></a>
                         </li>';
                 $monthYr = date('Y-m', $tourn['tdate']);
             }
