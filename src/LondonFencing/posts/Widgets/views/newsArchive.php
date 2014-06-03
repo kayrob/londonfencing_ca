@@ -19,7 +19,7 @@ if (isset($db) && $this INSTANCEOF Quipp){
     if (isset($recent) && $recent !== false){
 ?>
     <div class="archive-widget" id="news-archive-recent">
-    <div class="blankMainHeader"><h2>Recent News Posts:</h2></div>
+    <div class="blankMainHeader"><h2>Recent News:</h2></div>
     <div id="news-achive" class="news-archive">
     <ul>
 <?php
