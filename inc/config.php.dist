@@ -13,6 +13,7 @@
 
       , 'site_psr' => 'LondonFencing'
       , 'theme'    => 'LondonFencing'
+      , 'site_name'=> 'London Fencing Club'
 
       , 'modules' => array(
           'AccountManagement' => '\\Quipp\\Module\\AccountManagement\\Module'

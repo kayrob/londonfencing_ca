@@ -3,7 +3,7 @@
 
     $DRAGGIN = array(); // @cBq, @deprecated
 	
-	require __DIR__ . '/quipp/common.php';
+    require __DIR__ . '/quipp/common.php';
 	
     $quipp = new Quipp();
     $quipp->js = array(
