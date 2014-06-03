@@ -1,7 +1,6 @@
 <?php
+    require __DIR__ . '/inc/init.php';
     try {
-        require __DIR__ . '/inc/init.php';
-
         $page = new Page($_GET['p']);
         Quipp()->addMethod('page', function() use ($page) { return $page; });
 
@@ -18,6 +17,6 @@
             require_once $page->template;
         }
     } catch (\Quipp\HTTP\Exception $e) {
-		header("{$_SERVER["SERVER_PROTOCOL"]} {$e->getCode()} . {$e->getMessage()}");
-		require_once $_SERVER['DOCUMENT_ROOT'] . '/error.php';
+	header("{$_SERVER["SERVER_PROTOCOL"]} {$e->getCode()} . {$e->getMessage()}");
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/error.php';
     }
