@@ -6,7 +6,7 @@
         </div>
         <div class="colF">
             <ul>
-                <li>Copyright 2012 &#8226; London Fencing Club &#8226; London, Ontario, Canada</li>
+                <li>Copyright <?php echo date("Y");?> &#8226; London Fencing Club &#8226; London, Ontario, Canada</li>
                 <li><a href="http://www.fencingontario.ca" target="_blank"><img src="/themes/LondonFencing/img/ofa-trans.png" alt="OFA" width="38px" height="38px"/></a><a href="http://www.fencing.ca" target="_blank"><img src="/themes/LondonFencing/img/cff.png" alt="CFF" width="24px" height="38px"/></a></li>
             </ul>
         </div>

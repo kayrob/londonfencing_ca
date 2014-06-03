@@ -529,8 +529,12 @@ nav ul li a {
     margin-right: 5%;
     text-align:right;
 }
+.colG{
+    width: 50%;
+    margin: 0 auto;
+}
 
-.four-column .main,  .two-column .main { 
+.four-column .main,  .two-column .main, .error .main { 
     clear: both; 
     float: left;
     display: block; 
@@ -553,7 +557,9 @@ nav ul li a {
     background: url(/themes/LondonFencing/img/tileColC.png) repeat-y #FFF;
     background-position-x: 65%;
 }
-
+.error .main{
+    margin-top: 0; 
+}
 /* section { margin-top: 30px; } */
    
 /* =============================================================================
@@ -562,7 +568,7 @@ nav ul li a {
 
 /*Btn Style------------------------------------------------------------------ */   
 
-a.btnStyle, .btnStyle {
+a.btnStyle, .btnStyle, #goog-wm-sb {
     text-align: center;
     background: #4a762b; 
     border: none;
@@ -580,11 +586,11 @@ a.btnStyle, .btnStyle {
     line-height: normal;
 }
 
-a:hover.btnStyle, .btnStyle:hover {
+a:hover.btnStyle, .btnStyle:hover, #goog-wm-sb:hover {
     background: #569c1c;
 }
 
-a:active.btnStyle {
+a:active.btnStyle #goog-wm-sb:active {
     -moz-box-shadow: 0 0 2px rgba(0,0,0,0.12);
     -webkit-box-shadow: 0 0 2px rgba(0,0,0,0.12);
     box-shadow: 0 0 2px rgba(0,0,0,0.12);
@@ -1033,7 +1039,32 @@ footer ul li {
 #footerTag { float: right; }
 footer a{color: #FFF}
 
-    
+/* ===================================================== 
+    ERROR PAGE
+========================================================
+*/
+.error h2{
+    font-family: "Playfair Display", serif;
+    color: #2e567f;
+    font-size: 48px;
+    letter-spacing: 0.3rem;
+    text-shadow: 2px 2px #dddddd;
+    width: 100%;
+    background: url('/themes/LondonFencing/img/title_bg.gif') 100% 50% no-repeat;
+}
+.error #goog-fixurl ul{
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+.error #goog-fixurl #goog-wm-sb{
+    border-radius: 0 3px 3px 0;
+}
+.error #goog-fixurl #goog-wm-qt{
+    border-radius: 3px 0 0 3px;
+    padding: 7px;
+}
+
 /* ==|== media queries ======================================================
    PLACEHOLDER Media Queries for Responsive Design.
    These override the primary ('mobile first') styles
@@ -1124,6 +1155,9 @@ footer a{color: #FFF}
     #jPanelMenu-menu{
         overflow-y: auto !important;
     }
+    .error .colG{
+        width: 90%;
+    }
 }
 @media only screen and (max-width: 760px){
     .four-column .main .colC, .four-column .main .colD, .two-column .main .colC, .two-column .main .colB{
@@ -1169,13 +1203,25 @@ footer a{color: #FFF}
     #homeGallery .primeImg, #homeGallery .primeImg img {
         max-height: 175px;
     }
+    .error h2{
+        background-position-x: 110%;
+    }
+    .error #goog-fixurl #goog-wm-qt{
+        width: 95%;
+    }
+    .error #goog-fixurl #goog-wm-qt, .error #goog-fixurl #goog-wm-sb{
+        border-radius: 3px;
+    }
 }
 @media only screen and (max-width: 440px){
     #homeGallery .primeImg, #homeGallery .primeImg img{
         max-height: 135px;
     }
-    .callout h2 {
+    .callout h2{
         background-position-x: 180%;
+    }
+    .error h2{
+        background-position-x: 200%;
     }
     #ul-h1 li.li-h1 {
         font-size: 20px;
@@ -1228,6 +1274,9 @@ footer a{color: #FFF}
     #homeGallery .primeImg, #homeGallery .primeImg img {
         max-height: 118px;
     }
+    .error h2{
+        background-position-x: 430%;
+    }
 }
 @media only screen and (max-width: 280px){
     #ul-h1 li.li-h1{
@@ -1239,6 +1288,9 @@ footer a{color: #FFF}
     }
     .callout h2 {
         background-position-x: -650%;
+    }
+    .error h2{
+        background: none;
     }
 }
 /* ==|== non-semantic helper classes ========================================
