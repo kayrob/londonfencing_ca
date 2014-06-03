@@ -1,25 +1,25 @@
-<div class="clearfix"></div>
 </div> <!--! end of #content -->
 
     <footer>
+        <div class="colE">
         <?php print $nav->build_nav($nav->get_nav_items_under_bucket('footer'), $slug, true, false);  ?>
-        <div>Copyright 2012 &bull; London Fencing Club &bull;
-        London, Ontario, Canada&nbsp;
-        <a href="http://www.fencingontario.ca" target="_blank"><img src="/themes/LondonFencing/img/ofa-trans.png" alt="OFA" width="38px" height="38px"/></a>&nbsp;
-        <a href="http://www.fencing.ca" target="_blank"><img src="/themes/LondonFencing/img/cff.png" alt="CFF" width="24px" height="38px"/></a>
         </div>
-    	<div class="clearfix"></div>
+        <div class="colF">
+            <ul>
+                <li>Copyright 2012 &#8226; London Fencing Club &#8226; London, Ontario, Canada</li>
+                <li><a href="http://www.fencingontario.ca" target="_blank"><img src="/themes/LondonFencing/img/ofa-trans.png" alt="OFA" width="38px" height="38px"/></a><a href="http://www.fencing.ca" target="_blank"><img src="/themes/LondonFencing/img/cff.png" alt="CFF" width="24px" height="38px"/></a></li>
+            </ul>
+        </div>
     </footer>
     
-    <div class="clearfix"></div>
-    
 </div> <!--! end of #container --> 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-  <script>window.jQuery || document.write('<script src="/js/jquery-1.6.4.min.js"><\/script>')</script>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script>window.jQuery || document.write('<script src="/js/jquery-1.11.min.js"><\/script>')</script>
   <script src="/js/jquery-ui/jquery-ui-1.8.16.custom.min.js"></script>
   <script src="/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
   <script src="/js/jquery.easing-1.3.pack.js"></script>
   <script src="/js/jquery.hoverIntent.min.js"></script>
+  <script src="/js/jpanelmenu.js"></script>
 <?php
     if(isset($quipp->js['footer']) && is_array($quipp->js['footer'])) {
         foreach($quipp->js['footer'] as $val) {

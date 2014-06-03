@@ -20,6 +20,29 @@ audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; }
 audio:not([controls]) { display: none; }
 [hidden] { display: none; }
 
+@font-face {
+	font-family: 'londonfencing';
+	src:url('fonts/londonfencing.eot?dt2kru');
+	src:url('fonts/londonfencing.eot?#iefixdt2kru') format('embedded-opentype'),
+		url('fonts/londonfencing.woff?dt2kru') format('woff'),
+		url('fonts/londonfencing.ttf?dt2kru') format('truetype'),
+		url('fonts/londonfencing.svg?dt2kru#londonfencing') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'londonfencing';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+        font-size: 28px;
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
 
 /* =============================================================================
    Base
@@ -35,7 +58,7 @@ html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-
 
 body { margin: 0; font-size: 1em; line-height: 1.4; background-image:url('/themes/LondonFencing/img/pattern.jpg');}
 
-body, button, input, select, textarea { font-family: 'Droid Sans', sans-serif; color: #222; }
+body, button, input, select, textarea { font-family: 'Open Sans', sans-serif; color: #222; }
 
 /*
  * Remove text-shadow in selection highlight: h5bp.com/i
@@ -134,7 +157,9 @@ form { margin: 0; }
 fieldset { border: 0; margin: 0; padding: 0; }
 
 /* Indicate that 'label' will shift focus to the associated form element */
-label { cursor: pointer; }
+label { 
+    cursor: pointer; 
+}
 
 /*
  * 1. Correct color not inheriting in IE6/7/8/9
@@ -229,26 +254,20 @@ td { vertical-align: top; }
    ========================================================================== */
 
 body {
-    font-family: 'Droid Sans', 'Arial', sans-serif;
+    font-family: 'Open Sans', 'Arial', sans-serif;
     font-size: 13px;
     line-height: 24px;
     position: relative;
 }
 
 #container {
-    margin: 0 auto;
+    margin: 124px auto 0 auto;
     position: relative; 
-    z-index: 3; 
-    clear: both;
     padding: 0;
-    z-index: 2;
 }
 
 #content {
-    float: left;
-    clear: both;
-    z-index: 2;
-
+    width: 100%;
 }
 
 .two-column #content{
@@ -258,14 +277,13 @@ body {
 }
 
 h1 { font-size: 28px; margin-top: 0; color:#fff }
-header h1 { margin-top: 20px; padding-bottom: 10px; }
 h2 { font-size: 24px; color: #555;text-transform: uppercase; }
 h3 { font-size: 18px; }
 h4 { font-size: 15px; color: #707070; }
 h5 { font-size: 13px; }
 h6 { font-size: 11px; }
 
-h1, h2, h3 {font-weight: bold}
+h1, h2, h3 {font-weight: bold;}
 
 
 #twitter h6 { padding: 0 0 0 10px; }
@@ -275,38 +293,37 @@ h1, h2, h3 {font-weight: bold}
 
 /*h2 page title---------------------------------------------------------------- */  
  
-.two-column #colC .blankMainHeader { text-align: left; }
+.two-column .colC .blankMainHeader { text-align: left; }
 
-.two-column #colC .blankMainHeader{ 
+.two-column .colC .blankMainHeader{ 
 	position: relative;
 	background: #CCC;
 	margin: 28px 0 14px;
 	width: 100%;
 	height: 10px;
 }
-.two-column #colC .blankMainHeader h2 {
+.two-column .colC .blankMainHeader h2 {
 	float: left;
 	background: #FFF;
 	padding-right: 10px;
 	margin-top: -7px;
 }
-.four-column #colC .blankMainHeader,
-.four-column #colD .blankMainHeader,
-.four-column #colE .blankMainHeader, {
-	display: block;
-	width: 280px;
-	margin: 0 0 10px;
-}
-.two-column #colC h2 { 
+.four-column .colC .blankMainHeader,
+.four-column .colD .blankMainHeader,
+
+.two-column .colC h2 { 
     font-size: 20px; 
      background: #FFF;
     padding-right: 10px;
 }
-.two-column #colC h3 { 
+.two-column .colC h3 { 
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
-
+.two-column .wrapper{
+    width: 92%;
+    margin: 0 0 25px auto;
+}
 /*Paragraph------------------------------------------------------------------- */   
 
 p { margin: 10px 0; }
@@ -329,7 +346,7 @@ body, a:hover { color: #555; }
 
 nav a, #bannerContent h2, .boxStyle h2 { color: #fff; }
 a { color: #4A762B; text-decoration: none; border-bottom: 1px dashed #4A762B;}
-.main #colC .news-archive a, .main #colC .tourneysNav a, .pagination a, #colA a{border:none;}
+.main .colC .news-archive a, .main .colC .tourneysNav a, .pagination a, .colA a{border:none;}
 nav a:hover, nav .current a, footer a:hover { color: #ccc; text-decoration: none; border:none}
 
 #fancybox-close, #fancybox-left, #fancybox-right{
@@ -366,6 +383,12 @@ input[type="text"], input[type="email"], input[type="password"], textarea , sele
 }
 label { 
 	line-height: 24px;
+        float:left;
+        width: 135px;
+}
+textarea{
+    width: 90%;
+    max-width: 485px;
 }
 
 /* =============================================================================
@@ -373,46 +396,66 @@ label {
    ========================================================================== */
 
 header {
-    position: relative; 
-    text-align: center; 
-    padding: 10px 0 0 0;
-    z-index: 2;
+    position: fixed; 
+    padding: 0;
     background-color: rgba(74,118,43, 0.83);
     -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
-    border-left: 1px solid #DEDEDE;
-    border-right: 1px solid #DEDEDE;
+    height: 124px;
+    margin: 0;
+    top: 0;
+    width: 100%;
+    z-index: 20;
 } 
-#headerBg {
-	position: absolute;
-	height: 693px;
-	width: 100%;
-	top: 0;
-	z-index: 1;
+#ul-h1{
+    font-size: 28px;
+    width: 90%;
+    max-width: 1280px;
+    list-style:none;
+    color: #ffffff;
+    margin: 0 auto;
+    padding: 0;
+    height: 70px;
 }
-
+#ul-h1 li {
+    display: inline-block;
+    padding-top: 10px;
+    width: 25%;
+    text-align: left;
+    margin: 0;
+    padding-left: 0;
+}
+#ul-h1 li.li-h1{
+    text-align:center;
+    font-family: "Playfair Display", serif;
+    width: 47.9%;
+}
+#ul-h1 li#li-menu{
+    text-align:right;
+}
 nav {
     width: 100%;
-    clear: both;
     /*background: rgba(0,0,0,0.83);*/
     background: #222;
-    margin: 20px 0 0 0;
+    margin: 0 auto;
     text-transform: uppercase;
     font-weight: 300;
     color: #fff;
 }
-
+nav #momenu-logo{
+    display:none;
+}
 nav ul {
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
     text-align: center;
-    width: 100%;
+    width: 90%;
+    max-width: 1280px;
 }
 
 nav ul li {
     display: inline-block;
-    zoom:1; *display: inline;
     margin: 0;
     padding: 14px 28px;
     color: #fff;
@@ -430,57 +473,87 @@ nav ul li a {
     text-decoration: none;
     border:none;
 }
-
-#momenu{ display:none;cursor:pointer}
+.icon-menu:before{
+    content:"\e602";
+    color: #ffffff;
+}
+#momenu{ 
+    display:none;
+    cursor:pointer;
+}
 /* =============================================================================
    Templates
    ========================================================================== */   
    
-#colA, #colB, #colD { float: left; }
-#colC, #colE { float: right; }
-.four-column #colC { float: left; }
-
-.two-column #colB { width: 600px; margin-right: 25px; }
-
-.four-column #colA, .two-column #colA { 
-	width: 958px; 
-	border-left: 1px solid #dedede; 
-	border-right: 1px solid #dedede; 
-	border-bottom: 1px solid #dedede;
+.colA, .colB, .colD, .colC, .colE, .colF { float: left; }
+.four-column .colA, .two-column .colA { 
+    width: 100%;
+    max-width: 1280px;
+    border-bottom: 1px solid #dedede;
+    margin: 0 auto;
 }
-.four-column #colA{
+.four-column .colA{
     -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
+    background-color: rgba(255, 255, 255, 0.45);
 }
- .two-column #colA{    background-color:#fff;     }
-.four-column #colB { width: 100%; }
-.four-column #colC {width: 440px}
-.two-column #colC { 
-	width: 268px;
-	background:url(img/tileColC.png) repeat-y;
-	padding-left: 20px; 
+.two-column .colA{    
+    background-color:#fff;     
+    padding: 0;
+    border-bottom: 0;
 }
-.four-column #colD { width: 440px; margin-left: 34px; }
-.four-column #colE { width: 280px; }
-.four-column #colF { width: 100%; clear: both; }
+
+.four-column .colC, .colE {
+    width: 45%;
+    max-width: 640px;
+    margin-left: 5%;
+}
+.two-column .colB { 
+    width: 63%;
+    max-width: 832px;
+    margin-top: 0;
+}
+.two-column .main .colC { 
+    width: 32%;
+    max-width: 435px;
+}
+.four-column .colD, .colF { 
+   width: 45%;
+   max-width: 640px;
+   margin-left: 5%;
+
+}
+.colF{
+    margin-left: 0;
+    margin-right: 5%;
+    text-align:right;
+}
 
 .four-column .main,  .two-column .main { 
     clear: both; 
     float: left;
     display: block; 
-    margin: 15px 0; 
     padding: 10px 22px 80px 22px;
     background-color: #fff;
     border: 1px solid #dedede;
-}
-.four-column .main {
     -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    margin: 15px auto;
+    border-left: 0;
+    border-right: 0;
 }
- .two-column .main { margin-top: 0px; background: url(img/tileColC.png) repeat-y #FFF; background-position-x: 647px; }
- .two-column #colC .tooLong { position: relative; }
+.two-column .main{
+    padding: 0;
+    margin-top: 0;
+    background: url(/themes/LondonFencing/img/tileColC.png) repeat-y #FFF;
+    background-position-x: 65%;
+}
+
 /* section { margin-top: 30px; } */
    
 /* =============================================================================
@@ -519,104 +592,112 @@ a:active.btnStyle {
     top: 1px;
 }
 
-/*Address Box--------------------------------------------------------------- */
-
-#addressWrap { padding: 30px; background: #f5f5f5; border-bottom: 1px solid #CCC; z-index: 1; width: 900px; margin-left: -30px; }
-
-#address, .four-column #colF .blankMainHeader {
-	display: block;
-	width: 900px;
-	background: url(img/headingBorder.png) repeat-x 0 10px #f5f5f5;
-	text-align: center;
-	margin-bottom: -3px;
-}
-.four-column #colF .blankMainHeader { background-color: #fafafa; }
-
-#address h3 { 
-	background: #f5f5f5; 
-	padding: 0 10px; 
-	margin: 0;
-	width: auto; 
-	display: inline-block; 
-}
-
 /*PhotoGalleryWidget-------------------------------------------------------- */
 
-#colA ul {
+.colA ul {
     list-style: none;
     margin: 20px 0 0px 0;
     padding: 0 0 20px 24px;
     background-color: #fff;
 }
-#colA ul li {
+.colA ul li {
     list-style:none;
-    padding:10px 12px 10px 12px;
-    display:inline;
+    padding:10px 0 10px 0;
+    display:inline-block;
+    vertical-align: middle;
+    text-align:center;
 }
-#colA ul li:last-child { padding: 10px 23px 10px 0; }
-#colA ul li:first-child { padding: 10px 0 10px 23px; }
-ul.banner{margin-top: 310px}
-.banner li#arrow {
-	display: inline-block;
-	background: #444;
-	padding: 11px 13px !important;
-	width: 24px;
-	height: 28px;
-	border-radius: 25px;
-	-webkit-border-radius: 25px;
-	-moz-border-radius: 25px;
-	-moz-transition: all 0.5s linear;
+.banner-container{
+    width: 100%;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 10px 0;
+}
+.colA ul.banner{
+    width: 90%;
+    max-width: 1280px;
+    margin: 0 auto;
+    background-color: transparent;
+    padding: 0;
+    text-align: center;
+}
+
+.banner li.arrow a {
+    display: inline-block;
+    background: #444;
+    width: 50px;
+    height: 50px;
+    border-radius: 30px;
+    -moz-transition: all 0.5s linear;
     -webkit-transition: all 0.5s linear;
     -ms-transition: all 0.5s linear;
     transition: all 0.5s linear;
+    text-align:center;
 }
-.banner li#arrow:hover { background: #4a762b; }
+.icon-arrow-right:before{
+    content:"\e605";
+    text-shadow: 2px 1px #6a6a6a;
+}
+.icon-arrow-left:before{
+    content: "\e603";
+    text-shadow: -2px 1px #6a6a6a;
+}
 
-#colA .homeThumb, #colA .homeThumbB {
+.icon-arrow-left:before, .icon-arrow-right:before{
+    color: #ffffff;
+    line-height: 1.8;
+    
+}
+.banner li.arrow a:hover { background: #4a762b; }
+
+.colA .homeThumb, .colA .homeThumbB {
     opacity: 0.7;
     filter: alpha(opacity=70);
     border: 5px solid #d5d5d5;
     cursor:pointer
 }
 
-#colA .homeThumbB, #intermediate #colA .homeThumb:hover, #beginner #colA .homeThumb:hover {
+.colA .homeThumbB, #intermediate .colA .homeThumb:hover, #beginner .colA .homeThumb:hover {
 	opacity: 1.0;
   	filter: alpha(opacity=100);
 }
 
 #homeGallery {
     width: 100%;
-    float:left;
-    clear:both;
-    margin-bottom: 20px;
 }
 #homeGallery .primeImg {
-    /*width: 630px;*/
-    width: 958px;
-    height: 310px;
-    margin: 0px;
-    float: left;
-    clear:left;
+    width: 100%;
+    max-width: 960px;
+    height: 315px;
+    margin: 0 auto;
+    padding: 10px 0;
 }
-#homeGallery .imgTitle {
-    width: 33or 0px;
+#homeGallery .primeImg img{
     height: 310px;
-    margin: 0 0 0 630px;
-    clear:right;
-    background-color:rgba(0,0,0,0.83);
+    width: 100%;
+    border: 2px solid #ffffff;
+    max-width: 958px;
+    z-index: 0 !important;
+    margin-top: 10px;
 }
 .banner .next, .banner .prev {cursor: pointer}
 
-/**#intermediate #colA li:first-child, #intermediate #colA li:last-child, 
-##beginner #colA li:first-child, #beginner #colA li:last-child { display: none; }*/
-
-#intermediate #colA ul, #beginner #colA ul, #advanced #colA ul, #tournaments #colA ul { padding-left: 70px; }
+.two-column .colA ul{
+    width: 90%;
+    margin: 20px auto;
+}
+.two-column .colA ul li{
+    min-width: 14%;
+}
 
 /* Home callouts -------------------------------------------------------------*/
 
-
+.callout{
+    width: 90%;
+    max-width: 640px;
+}
 .callout h2 {
-    background: url('/themes/LondonFencing/img/title_bg.gif') 200px 50% no-repeat;
+    background: url('/themes/LondonFencing/img/title_bg.gif') 100% 50% no-repeat;
 }
     
 .callout img, .tournaments img { margin:0; padding:0; border:none; float: right;padding-left: 3px; }
@@ -640,28 +721,60 @@ ul.banner{margin-top: 310px}
 }
    
 #practiceWidget h4, #tourneyWidget h4{ text-transform: uppercase; margin: 0; display: block; padding-top: 20px; }
-#practiceWidget h2 { margin-bottom: 5px; }
-#practiceWidget p { margin-bottom: 20px; }
+#practiceWidget h2, #tourneyWidget h2 { margin-bottom: 5px; }
+#practiceWidget p, #tourneyWidget p { margin-bottom: 20px; }
 
-#practiceWidget, #latestNews { margin-bottom: 50px; }
-
+#latestNews { margin-bottom: 50px; }
+#practiceWidget{
+    margin-bottom: 80px;
+}
+.callout ul{
+    width: 100%;
+    padding: 0;
+    margin: 0 0 50px 0;
+    list-style:none;
+}
+.callout ul li{
+    margin-top: -70px;
+    text-align:right;
+    width: 40%;
+    margin-left: 60%;
+}
+.callout ul li:first-child{
+    margin-top: 0;
+    text-align:left;
+    width: 60%;
+    margin-left: 0;
+}
 .moreTournaments{ margin-top: 20px; }
 
-.icons , .iconsM{
-    float: right;
+.icons{
     background: #444;
-    width: 20px;
-    height: 20px;
-    border-radius: 25px;
+    width: 50px;
+    height: 50px;
+    border-radius: 30px;
     -webkit-border-radius: 25px;
     -moz-border-radius: 25px;
     margin-left: 3px;
+    display:inline-block;
+    text-align:center;
 }
-.icons{
-      padding: 15px 15px !important;
+.icon-location, .icon-plus, .icon-link{
+    line-height: 1.7;
 }
-.iconsM {
-    padding: 5px 5px !important;
+.icon-location:before, .icon-plus:before, .icon-link:before{
+    color: #ffffff;
+    font-size: 22px;
+    text-shadow: 1px 1px #3a3a3a;
+}
+.icon-location:before{
+    content: "\e600";
+}
+.icon-plus:before{
+    content: "\e604";
+}
+.icon-link:before{
+    content: "\e601";
 }
 .green, .blue, .gray{
     -moz-transition: all 0.5s linear;
@@ -713,26 +826,71 @@ ul.banner{margin-top: 310px}
 .tourneysNav a:hover{
     font-style: italic;
 }
-.tourneysNav img{
-    padding-left: 4px;
-    margin-top: -5px;
+.tourneysNav .icons, .tournaments .icons{
+    float: right;
+    width: 30px;
+    height: 30px;
+    border-radius: 25px;
+    display:inline-block;
 }
+.tournaments .icons{
+    float:none;
+}
+.tourneysNav .icon-arrow-right{
+    font-size: 14px;
+    vertical-align: text-top;
+    line-height: 1.8;
+}
+.tourneysNav .icon-arrow-right:before{
+    line-height: 1.9;
+    font-size: 14px;
+}
+.tournaments .icon-link, .tournaments .icon-plus{
+    line-height: 0.75;
+}
+.tournaments .icon-link:before, .tournaments .icon-plus:before{
+    font-size: 16px;
+}
+
+.tournaments ul{
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style:none;
+    min-height: 55px;
+}
+.tournaments li{
+    text-align:right;
+    width: 30%;
+    margin-left: 70%;
+    margin-top: -45px;
+}
+.tournaments li:first-child{
+    margin-top: 0;
+    text-align:left;
+    width: 70%;
+    margin-left: 0;
+}
+
 /* Col C Widget Lists
 ----------------------------------------------------------------------------------- */
-#colC .blankBodyMainCap ul, #regSideNav ul, .news-archive ul  {
+.colC .blankBodyMainCap{
+    padding-top: 1px;
+}
+.colC .blankBodyMainCap ul, #regSideNav ul, .news-archive ul  {
     list-style: none; 
     padding: 0; 
     margin: 0;
 }
-#colC .blankBodyMainCap ul li, #regSideNav ul li, .news-archive li {
+.colC .blankBodyMainCap ul li, #regSideNav ul li, .news-archive li {
     margin: 0;
     padding: 10px 0 10px 5px;
     border-bottom: 1px solid #ddd;
 }
-#colC .blankBodyMainCap ul li:last-child, #regSideNav ul li:last-child, .news-archive li:last-child  {
+.colC .blankBodyMainCap ul li:last-child, #regSideNav ul li:last-child, .news-archive li:last-child  {
     border:none;
 }
-#colC .blankBodyMainCap span:nth-child(odd), #regSideNav span:nth-child(odd){
+.colC .blankBodyMainCap span:nth-child(odd), #regSideNav span:nth-child(odd){
     color: #4A762B; 
     font-weight: bold;
 }
@@ -768,25 +926,6 @@ ul.banner{margin-top: 310px}
     text-align:center;
     margin: 10px 0 10px 0;
 }
-/*Contact Footer------------------------------------------------------------ */
-
-.four-column #colF .blankMainHeader { margin-bottom: 20px; }
-
-.four-column #contactFooter #colC { margin-right: 30px; }
-
-
-label { float: left; width: 130px; }
-#home label { float: none; }
-#home label h6 { display: inline; margin: 0; padding: 0 6px; float: none; }
-
-
-#home #RQvalALPHName { float:left; width: 228px; }
-#home #RQvalPHONPhone_Number { width: 166px; }
-#home #RQvalMAILServices { width: 148px; }
-#RQvalMAILEmail_Address { width: 206px; }
-textarea { width:485px; }
-
-#contactFooter .btnStyle { margin-top: 68px; }
 
 /*Blog---------------------------------------------------------------------- */
 
@@ -847,7 +986,7 @@ textarea { width:485px; }
   Widgets
    ========================================================================== */
 
-.two-column #colC li { margin-top: 0; }
+.two-column .colC li { margin-top: 0; }
 
 /* =============================================================================
    Footer
@@ -861,45 +1000,247 @@ footer {
     line-height: normal;
     background-color:#222;
     color: #fff;
-    margin-top: -15px;
+    margin-top: -14px;
+}
+footer div{ 
+    margin: 0; 
+    float:left;
+    width: 50%;
+    height: 60px;
+    vertical-align: middle;
 }
 
 footer ul {
-    float: left;
     list-style: none;
-    margin: 20px 0 0 10px;
+    margin: 0;
     padding: 0;
-    display: inline
+    width: 100%;
+    height: 60px;
+    
 }
 
 footer ul li {
     display: inline-block;
-    zoom:1; *display: inline;
-    margin: 0 10px;
+    margin: 0;
+    height: 40px;
 }
-
+.colE li{
+    margin: 30px 10px 0 0;
+}
+.colF li:first-child{
+    margin-top: 30px;
+}
 #footerTag { float: right; }
 footer a{color: #FFF}
-footer div{ display: inline; margin: 10px 20px 10px 10px; float:right;}
+
     
 /* ==|== media queries ======================================================
    PLACEHOLDER Media Queries for Responsive Design.
    These override the primary ('mobile first') styles
    Modify as content requires.
    ========================================================================== */
-
-@media only screen and (min-width: 480px) {
-  /* Style adjustments for viewports 480px and over go here */
-
-}
-
-@media only screen and (min-width: 768px) {
-  /* Style adjustments for viewports 768px and over go here */
+@media only screen and (max-width: 1024px) {
+    nav ul{
+        width: 100%;
+    }
     
 }
+@media only screen and (max-width: 960px) {
+    #homeGallery .primeImg{
+        min-height: 100px;
+        max-height: 280px;
+        overflow: visible;
+        width: 100%;
+        padding: 0;
+    }
+    #homeGallery .primeImg img{
+        width: 100%;
+        height: auto;
+        max-height: 280px;
+        border: none;
+        margin-top: 0;
+    }
+    nav ul li{
+        padding: 14px 19px;
+    }
+    .colA ul.banner{
+        width: 95%;
+    }
+    .callout h2{
+        background-position-x: 210%;
+    }
+    
+}
+@media only screen and (max-width: 800px){
+    header{
+        height: 60px;
+        border-bottom: 1px solid #4a762b;
+    }
+    #ul-h1{
+        height: 60px;
+    }
+    #ul-h1 li:first-child{
+        display:none;
+        width: 0;
+    }
+    #ul-h1 li.li-h1{
+        text-align:left;
+        width: 80%;
+        margin-top: 8px;
+        vertical-align:top;
+    }
+    #ul-h1 li#li-menu{
+        width: 17%;
+        line-height: 1.4;
+    }
+    #momenu{
+        display: inline;
+    }
+    nav{
+        display:none;
+    }
+    nav #momenu-logo{
+        display:list-item;
+    }
+    nav ul li{
+        display:list-item;
+        text-align:left;
+    }
+    #container{
+        margin-top: 61px;
+    }
+    .callout h2{
+        background-position-x: 250%;
+    }
+    .colE, .colF{
+        width: 100%;
+        margin: 0;
+        text-align: left;
+    }
+    .colE ul, .colF ul{
+        width: 90%;
+        margin: 0 auto;
+    }
+    #jPanelMenu-menu{
+        overflow-y: auto !important;
+    }
+}
+@media only screen and (max-width: 760px){
+    .four-column .main .colC, .four-column .main .colD, .two-column .main .colC, .two-column .main .colB{
+        width: 100%;
+        margin-left: 0;
+        max-width: 100%;
+    }
+    .two-column .main{
+        background-image: none;
+    }
+    .two-column .main .colB{
+        padding-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+    }
+    .two-column .wrapper{
+        width: 90%;
+        margin: 0 auto;
+    }
+    .callout{
+        width: 90%;
+        margin-left: 5%;
+    }
+    .callout h2{
+        background-position-x: 100%;
+    }
+}
+@media only screen and (max-width: 600px){
+    .banner li.arrow{
+        display:none;
+    }
+    #homeGallery .primeImg, #homeGallery .primeImg img{
+        max-height: 202px;
+    }
+    .colA ul.banner{
+        width: 100%;
+    }
+    .colF li:first-child {
+        margin-top:0;
+    }
+    
+}
+@media only screen and (max-width: 540px){
+    #homeGallery .primeImg, #homeGallery .primeImg img {
+        max-height: 175px;
+    }
+}
+@media only screen and (max-width: 440px){
+    #homeGallery .primeImg, #homeGallery .primeImg img{
+        max-height: 135px;
+    }
+    .callout h2 {
+        background-position-x: 180%;
+    }
+    #ul-h1 li.li-h1 {
+        font-size: 20px;
+    }
+    .colF{
+        height: 70px;
+    }
+    .tournaments ul li{
+        margin-bottom: 20px;
+    }
+    .tournaments ul li, .tournaments ul li:first-child {
+        margin-top: 0;
+        text-align: left;
+        width: 100%;
+        margin-left: 0;
+    }
+    .tournaments ul li:first-child{
+        margin-bottom: 20px;
+    }
 
-
-
+}
+@media only screen and (max-width: 350px){
+    
+    .colE ul, .colF ul{
+        height: auto;
+        margin-top: 10px;
+    }
+    footer ul li{
+        display: list-item;
+        height: auto;
+    }
+    footer .colE li{
+        margin: 0;
+    }
+    .callout h2 {
+        background-position-x: 410%;
+    }
+    .callout ul li{
+        margin-bottom: 20px;
+    }
+    .callout ul li, .callout ul li:first-child {
+        margin-top: 0;
+        text-align: left;
+        width: 100%;
+        margin-left: 0;
+    }
+    .callout ul li:first-child{
+        margin-bottom: 20px;
+    }
+    #homeGallery .primeImg, #homeGallery .primeImg img {
+        max-height: 118px;
+    }
+}
+@media only screen and (max-width: 280px){
+    #ul-h1 li.li-h1{
+        font-size: 16px;
+        width: 79%;
+    }
+    #homeGallery .primeImg, #homeGallery .primeImg img {
+        max-height: 100px;
+    }
+    .callout h2 {
+        background-position-x: -650%;
+    }
+}
 /* ==|== non-semantic helper classes ========================================
    Please define your styles before this section.
    ========================================================================== */

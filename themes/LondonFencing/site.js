@@ -31,62 +31,50 @@ jQuery(document).ready(function($) {
     	$('#colC div').addClass('tooLong');
     }
     function afterCycle(){
+        var imgLength = $('.banner img').length;
+        var theImage = $(this).index();
         $('.banner img').each(function(imgIndex){
-            if (imgIndex > 0 && imgIndex < ($('.banner li').length - 1)){
+            if (imgIndex > 0 && imgIndex < ($('.banner li.resize').length)){
                 $(this).removeClass().addClass('homeThumb');
             }
         });
-        $('.banner img:eq('+($(this).index() +1)+')').removeClass('homeThumb').addClass('homeThumbB');
-        $('.banner li:eq('+($(this).index() +1)+')').show();
-        //get siblings prior to current li index where class <> 'next' and class <> 'prev'
-        if ($('.banner li').length > 8){
-            var visible = 1;
-            var imgLen = $('.banner li').length - 1;
-            var stInd = ($(this).index() + 1) + 1;
-            var prvInd = $(this).index();
-            for (var s = stInd; s < imgLen; s++){
-                if (visible < 6){
-                    var cycleInd = (-1 + s);
-                    $('.banner img:eq('+s+')').addClass('homeThumb').bind('click', function(){
-                        $('.primeImg').cycle($(this).data('index'));
-                    });
-                    $('.banner li:eq('+s+')').show();
-                    visible++;
-                }
-                else{
-                    $('.banner img:eq('+s+')').removeClass('homeThumb').unbind('click');
-                    $('.banner li:eq('+s+')').hide();
-                }
+        var pagerLength = (imgLength > 6) ? 6 : imgLength;
+        var visible = new Array();
+        for (var i = theImage; i < imgLength; i++){
+            visible.push(i);
+            if (visible.length == pagerLength){
+                break;
             }
-            for (s = prvInd; s > 0; s--){
-                if (visible < 6){
-                    cycleInd = (-1 + s);
-                    $('.banner img:eq('+s+')').addClass('homeThumb').bind('click', function(){
-                        $('.primeImg').cycle($(this).data('index'));
-                    });
-                    $('.banner li:eq('+s+')').show();
-                    visible++;
-                }
-                else{
-                    $('.banner img:eq('+s+')').removeClass('homeThumb').unbind('click');
-                    $('.banner li:eq('+s+')').hide();
+        }
+        if (visible.length < 6){
+            for (var m = 0; m < (imgLength - visible.length); m++){
+                visible.push(m);
+                if (visible.length == pagerLength){
+                    break;
                 }
             }
         }
+        $(".banner li.resize").hide();
+        $(".banner li.resize img").removeClass("homeThumb").removeClass("homeThumbB").unbind("click");
+        for (var v = 0; v < visible.length; v++){
+            var theLI = $(".banner li.resize:eq("+visible[v]+")");
+            var thumbClass = (visible[v] == theImage) ? "homeThumbB" : "homeThumb";
+            $("img", theLI).addClass(thumbClass).bind("click", function(){
+                $('.primeImg').cycle($(this).data('index'));
+            });
+            theLI.show();
+        }
+   
     }
-    
- /*   $('#momenu').click(function(){
-        $('nav ul').toggle(300,function(){
-            var triangle = ($('#momenu').html() == '▼' )?'▲' : '▼';
-            $('#momenu').html(triangle);
-        });
-    });*/
-    
+    var jpm = $.jPanelMenu({
+        menu: 'nav',
+        trigger: '#momenu'
+    });
+    var mobileMenu = function(){
+        ($("#momenu").is(":visible")) ? jpm.on() : jpm.off();
+    }
+    mobileMenu();
+    $(window).on("resize", function(){
+        mobileMenu();
+    });
 });
-function hsNav(){
-    var navUL = document.getElementById("container").getElementsByTagName("ul");
-    var navStyle = (navUL[0].style.display == 'none')?"block":"none";
-    var triangle = (navStyle == "block")?"▲":"▼";
-    navUL[0].style.display = navStyle;
-    document.getElementById('momenu').innerHTML = triangle;
-}
