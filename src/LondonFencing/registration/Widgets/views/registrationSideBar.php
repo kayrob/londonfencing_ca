@@ -28,5 +28,7 @@ if (isset($_GET['p']) && preg_match('%(intermediate|beginner)%', $_GET['p'],$mat
 <?php
         
     }
-    
+    else{
+        include_once(dirname(dirname(dirname(__DIR__))) ."/calendar/Widgets/views/practiceSideBar.php");
+    }
 }
