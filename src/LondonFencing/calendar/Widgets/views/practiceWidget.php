@@ -37,7 +37,7 @@ if ($this instanceof Page && isset($db)){
         $practices = multi_array_subval_sort($practices,'start');
         foreach ($practices as $type => $pData){
            $mapLoc = (strstr($pData['location'],"Boyle") !== false)?"530+Charlotte+Street+London+Ontario":str_replace(" ","+",stripslashes($pData['location']))."+London+Ontario";
-           $map = "http://maps.google.com/maps/api/staticmap?zoom=15&markers=".$mapLoc."&size=600x400&sensor=false";
+           $map = "http://maps.google.com/maps/api/staticmap?zoom=15&amp;markers=".$mapLoc."&amp;size=600x400&amp;sensor=false";
            $h4Class = ($p > 0) ?' class="bordered"' : '';
            echo '<h4'.$h4Class.'>' .$pData['type'].'</h4>';
            echo '<ul>';
@@ -47,7 +47,7 @@ if ($this instanceof Page && isset($db)){
            echo '<li><a href="#mapit_'.$pData["eID"].'" class="fbMap icons blue"><i class="icon-location" title="View Map"></i></a>';
            echo '<a href="/src/LondonFencing/calendar/assets/rss/icalEvents.php?event='.$pData["eID"].'" class="icons green"><i class="icon-plus" title="Add to Calendar"></i></a></li>';    
            echo '</ul>';
-           echo '<div style="display:none"><img src="'.$map.'" id="mapit_'.$pData["eID"].'" /></div>';
+           echo '<div style="display:none"><img src="'.$map.'" id="mapit_'.$pData["eID"].'" alt="" /></div>';
            $p++;
         }
         global $quipp;
