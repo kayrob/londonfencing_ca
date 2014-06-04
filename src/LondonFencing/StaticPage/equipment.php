@@ -34,20 +34,12 @@ if (isset($_GET["eqt"]) && preg_match('%^[a-fA-F0-9]{40}$%', $_GET['eqt'], $matc
     <head>
         <title>Equipment Update</title>
         <link rel="stylesheet" href="/themes/LondonFencing/default.css" media="screen" type="text/css"/>
-        <style type="text/css">
-            .alertBoxFunctionBad{width: 280px;float: none;margin-top: 0px;}
-            #loginBox{width: 90%; text-align:center}
-            #loginBox img{margin-left: 105px;}
-            td{padding-bottom: 20px;}
-            td:nth-child(odd){text-align:right;padding-right: 20px}
-            td:nth-child(even){text-align:left;padding-left: 20px}
-            body{font-size: 28px}
-            .btnStyle {font-size: 28px}
-        </style>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     </head>
 <body>
         <div id="loginBox" <?php print $showQuippBrand; ?>>
-            <div class="loginBoxHead"><img src="/themes/LondonFencing/img/logo.png" alt="Logo" /></div>
+            <div class="loginBoxHead"><img src="/themes/LondonFencing/img/logo.png" alt="" height="50"/></div>
 <?php
     if (empty($row)){
         echo '<p>This code is not valid. Login to the admin to update equipment status</p>';
@@ -61,14 +53,30 @@ if (isset($_GET["eqt"]) && preg_match('%^[a-fA-F0-9]{40}$%', $_GET['eqt'], $matc
                     echo '<p><strong>There was an error updating the status of this equipment</strong></p>';
                 }
 ?>
-                <table width="100%">
-                    <tr><td width="50%">Equipment ID:</td><td><strong><?php echo $row["itemID"];?></strong></td></tr>
-                    <tr><td>Status:</td><td><strong><?php echo $statuses[$row["functionStatus"]];?></strong></td></tr>
-                    <tr><td>Equipment Type:</td><td><?php echo $row["type"];?></td></tr>
-                    <tr><td>Company:</td><td><?php echo $row["company"];?></td></tr>
-                    <tr><td>Last Updated:</td><td><?php echo date("Y-m-d g:i a", $row["dateLastUpdated"]);?></td></tr>
-                    <tr><td>Last Updated By:</td><td><?php echo $row["lastUpdatedBy"];?></td></tr>
-                </table>
+               <div>
+                   <span class="label">Equipment ID</span>
+                   <span class="nfo"><strong><?php echo $row["itemID"];?></strong></span>
+               </div>
+               <div>
+                   <span class="label">Status</span>
+                   <span class="nfo"><strong><?php echo $statuses[$row["functionStatus"]];?></strong></span>
+               </div>
+               <div>
+                   <span class="label">Equipment Type</span>
+                   <span class="nfo"><?php echo $row["type"];?></span>
+               </div>
+               <div>
+                   <span class="label">Company</span>
+                   <span class="nfo"><?php echo $row["company"];?></span>
+               </div>
+               <div>
+                   <span class="label">Last Updated</span>
+                   <span class="nfo"><?php echo date("Y-m-d g:i a", $row["dateLastUpdated"]);?></span>
+               </div>
+               <div>
+                   <span class="label">Last Updated By</span>
+                   <span class="nfo"><?php echo $row["lastUpdatedBy"];?></span>
+               </div>
                 <input type="hidden" name="status" value="<?php echo $newStatus;?>" />
                 <input type="hidden" name="nonce" value="<?php echo Quipp()->config('security.nonce'); ?>" />
    <?php
