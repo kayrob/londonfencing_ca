@@ -1,5 +1,5 @@
 <?php 
-$mainLogo50 = '<a class="logo" href="/"><img src="/themes/LondonFencing/img/logo50.png" alt="London Fencing Club" height="50" width="110"/></a>';
+$mainLogo50 = '<img src="/themes/LondonFencing/img/logo50.png" alt="London Fencing Club" height="50" width="110"/>';;
 ?>
 <!doctype html>
 <html class="no-js" lang="en">
@@ -9,8 +9,8 @@ $mainLogo50 = '<a class="logo" href="/"><img src="/themes/LondonFencing/img/logo
     <meta name="description" content="<?php print $meta['description']; ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/plain" rel="author" href="/humans.txt" />
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans|Playfair+Display' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="/min/?f=themes/LondonFencing/default.css,js/fancybox/jquery.fancybox-1.3.4.css,js/jquery-ui/jquery-ui-1.8.18.custom.css">
+    <link href="http://fonts.googleapis.com/css?family=Playfair+Display%7COpen+Sans" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/min/?f=themes/LondonFencing/default.css,js/fancybox/jquery.fancybox.css,js/jquery-ui/jquery-ui-1.8.18.custom.css">
     <link rel="alternate" type="application/rss+xml" href="/feed/blog">
     <?php
     if(isset($quipp->css) && is_array($quipp->css)) {
@@ -40,7 +40,7 @@ $mainLogo50 = '<a class="logo" href="/"><img src="/themes/LondonFencing/img/logo
             <li class="li-h1">London Fencing Club</li>
             <li id="li-menu"><a id="momenu" title="Menu"><i class="icon-menu"></i></a></li>
         </ul>
-        <nav><?php print str_replace("<ul>", "<ul><li id=\"momenu-logo\">{$mainLogo50}</li>", str_replace("main","",$nav->build_nav($nav->get_nav_items_under_bucket('primary'), $slug, true, false)));  ?></nav>
+        <nav><?php print str_replace("<ul>", "<ul><li id=\"momenu-logo\"><a class=\"logo\" href=\"/\">{$mainLogo50}</a></li>", str_replace("main","",$nav->build_nav($nav->get_nav_items_under_bucket('primary'), $slug, true, false)));  ?></nav>
 </header>
 <div id="container">
     <div id="content">

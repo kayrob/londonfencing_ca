@@ -215,7 +215,8 @@ textarea { overflow: auto; vertical-align: top; resize: vertical; }
 input:valid, textarea:valid {  }
 input:invalid, textarea:invalid { background-color: #f0dddd; }
 #loginBox{
-    width: 400px;
+    width: 90%;
+    max-width: 400px;
     padding: 0;
     margin: 10% auto;
 }
@@ -227,10 +228,25 @@ input:invalid, textarea:invalid { background-color: #f0dddd; }
     box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
 }
 #loginBox img{
-    margin: 10px 0 10px 120px;
+    margin: 10px 0;
 }
 #loginBox .loginBoxHead{
     background-color: rgba(74,118,43, 0.83);
+    text-align: center;
+}
+#loginBox form div{
+    margin-bottom: 10px;
+}
+#loginBox span.label, #loginBox span.nfo{
+    display:inline-block;
+    width: 45.5%;
+    padding: 0 4px;
+}
+#loginBox span.nfo{
+    margin-left: 1%;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 4px;
 }
 /* =============================================================================
    Tables
@@ -292,15 +308,14 @@ h1, h2, h3 {font-weight: bold;}
 .right { float: right; }
 
 /*h2 page title---------------------------------------------------------------- */  
- 
-.two-column .colC .blankMainHeader { text-align: left; }
 
 .two-column .colC .blankMainHeader{ 
 	position: relative;
 	background: #CCC;
-	margin: 28px 0 14px;
+	margin: 28px 0 24px;
 	width: 100%;
 	height: 10px;
+        text-align: left;
 }
 .two-column .colC .blankMainHeader h2 {
 	float: left;
@@ -349,7 +364,7 @@ a { color: #4A762B; text-decoration: none; border-bottom: 1px dashed #4A762B;}
 .main .colC .news-archive a, .main .colC .tourneysNav a, .pagination a, .colA a{border:none;}
 nav a:hover, nav .current a, footer a:hover { color: #ccc; text-decoration: none; border:none}
 
-#fancybox-close, #fancybox-left, #fancybox-right{
+a.fancybox-close, a.fancybox-left, a.fancybox-right{
     border-bottom: none;
 }
 
@@ -554,8 +569,8 @@ nav ul li a {
 .two-column .main{
     padding: 0;
     margin-top: 0;
-    background: url(/themes/LondonFencing/img/tileColC.png) repeat-y #FFF;
-    background-position-x: 65%;
+    background: url('/themes/LondonFencing/img/tileColC.png') repeat-y scroll 65% 0 #FFF;
+    /*background-position-x: 65%;*/
 }
 .error .main{
     margin-top: 0; 
@@ -832,14 +847,14 @@ a:active.btnStyle #goog-wm-sb:active {
 .tourneysNav a:hover{
     font-style: italic;
 }
-.tourneysNav .icons, .tournaments .icons{
+.tourneysNav .icons, .two-column .colB .icons, #practiceSideNav .icons{
     float: right;
     width: 30px;
     height: 30px;
     border-radius: 25px;
     display:inline-block;
 }
-.tournaments .icons{
+.two-column .colB .icons, #practiceSideNav .icons{
     float:none;
 }
 .tourneysNav .icon-arrow-right{
@@ -851,10 +866,13 @@ a:active.btnStyle #goog-wm-sb:active {
     line-height: 1.9;
     font-size: 14px;
 }
-.tournaments .icon-link, .tournaments .icon-plus{
+.two-column .colB .icon-link, .two-column .colB .icon-plus, #practiceSideNav .icon-location, 
+#practiceSideNav .icon-plus{
     line-height: 0.75;
 }
-.tournaments .icon-link:before, .tournaments .icon-plus:before{
+.two-column .colB .icon-link:before, .two-column .colB .icon-plus:before,
+#practiceSideNav .icon-location:before, 
+#practiceSideNav .icon-plus:before{
     font-size: 16px;
 }
 
@@ -883,22 +901,44 @@ a:active.btnStyle #goog-wm-sb:active {
 .colC .blankBodyMainCap{
     padding-top: 1px;
 }
-.colC .blankBodyMainCap ul, #regSideNav ul, .news-archive ul  {
+.colC .blankBodyMainCap ul, #regSideNav ul, .news-archive ul,
+#practiceSideNav ul{
     list-style: none; 
     padding: 0; 
     margin: 0;
 }
-.colC .blankBodyMainCap ul li, #regSideNav ul li, .news-archive li {
+#practiceSideNav ul{
+    height: 70px;
+    padding-bottom: 20px;
+}
+#practiceSideNav ul.bordered{
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+.colC .blankBodyMainCap ul li, #regSideNav ul li, .news-archive li{
     margin: 0;
     padding: 10px 0 10px 5px;
     border-bottom: 1px solid #ddd;
 }
-.colC .blankBodyMainCap ul li:last-child, #regSideNav ul li:last-child, .news-archive li:last-child  {
+.colC .blankBodyMainCap ul li:last-child, #regSideNav ul li:last-child, .news-archive li:last-child,
+#practiceSideNav ul li:last-child{
     border:none;
 }
 .colC .blankBodyMainCap span:nth-child(odd), #regSideNav span:nth-child(odd){
     color: #4A762B; 
     font-weight: bold;
+}
+#practiceSideNav ul li{
+    width: 40%;
+    text-align:right;
+    margin-top: -70px;
+    margin-left: 60%;
+}
+#practiceSideNav ul li:first-child{
+    width: 60%;
+    text-align:left;
+    margin-top: 0;
+    margin-left: 0;
 }
 
 
@@ -932,7 +972,10 @@ a:active.btnStyle #goog-wm-sb:active {
     text-align:center;
     margin: 10px 0 10px 0;
 }
-
+.two-column .colB small{
+    display: block;
+    margin: -5px 0 10px 135px;
+}
 /*Blog---------------------------------------------------------------------- */
 
 .archive-widget ul {
@@ -1064,6 +1107,47 @@ footer a{color: #FFF}
     border-radius: 3px 0 0 3px;
     padding: 7px;
 }
+/* Alert Boxes
+--------------------------------------------------------------------------------------------*/
+
+.alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty {
+    width:90%;
+    padding:10px 10px 15px 45px;
+    margin:20px 0 10px 0;
+    color:#000000;
+    background-position: 5px 10px;
+    background-repeat:no-repeat;
+    line-height: 16px;
+}
+
+.alertBoxFunctionGood {
+	background-color:#D3FFD4;
+	border: 1px solid #55FF49;
+}
+
+.alertBoxFunctionBad {
+	background-color:#FFD4D4;
+	border: 1px solid #FF4A4B;
+}
+
+.alertBoxFunctionWarn {
+	background-color:#FFFDD5;
+	border: 1px solid #FDCA52;
+}
+
+.alertBoxFunctionEmpty {
+	background-color:#F5F5F5;
+	border: 1px solid #E5E5E5;
+	color:#666666;
+}
+
+.alertBoxFunctionGood a, .alertBoxFunctionBad a, .alertBoxFunctionWarn a, .alertBoxFunctionEmpty a { color:#0000FF; border:none;}
+.alertBoxFunctionGood a:hover, .alertBoxFunctionBad a:hover, .alertBoxFunctionWarn a:hover, .alertBoxFunctionEmpty a:hover { color:#0000FF; }
+
+
+/*datepicker*/
+.ui-corner-all{border-bottom:none;}
+
 
 /* ==|== media queries ======================================================
    PLACEHOLDER Media Queries for Responsive Design.
@@ -1158,6 +1242,21 @@ footer a{color: #FFF}
     .error .colG{
         width: 90%;
     }
+    .two-column .colB form label{
+        width: 100%;
+    }
+    .alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty {
+        width:83%;
+    }
+    #practiceSideNav ul{
+        height: initial;
+    }
+    #practiceSideNav ul li, #practiceSideNav ul li:first-child{
+        width: 100%;
+        text-align:left;
+        margin-top: 10px;
+        margin-left: 0;
+    }
 }
 @media only screen and (max-width: 760px){
     .four-column .main .colC, .four-column .main .colD, .two-column .main .colC, .two-column .main .colB{
@@ -1183,6 +1282,12 @@ footer a{color: #FFF}
     .callout h2{
         background-position-x: 100%;
     }
+    .two-column .colB form label{
+        width: 135px;
+    }
+    .alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty {
+        width:90%;
+    }
 }
 @media only screen and (max-width: 600px){
     .banner li.arrow{
@@ -1196,6 +1301,19 @@ footer a{color: #FFF}
     }
     .colF li:first-child {
         margin-top:0;
+    }
+    .two-column form{
+       width: 90%;
+    }
+    .two-column .colB form label, .two-column .colB input[type="text"], .two-column .colB input[type="email"], 
+    .two-column .colB input[type="tel"], .two-column .colB input[type="url"], .two-column .colB input[type="number"]{
+        width: 100%;
+    }
+    .two-column .colB textarea{
+        width: 100% !important;
+    }
+    .two-column .colB small{
+        margin-left: 0;
     }
     
 }
@@ -1211,6 +1329,9 @@ footer a{color: #FFF}
     }
     .error #goog-fixurl #goog-wm-qt, .error #goog-fixurl #goog-wm-sb{
         border-radius: 3px;
+    }
+    .alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty {
+        width:88%;
     }
 }
 @media only screen and (max-width: 440px){
@@ -1240,6 +1361,15 @@ footer a{color: #FFF}
     }
     .tournaments ul li:first-child{
         margin-bottom: 20px;
+    }
+    .alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty {
+        width:84%;
+    }
+    #loginBox span.label, #loginBox span.nfo{
+        width: 100%;
+    }
+    #loginBox span.nfo{
+        margin-left: 0;
     }
 
 }
@@ -1277,6 +1407,9 @@ footer a{color: #FFF}
     .error h2{
         background-position-x: 430%;
     }
+    .alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty {
+        width:80%;
+    }
 }
 @media only screen and (max-width: 280px){
     #ul-h1 li.li-h1{
@@ -1291,6 +1424,10 @@ footer a{color: #FFF}
     }
     .error h2{
         background: none;
+    }
+    .alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty {
+        width:80%;
+        max-width: 145px;
     }
 }
 /* ==|== non-semantic helper classes ========================================
@@ -1321,47 +1458,6 @@ footer a{color: #FFF}
 .clearfix:after { clear: both; }
 .clearfix { *zoom: 1; }
 
-/* Alert Boxes
---------------------------------------------------------------------------------------------*/
-
-.alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty {
-	width:550px;
-	padding:10px 10px 15px 45px;
-	margin:20px 0 10px 0;
-	color:#000000;
-	float:left;
-                  background-position: 5px 10px;
-                  background-repeat:no-repeat;
-                  line-height: 16px;
-}
-
-.alertBoxFunctionGood {
-	background-color:#D3FFD4;
-	border: 1px solid #55FF49;
-}
-
-.alertBoxFunctionBad {
-	background-color:#FFD4D4;
-	border: 1px solid #FF4A4B;
-}
-
-.alertBoxFunctionWarn {
-	background-color:#FFFDD5;
-	border: 1px solid #FDCA52;
-}
-
-.alertBoxFunctionEmpty {
-	background-color:#F5F5F5;
-	border: 1px solid #E5E5E5;
-	color:#666666;
-}
-
-.alertBoxFunctionGood a, .alertBoxFunctionBad a, .alertBoxFunctionWarn a, .alertBoxFunctionEmpty a { color:#0000FF; border:none;}
-.alertBoxFunctionGood a:hover, .alertBoxFunctionBad a:hover, .alertBoxFunctionWarn a:hover, .alertBoxFunctionEmpty a:hover { color:#0000FF; }
-
-
-/*datepicker*/
-.ui-corner-all{border-bottom:none;}
 
 /* ==|== print styles =======================================================
    Print styles.

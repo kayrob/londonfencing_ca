@@ -7,7 +7,7 @@
         <div class="colF">
             <ul>
                 <li>Copyright <?php echo date("Y");?> &#8226; London Fencing Club &#8226; London, Ontario, Canada</li>
-                <li><a href="http://www.fencingontario.ca" target="_blank"><img src="/themes/LondonFencing/img/ofa-trans.png" alt="OFA" width="38px" height="38px"/></a><a href="http://www.fencing.ca" target="_blank"><img src="/themes/LondonFencing/img/cff.png" alt="CFF" width="24px" height="38px"/></a></li>
+                <li><a href="http://www.fencingontario.ca" target="_blank"><img src="/themes/LondonFencing/img/ofa-trans.png" alt="OFA" width="38" height="38"/></a><a href="http://www.fencing.ca" target="_blank"><img src="/themes/LondonFencing/img/cff.png" alt="CFF" width="24" height="38"/></a></li>
             </ul>
         </div>
     </footer>
@@ -16,14 +16,14 @@
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script>window.jQuery || document.write('<script src="/js/jquery-1.11.min.js"><\/script>')</script>
   <script src="/js/jquery-ui/jquery-ui-1.8.16.custom.min.js"></script>
-  <script src="/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+  <script src="/js/fancybox/jquery.fancybox.pack.js"></script>
   <script src="/js/jquery.easing-1.3.pack.js"></script>
   <script src="/js/jquery.hoverIntent.min.js"></script>
   <script src="/js/jpanelmenu.js"></script>
 <?php
     if(isset($quipp->js['footer']) && is_array($quipp->js['footer'])) {
         foreach($quipp->js['footer'] as $val) {
-            if ($val != '') { print '<script src="' . $val . '"></script>'; }
+            if (!empty($val)) { print '<script src="/min/?f=' . trim($val, "/") . '"></script>'; }
         }
     }
 ?>
