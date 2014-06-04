@@ -14,6 +14,13 @@ $page = (isset($_GET['page']) && (int)$_GET['page'] > 0 && $showAll === false) ?
 
 $filterStartDate = (isset($_GET['filter']))? $_GET['filter'] : date('U');
 $filterEndDate = (isset($_GET['filter'])) ? strtotime('next month', $_GET['filter']): strtotime('+1 year');
+
+$holidays = array(
+    "New Years Day", "New Year's Day", "Family Day", "Good Friday", "Easter Sunday", "Easter Monday",
+    "Victoria Day", "Mother's Day", "Mothers Day", "Father's Day", "Fathers Day", "Canada Day", "Civic Holiday",
+    "Labour Day", "Labor Day", "Thanksgiving Day", "Thanksgiving", "Thanksgiving Monday", "Remembrance Day",
+    "Christmas Eve", "Christmas Day", "Boxing Day", "New Year's Eve", "New Years Eve"
+);
 ?>
 
 <section class="tournaments">
@@ -28,7 +35,9 @@ if (!empty($tourns)){
         $end = ($showAll === true)? count($tourns) : $start + 10;
         $border = false;
         foreach ($tourns as $tourn){
-            if ($tourn['tdate'] >= $filterStartDate && $tourn['tdate'] < $filterEndDate && $p >= $start){
+            $tournTitle = preg_replace('%\(.*\)%' , '', $tourn["title"]);
+
+            if ($tourn['tdate'] >= $filterStartDate && $tourn['tdate'] < $filterEndDate && $p >= $start && !in_array(trim($tournTitle), $holidays)){
                 //if eID link to cal ICS, else static ICS with specific data
                 $description = ltrim($tourn['description'],"<br />");
                 $date = date('M j, Y g:i a',$tourn['tdate']);
@@ -37,7 +46,7 @@ if (!empty($tourns)){
                 
                 $location = (preg_match('%[Ll]ocation\:(\s)?(.*)%', $description, $matches)) ? $matches[2] :'' ;
                 
-                $icsHREF = ($tourn["eID"] !== false) ? "/src/LondonFencing/calendar/assets/rss/icalEvents.php?event=".$tourn["eID"]:"/src/LondonFencing/StaticPage/ics.php?event=".urlencode($tourn["title"])."&start=".$tourn['tdate']."&end=".$tourn['tend'].'&location='.$location;
+                $icsHREF = ($tourn["eID"] !== false) ? "/src/LondonFencing/calendar/assets/rss/icalEvents.php?event=".$tourn["eID"]:"/src/LondonFencing/StaticPage/ics.php?event=".urlencode($tourn["title"])."&amp;start=".$tourn['tdate']."&amp;end=".$tourn['tend'].'&amp;location='.urlencode($location);
                 $h4Class =  '';
                 if ($border == true){
                     $h4Class = ' class="bordered"';
@@ -45,7 +54,7 @@ if (!empty($tourns)){
                 else{
                     $border = true;
                 }
-                echo '<h4'.$h4Class.'>'.preg_replace('%\(.*\)%' , '', $tourn["title"]).'</h4>';
+                echo '<h4'.$h4Class.'>'.trim($tournTitle).'</h4>';
                 echo '<ul>';
                 echo '<li>';
                 echo'<span class="lowlight">Date:</span>&nbsp;&nbsp;&nbsp;&nbsp;'.$date.'<br />';
@@ -71,7 +80,7 @@ if (!empty($tourns)){
         }
 }
 if (!isset($_GET['filter'])){
-    echo pagination(ceil(count($tourns) / 10), $page, "/tournaments&page=", 1 );
+    echo pagination(ceil(count($tourns) / 10), $page, "/tournaments&amp;page=", 1 );
 }
 ?>
 </section>

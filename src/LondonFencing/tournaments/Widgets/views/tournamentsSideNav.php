@@ -21,15 +21,15 @@ if (!empty($tourns)){
         foreach ($tourns as $tourn){
             if ($tourn['tdate'] >= date('U') && $monthYr != date('Y-m', $tourn['tdate'])){
                 echo '<li>
-                    <a href="/'.$_GET['p'].'&filter='.mktime(0,0,0, date('m',$tourn['tdate']),1, date('Y',$tourn['tdate'])).'">'.date('F Y', $tourn['tdate']).'</a>
-                    <a class="icons gray" href="/'.$_GET['p'].'&filter='.mktime(0,0,0, date('m',$tourn['tdate']),1, date('Y',$tourn['tdate'])).'">
+                    <a href="/'.$_GET['p'].'&amp;filter='.mktime(0,0,0, date('m',$tourn['tdate']),1, date('Y',$tourn['tdate'])).'">'.date('F Y', $tourn['tdate']).'</a>
+                    <a class="icons gray" href="/'.$_GET['p'].'&amp;filter='.mktime(0,0,0, date('m',$tourn['tdate']),1, date('Y',$tourn['tdate'])).'">
                         <i class="icon-arrow-right"></i></a>
                         </li>';
                 $monthYr = date('Y-m', $tourn['tdate']);
             }
         }
         if (isset($_GET['filter'])){
-            echo '<li ><a href="/'.$_GET['p'].'">Clear Filter</a><a href="/'.$_GET['p'].'" class="iconsM gray"><img src="/themes/LondonFencing/img/arrowL.png" alt="" width="15px" height="15px" /></a></li>';
+            echo '<li ><a href="/'.$_GET['p'].'">Clear Filter</a><a href="/'.$_GET['p'].'" class="iconsM gray"><img src="/themes/LondonFencing/img/arrowL.png" alt="" width="15" height="15" /></a></li>';
         }
         echo '</ul>';
 }

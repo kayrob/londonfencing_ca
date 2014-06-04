@@ -8,6 +8,12 @@ if ($this instanceof Page && isset($db)){
 $tournObj = new Tmnts\tournaments($db);
 $tournaments = $tournObj->getUpcomingTournaments();
 $tourns = multi_array_subval_sort($tournaments,'tdate');
+$holidays = array(
+    "New Years Day", "New Year's Day", "Family Day", "Good Friday", "Easter Sunday", "Easter Monday",
+    "Victoria Day", "Mother's Day", "Mothers Day", "Father's Day", "Fathers Day", "Canada Day", "Civic Holiday",
+    "Labour Day", "Labor Day", "Thanksgiving Day", "Thanksgiving", "Thanksgiving Monday", "Remembrance Day",
+    "Christmas Eve", "Christmas Day", "Boxing Day", "New Year's Eve", "New Years Eve"
+);
 ?>
 
 <section class="callout" id="tourneyWidget">
@@ -17,7 +23,8 @@ if (!empty($tourns)){
 
         $p = 0;
         foreach ($tourns as $tourn){
-            if ($tourn['tdate'] >= date('U')){
+            $tournTitle = preg_replace('%\(.*\)%' , '', $tourn["title"]);
+            if ($tourn['tdate'] >= date('U') && !in_array(trim($tournTitle), $holidays)){
                 //if eID link to cal ICS, else static ICS with specific data
                 $description = ltrim($tourn['description'],"<br />");
                 $date = date('M j, Y g:i a',$tourn['tdate']);
@@ -25,9 +32,9 @@ if (!empty($tourns)){
                 $date = str_ireplace('12:00 am','',$date);
                 
                 $location = (preg_match('%[Ll]ocation\:(\s)?(.*)%', $description, $matches)) ? $matches[2] :'' ;
-                $icsHREF = ($tourn["eID"] !== false) ? "/src/LondonFencing/calendar/assets/rss/icalEvents.php?event=".$tourn["eID"]:"/src/LondonFencing/StaticPage/ics.php?event=".urlencode($tourn["title"])."&start=".$tourn['tdate']."&end=".$tourn['tend'].'&location='.$location;
+                $icsHREF = ($tourn["eID"] !== false) ? "/src/LondonFencing/calendar/assets/rss/icalEvents.php?event=".$tourn["eID"]:"/src/LondonFencing/StaticPage/ics.php?event=".urlencode($tourn["title"])."&amp;start=".$tourn['tdate']."&amp;end=".$tourn['tend'].'&amp;location='.urlencode($location);
                 $h4Class = ($p > 0) ?' class="bordered"' : '';
-                echo '<h4'.$h4Class.'>'.preg_replace('%\(.*\)%' , '', $tourn["title"]).'</h4>';
+                echo '<h4'.$h4Class.'>'.trim($tournTitle).'</h4>';
                 echo '<ul>';
                 echo'<li><span class="lowlight">Date:</span>&nbsp;&nbsp;&nbsp;&nbsp;'.$date.'<br />';
                 if ($location != ''){

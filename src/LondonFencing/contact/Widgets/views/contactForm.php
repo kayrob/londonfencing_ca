@@ -51,7 +51,7 @@ if($sent == 1){
 <h3>Please complete all fields marked with *</h3>
 <form action="<?php print $_SERVER['REQUEST_URI']; ?>" method="post">
     <div>
-	<label for="RQvalALPHName" class="req">Name*</label></td>
+	<label for="RQvalALPHName" class="req">Name*</label>
         <input type="text" name="RQvalALPHName" id="RQvalALPHName"  value = "<?php echo $post["RQvalALPHName"];?>" />
     </div>
 

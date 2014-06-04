@@ -19,7 +19,7 @@ if ($this instanceof Page && isset($props[0])){
         $a = 0;
         foreach($images as $tagID => $album){
             if ($a < 6 ){
-                echo '<li class="resize"><a href="/uploads/media/'.$album['img'].'" class="fbGallery" rel="'.$props[0].'"><img class="homeThumb" src="/uploads/media/med/'.$album['img'].'" width="100px" height="100px" data-title="'.$album['title'].'" data-src="'.$album['img'].'"/></a></li>';
+                echo '<li class="resize"><a href="/uploads/media/'.$album['img'].'" class="fbGallery" data-fancybox-group="'.$props[0].'"><img class="homeThumb" src="/uploads/media/med/'.$album['img'].'" width="100" height="100" data-title="'.$album['title'].'" data-src="'.$album['img'].'" alt="" /></a></li>';
             }
             else{
                  echo '<li><a href="/gallery/'.$tagID.'">View All</a></li>';
@@ -34,7 +34,6 @@ if ($this instanceof Page && isset($props[0])){
 <?php
     global $quipp;
     $quipp->js['footer'][] = "/src/LondonFencing/media/assets/js/media.js";
-    $quipp->js['footer'][] = "/js/jquery.cycle.min.js";
     }
 
 }

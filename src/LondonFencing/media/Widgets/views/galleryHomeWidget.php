@@ -19,8 +19,7 @@ if ($this instanceof Page && isset($props[0])) {
                     $limit = count($album);
                     for ($a = 0; $a < $limit; $a++) {
                         $display = ($a == 0) ? '' : ' style="display:none"';
-                        //echo '<img src="/uploads/media/home/'.$album[$a]['img'].'" width="960px;"'.$display.' />';
-                        echo '<img src=""' . $display . ' data-src="' . $album[$a]['img'] . '" alt="" />';
+                        echo '<img src="'.$album[$a]['img'].'"' . $display . ' data-src="' . $album[$a]['img'] . '" alt="" />';
                     }
                 }
                 ?>
@@ -37,7 +36,7 @@ if ($this instanceof Page && isset($props[0])) {
                 for ($a = 0; $a < $limit; $a++) {
                     $style = ($a >= 6) ? ' style="display:none;width:'.$liPercent.'%"' : ' style="width:'.$liPercent.'%"';
                     $imgStyle = ($a < 6) ? ' class="homeThumb"' : '';
-                    echo '<li' . $style . ' class="resize"><img'.$imgStyle.' src="/uploads/media/med/' . $album[$a]['img'] . '" width="100px" height="100px" data-title="' . $album[$a]['title'] . '" data-src="' . $album[$a]['img'] . '" data-index="'.$a.'"/></li>';
+                    echo '<li' . $style . ' class="resize"><img'.$imgStyle.' src="/uploads/media/med/' . $album[$a]['img'] . '" width="100" height="100" data-title="' . $album[$a]['title'] . '" data-src="' . $album[$a]['img'] . '" data-index="'.$a.'" alt="" /></li>';
                 }
                 break;
             }

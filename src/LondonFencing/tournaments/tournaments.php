@@ -24,13 +24,13 @@ class tournaments  extends Cal\calendar{
                         $tEnd = (isset($mEnd[1])) ? strtotime(preg_replace('%(E[SD]T)(.*)%','',str_replace('at','',$mEnd[1]))) : (strtotime((string)$tourn->pubDate) + (60*60*5));
 
                         $tourney[] = array(
-                            "tdate"             =>  strtotime((string)$tourn->pubDate),
-                            "tend"              => $tEnd,
+                            "tdate"         =>  strtotime((string)$tourn->pubDate),
+                            "tend"          => $tEnd,
                             "description"   =>  ltrim(ltrim($description,"<br />"),"<br>"),
-                            "title"              =>  (string)$tourn->title,
-                            "link"              => $regLink,
-                            "eID"               => false,
-                            "about"            => ''
+                            "title"         =>  (string)$tourn->title,
+                            "link"          => $regLink,
+                            "eID"           => false,
+                            "about"         => ''
                         );
                     }
             }
