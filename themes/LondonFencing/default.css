@@ -284,6 +284,8 @@ body {
 
 #content {
     width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
 }
 
 .two-column #content{
@@ -413,25 +415,30 @@ textarea{
 header {
     position: fixed; 
     padding: 0;
-    background-color: rgba(74,118,43, 0.83);
-    -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
-    -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     height: 124px;
-    margin: 0;
-    top: 0;
     width: 100%;
+    margin: 0 auto;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 20;
 } 
 #ul-h1{
     font-size: 28px;
-    width: 90%;
-    max-width: 1280px;
+    width: 100%;
+    max-width: 960px;
     list-style:none;
     color: #ffffff;
     margin: 0 auto;
     padding: 0;
     height: 70px;
+    background-color: rgba(74,118,43, 0.83);
+    -moz-box-shadow: 1px 1px 0px rgba(0,0,0,0.12);
+    -webkit-box-shadow: 1px 1px 0px rgba(0,0,0,0.12);
+    box-shadow: 1px 1px 0px rgba(0,0,0,0.12);
+}
+#ul-h1 a, #ul-h1 a:hover, #ul-h1:visited{
+    color: #ffffff;
 }
 #ul-h1 li {
     display: inline-block;
@@ -440,6 +447,9 @@ header {
     text-align: left;
     margin: 0;
     padding-left: 0;
+}
+#ul-h1 .logo{
+    margin-left: 20%;
 }
 #ul-h1 li.li-h1{
     text-align:center;
@@ -451,12 +461,15 @@ header {
 }
 nav {
     width: 100%;
-    /*background: rgba(0,0,0,0.83);*/
+    max-width: 960px;
     background: #222;
     margin: 0 auto;
     text-transform: uppercase;
     font-weight: 300;
     color: #fff;
+    -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
+    -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
 }
 nav #momenu-logo{
     display:none;
@@ -465,8 +478,8 @@ nav ul {
     margin: 0 auto;
     padding: 0;
     text-align: center;
-    width: 90%;
-    max-width: 1280px;
+    width: 100%;
+    max-width: 960px;
 }
 
 nav ul li {
@@ -503,7 +516,7 @@ nav ul li a {
 .colA, .colB, .colD, .colC, .colE, .colF { float: left; }
 .four-column .colA, .two-column .colA { 
     width: 100%;
-    max-width: 1280px;
+    max-width: 960px;
     border-bottom: 1px solid #dedede;
     margin: 0 auto;
 }
@@ -524,6 +537,9 @@ nav ul li a {
     max-width: 640px;
     margin-left: 5%;
 }
+.colE{
+    width: 35%;
+}
 .two-column .colB { 
     width: 63%;
     max-width: 832px;
@@ -543,6 +559,7 @@ nav ul li a {
     margin-left: 0;
     margin-right: 5%;
     text-align:right;
+    width: 55%;
 }
 .colG{
     width: 50%;
@@ -634,18 +651,50 @@ a:active.btnStyle #goog-wm-sb:active {
     margin: 0;
     padding: 10px 0;
 }
-.colA ul.banner{
-    width: 90%;
-    max-width: 1280px;
+.banner-scroller{
+    width: 95%;
     margin: 0 auto;
+    height: 130px;
+    overflow:hidden;
+    max-width: 840px;
+}
+.colA ul.banner{
+    margin: 0;
     background-color: transparent;
     padding: 0;
-    text-align: center;
 }
-
-.banner li.arrow a {
+.colA ul.banner li{
+    margin-right: 10px;
+}
+#banner-arrows, #inner-banner-arrows{
+    width: 99%;
+    max-width: 960px;
+    height: 50px;
+    position: absolute;
+    top: 130px;
+    margin-left: 0.5%;
+}
+#inner-banner-arrows{
+    background-color: rgba(0,0,0, 0.15);
+    width: 100%;
+    margin-left: 0;
+    height: 20px;
+    top: 80px;
+    display: none;
+}
+#banner-arrows span, #inner-banner-arrows span{
+    display:inline-block;
+    width: 49.3%;
+    margin:0;
+    padding:0;
+}
+#banner-arrows #span-arrow-next, #inner-banner-arrows #span-arrow-next{
+    text-align:right;
+    
+}
+#banner-arrows a, #inner-banner-arrows a {
     display: inline-block;
-    background: #444;
+    background-color: #444444;
     width: 50px;
     height: 50px;
     border-radius: 30px;
@@ -654,6 +703,13 @@ a:active.btnStyle #goog-wm-sb:active {
     -ms-transition: all 0.5s linear;
     transition: all 0.5s linear;
     text-align:center;
+    cursor:pointer;
+}
+
+#inner-banner-arrows a{
+    background-color: transparent;
+    height: 20px;
+    width: 20px;
 }
 .icon-arrow-right:before{
     content:"\e605";
@@ -663,22 +719,34 @@ a:active.btnStyle #goog-wm-sb:active {
     content: "\e603";
     text-shadow: -2px 1px #6a6a6a;
 }
-
 .icon-arrow-left:before, .icon-arrow-right:before{
     color: #ffffff;
     line-height: 1.8;
-    
 }
-.banner li.arrow a:hover { background: #4a762b; }
+#inner-banner-arrows .icon-arrow-left, #inner-banner-arrows .icon-arrow-right{
+    font-size: 16px;
+}
+#inner-banner-arrows .icon-arrow-left:before, #inner-banner-arrows .icon-arrow-right:before{
+    line-height: 0.8;
+}
+#banner-arrows a:hover, #inner-banner-arrows a:hover { background: #4a762b; }
 
 .colA .homeThumb, .colA .homeThumbB {
     opacity: 0.7;
     filter: alpha(opacity=70);
     border: 5px solid #d5d5d5;
-    cursor:pointer
+    cursor:pointer;
+    width: 100px;
+    height: 100px;
+}
+.colA .innerThumb{
+    opacity: 0.7;
+    filter: alpha(opacity=70);
+    cursor:pointer;
+    height: 100px;
 }
 
-.colA .homeThumbB, #intermediate .colA .homeThumb:hover, #beginner .colA .homeThumb:hover {
+.colA .homeThumbB, #intermediate .colA .homeThumb:hover, #beginner .colA .homeThumb:hover, .colA .innerThumb:hover {
 	opacity: 1.0;
   	filter: alpha(opacity=100);
 }
@@ -687,28 +755,31 @@ a:active.btnStyle #goog-wm-sb:active {
     width: 100%;
 }
 #homeGallery .primeImg {
-    width: 100%;
-    max-width: 960px;
-    height: 315px;
-    margin: 0 auto;
-    padding: 10px 0;
+    width:960px;
+    height:310px;
+    margin:0 auto;
+    padding:0;
+    background-color:transparent;
 }
-#homeGallery .primeImg img{
-    height: 310px;
-    width: 100%;
-    border: 2px solid #ffffff;
-    max-width: 958px;
-    z-index: 0 !important;
-    margin-top: 10px;
+.primeImg img{
+    position:absolute;
+    margin-top: 0;
 }
-.banner .next, .banner .prev {cursor: pointer}
-
+.banner-inner-scroller{
+    width: 100%;
+    overflow:hidden;
+    height: 100px;
+}
 .two-column .colA ul{
-    width: 90%;
-    margin: 20px auto;
+   min-width: 100%;
+   margin: 0;
+   padding: 0;
+   height: 100px;
 }
 .two-column .colA ul li{
-    min-width: 14%;
+    /*min-width: 14%;*/
+    margin:0;
+    padding: 0;
 }
 
 /* Home callouts -------------------------------------------------------------*/
@@ -718,7 +789,7 @@ a:active.btnStyle #goog-wm-sb:active {
     max-width: 640px;
 }
 .callout h2 {
-    background: url('/themes/LondonFencing/img/title_bg.gif') 100% 50% no-repeat;
+    background: url('/themes/LondonFencing/img/title_bg.gif') 115% 50% no-repeat;
 }
     
 .callout img, .tournaments img { margin:0; padding:0; border:none; float: right;padding-left: 3px; }
@@ -1046,8 +1117,10 @@ footer {
     float: left;
     clear: both;
     width: 100%;
+    max-width: 960px;
     line-height: normal;
     background-color:#222;
+    margin: 0 auto;
     color: #fff;
     margin-top: -14px;
 }
@@ -1154,13 +1227,8 @@ footer a{color: #FFF}
    These override the primary ('mobile first') styles
    Modify as content requires.
    ========================================================================== */
-@media only screen and (max-width: 1024px) {
-    nav ul{
-        width: 100%;
-    }
-    
-}
 @media only screen and (max-width: 960px) {
+     
     #homeGallery .primeImg{
         min-height: 100px;
         max-height: 280px;
@@ -1190,9 +1258,15 @@ footer a{color: #FFF}
     header{
         height: 60px;
         border-bottom: 1px solid #4a762b;
+        max-width: 100%;
+        left: auto;
+        right: auto;
     }
     #ul-h1{
         height: 60px;
+    }
+    #ul-h1.jpm{
+        background-color: rgba(74,118,43, 1.0);
     }
     #ul-h1 li:first-child{
         display:none;
@@ -1203,6 +1277,7 @@ footer a{color: #FFF}
         width: 80%;
         margin-top: 8px;
         vertical-align:top;
+        text-indent: 2.5%;
     }
     #ul-h1 li#li-menu{
         width: 17%;
@@ -1288,6 +1363,12 @@ footer a{color: #FFF}
     .alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty {
         width:90%;
     }
+    #banner-arrows{
+        top: 100px;
+    }
+    #banner-arrows span, #inner-banner-arrows span{
+        width: 49.3%;
+    }
 }
 @media only screen and (max-width: 600px){
     .banner li.arrow{
@@ -1296,8 +1377,21 @@ footer a{color: #FFF}
     #homeGallery .primeImg, #homeGallery .primeImg img{
         max-height: 202px;
     }
+    #banner-arrows{
+        top: 80px;
+    }
+    #banner-arrows a{
+        background-color: rgba(0,0,0, 0.3);
+    }
+    .banner-scroller{
+        max-width: 550px;
+    }
     .colA ul.banner{
         width: 100%;
+    }
+    .colA .homeThumb, .colA .homeThumbB{
+        width: 90px;
+        height: 90px;
     }
     .colF li:first-child {
         margin-top:0;
@@ -1315,11 +1409,14 @@ footer a{color: #FFF}
     .two-column .colB small{
         margin-left: 0;
     }
-    
+   
 }
 @media only screen and (max-width: 540px){
     #homeGallery .primeImg, #homeGallery .primeImg img {
         max-height: 175px;
+    }
+    #banner-arrows{
+        top: 65px;
     }
     .error h2{
         background-position-x: 110%;
@@ -1337,6 +1434,9 @@ footer a{color: #FFF}
 @media only screen and (max-width: 440px){
     #homeGallery .primeImg, #homeGallery .primeImg img{
         max-height: 135px;
+    }
+    #banner-arrows{
+        top: 35px;
     }
     .callout h2{
         background-position-x: 180%;
@@ -1419,6 +1519,9 @@ footer a{color: #FFF}
     #homeGallery .primeImg, #homeGallery .primeImg img {
         max-height: 100px;
     }
+    #banner-arrows{
+        top: 20px;
+    }
     .callout h2 {
         background-position-x: -650%;
     }
@@ -1428,6 +1531,14 @@ footer a{color: #FFF}
     .alertBoxFunctionGood, .alertBoxFunctionBad, .alertBoxFunctionWarn, .alertBoxFunctionEmpty {
         width:80%;
         max-width: 145px;
+    }
+}
+@media only screen and (max-width: 600px) and (orientation:landscape), only screen and (max-width: 480px){
+    .banner-container{
+        display:none;
+    }
+    .four-column .main{
+        margin-top: 0;
     }
 }
 /* ==|== non-semantic helper classes ========================================

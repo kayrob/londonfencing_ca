@@ -1,4 +1,4 @@
-</div> <!--! end of #content -->
+
 
     <footer>
         <div class="colE">
@@ -11,7 +11,7 @@
             </ul>
         </div>
     </footer>
-    
+</div> <!--! end of #content -->    
 </div> <!--! end of #container --> 
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script>window.jQuery || document.write('<script src="/js/jquery-1.11.min.js"><\/script>')</script>

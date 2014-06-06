@@ -37,7 +37,7 @@ $mainLogo50 = '<img src="/themes/LondonFencing/img/logo50.png" alt="London Fenci
 <header>
         <ul id="ul-h1">
             <li><a class="logo" href="/"><?php echo $mainLogo50;?></a></li>
-            <li class="li-h1">London Fencing Club</li>
+            <li class="li-h1"><a href="/">London Fencing Club</a></li>
             <li id="li-menu"><a id="momenu" title="Menu"><i class="icon-menu"></i></a></li>
         </ul>
         <nav><?php print str_replace("<ul>", "<ul><li id=\"momenu-logo\"><a class=\"logo\" href=\"/\">{$mainLogo50}</a></li>", str_replace("main","",$nav->build_nav($nav->get_nav_items_under_bucket('primary'), $slug, true, false)));  ?></nav>

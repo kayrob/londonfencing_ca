@@ -9,45 +9,50 @@ if ($this instanceof Page && isset($props[0])) {
     $med = new MED\media($db);
 
     list($photos, $videos) = $med->get_tag_arrays($props[0]);
+    
     if (is_array($photos) && count($photos) > 0) {
+        $images = array();
+        foreach ($photos as $tagID => $album) {
+            //$limit = (count($album) <= 6)? count($album): 6;
+            $limit = count($album);
+            for ($a = 0; $a < $limit; $a++){
+                $images[] = array("src" => urlencode($album[$a]['img']), "title" => $album[$a]["title"]);
+            }
+        }
         ?>
         <div id="homeGallery">
-            <div class="primeImg" style="overflow:hidden">
+           <div class="primeImg">
                 <?php
-                foreach ($photos as $tagID => $album) {
-                    //$limit = (count($album) <= 6)? count($album): 6;
-                    $limit = count($album);
-                    for ($a = 0; $a < $limit; $a++) {
-                        $display = ($a == 0) ? '' : ' style="display:none"';
-                        echo '<img src="'.$album[$a]['img'].'"' . $display . ' data-src="' . $album[$a]['img'] . '" alt="" />';
+                foreach ($images as $index => $src) {
+                    $imgDisplay = ($index == 1) ? " style=\"display:none\"" : "";
+                    echo '<img'.$imgDisplay.' src="/src/LondonFencing/StaticPage/resize.php?jpeg=home/'.$src["src"].'&jpgw=960&jpgh=310" data-src="' . $src["src"] . '" alt="" />';
+                    if ($index == 1){
+                        break;
                     }
                 }
                 ?>
             </div>
-        </div>
+            <div id="banner-arrows">
+                <span id="span-arrow-prev"><a class="prev" title="Previous"><i class="icon-arrow-left"></i></a></span>
+                <span id="span-arrow-next"><a class="next" title="Next"><i class="icon-arrow-right"></i></a></span>
+            </div>
         <div class="banner-container">
-        <ul class="banner">
-            <li class="arrow"><a class="prev"><i class="icon-arrow-left"></i></a></li>
-            <?php
-            foreach ($photos as $tagID => $album) {
-                $WidthLimit = (count($album) <= 6)? count($album): 6;
-                $limit = count($album);
-                $liPercent = floor((100-14) / $WidthLimit);
-                for ($a = 0; $a < $limit; $a++) {
-                    $style = ($a >= 6) ? ' style="display:none;width:'.$liPercent.'%"' : ' style="width:'.$liPercent.'%"';
-                    $imgStyle = ($a < 6) ? ' class="homeThumb"' : '';
-                    echo '<li' . $style . ' class="resize"><img'.$imgStyle.' src="/uploads/media/med/' . $album[$a]['img'] . '" width="100" height="100" data-title="' . $album[$a]['title'] . '" data-src="' . $album[$a]['img'] . '" data-index="'.$a.'" alt="" /></li>';
-                }
-                break;
-            }
-            ?>
-            <li class="arrow"><a class="next"><i class="icon-arrow-right"></i></a></li>
-        </ul>
+            <div class="banner-scroller">
+            <ul class="banner" style="width:<?php echo (count($images) * 120);?>px">
+                <?php
+                    //$liPercent = (100 / count($images));
+                    for ($a = 0; $a < count($images); $a++) {
+                        $imgStyle = ($a == 0) ? " class=\"homeThumbB\"" : " class=\"homeThumb\"";
+                        $style="";
+                        echo '<li' . $style . ' class="resize"><img'.$imgStyle.' src="/uploads/media/med/' . $images[$a]["src"] . '" data-title="' . $images[$a]['title'] . '" data-src="' . $images[$a]['src'] . '" data-index="'.$a.'" alt="" /></li>';
+                    }
+                ?>
+            </ul>
+            </div>
         </div>
         <?php
         global $quipp;
         $quipp->js['footer'][] = "/src/LondonFencing/media/assets/js/media.js";
-        $quipp->js['footer'][] = "/js/jquery.cycle.min.js";
     }
     ?>
 
