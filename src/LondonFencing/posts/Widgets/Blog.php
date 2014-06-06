@@ -150,4 +150,41 @@ class Blog extends Posts\posts{
         }
         return false;
     }
+    public function getArchiveByYear($year){
+        $toReturn = array();
+        $matches = array();
+        if (preg_match("%^2(\d{3})$%",$year,$matches)){
+            $qry = sprintf("SELECT `title`, UNIX_TIMESTAMP(`displayDate`) as `displayDate`, `slug`, `lead_in`, `author` FROM `tblNews` WHERE `sysOpen` = '1' AND `type` = '%s' AND `sysStatus` = '%s' AND `siteID` = %d AND UNIX_TIMESTAMP(`displayDate`) >= %d AND  UNIX_TIMESTAMP(`displayDate`) < %d ORDER BY UNIX_TIMESTAMP(`displayDate`) DESC",
+                $this->type,
+                $this->_status,
+                $this->_siteID,
+                mktime(0,0,0,1,1,$matches[0]),
+                mktime(0,0,0,1,1,($matches[0] + 1))
+            );
+            
+            $res = $this->_db->query($qry);
+            if ($this->_db->valid($res)){
+                while ($row = $this->_db->fetch_assoc($res)){
+                    $toReturn[] = $row;
+                }
+            }
+        }
+        return $toReturn;
+    }
+    public function getArchiveYears(){
+        $years = array();
+        $qry = sprintf("SELECT DISTINCT YEAR(`displayDate`) as published 
+            FROM `tblNews` 
+            WHERE `type` = '%s' AND `sysStatus` = 'active' AND `sysOpen` = '1' 
+            ORDER BY `displayDate` desc",
+            $this->type
+        );
+        $res = $this->_db->query($qry);
+        if ($this->_db->valid($res)){
+            while($row = $this->_db->fetch_assoc($res)){
+                $years[] = trim($row["published"]);
+            }
+        }
+        return $years;
+   }
 }

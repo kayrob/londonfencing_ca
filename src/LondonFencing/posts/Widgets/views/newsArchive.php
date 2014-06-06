@@ -14,6 +14,7 @@ if (isset($db) && $this INSTANCEOF Quipp){
     $recent = $news->getPostList(($page*5)-5,5);
     
     $articles = 1;
+    $archiveYear = 0;
     
     $newsSlug = (isset($_GET['slug'])) ? "/".$_GET['slug'] :'' ;
     if (isset($recent) && $recent !== false){
@@ -25,16 +26,29 @@ if (isset($db) && $this INSTANCEOF Quipp){
 <?php
         foreach ($recent as $post){
             $articles = $post["count"];
+            if ($archiveYear == 0){
+                $archiveYear = date("Y", $post["displayDate"]);
+            }
             echo '<li><a href="/news/'.trim($post['slug']).'">'.str_shorten($post['title'], 30).'</a><br /><small>Posted On: '.date("M j, Y",$post["displayDate"]).'</small></li>';
         }
 ?>
     </ul>
     </div>
-<?php
-     echo pagination($articles, $page, "/news".$newsSlug."?page=", 5, false);
-?>
     </div>
-
 <?php
+        if ($articles >= 5 && $archiveYear > 2000){
+?>
+        <div class="filtersNav">
+            <ul>
+                <li>
+                    <a href="/news-archive/<?php echo $archiveYear;?>">View All</a>
+                    <a class="icons gray" href="/news-archive/<?php echo $archiveYear;?>">
+                    <i class="icon-arrow-right"></i></a>
+                </li>
+            </ul>
+        </div>
+<?php
+        }
+
     }
 }

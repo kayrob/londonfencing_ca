@@ -30,7 +30,7 @@ if ($this instanceof Page && isset($props[0])){
     <ul class="inner-banner">
 <?php
         foreach($list as $src){
-            $resizeSrc = "/src/LondonFencing/StaticPage/resize.php?jpeg=" . urlencode($src['src']) . "&jpgw=". $imgWidthRz ."&jpgh=100";
+            $resizeSrc = "/src/LondonFencing/StaticPage/resize.php?jpeg=" . urlencode($src['src']) . "&amp;jpgw=". $imgWidthRz ."&amp;jpgh=100";
             echo '<li><a href="/uploads/media/'.$src['src'].'" class="fbGallery" data-fancybox-group="'.$props[0].'">';
             echo '<img class="innerThumb" src="'.$resizeSrc.'" data-title="'.$src['title'].'" data-src="'.$src['src'].'" alt="" />';
             echo '</a></li>';

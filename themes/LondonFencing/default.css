@@ -363,7 +363,7 @@ body, a:hover { color: #555; }
 
 nav a, #bannerContent h2, .boxStyle h2 { color: #fff; }
 a { color: #4A762B; text-decoration: none; border-bottom: 1px dashed #4A762B;}
-.main .colC .news-archive a, .main .colC .tourneysNav a, .pagination a, .colA a{border:none;}
+.main .colC .news-archive a, .main .colC .tourneysNav a, .pagination a, .colA a, .filtersNav a{border:none;}
 nav a:hover, nav .current a, footer a:hover { color: #ccc; text-decoration: none; border:none}
 
 a.fancybox-close, a.fancybox-left, a.fancybox-right{
@@ -794,7 +794,7 @@ a:active.btnStyle #goog-wm-sb:active {
     
 .callout img, .tournaments img { margin:0; padding:0; border:none; float: right;padding-left: 3px; }
 .tournaments img{padding: 4px 3px 0 0}
-.callout .bordered, .tournaments .bordered {
+.callout .bordered, .tournaments .bordered, .news-archive .bordered {
     border-top: 1px solid #E0E0E0;
     padding-top: 20px;
     
@@ -886,8 +886,8 @@ a:active.btnStyle #goog-wm-sb:active {
 }
 .blue:hover, .gray:hover { background: #4a762b; }
 .green:hover { background: #2e567f; }
-.tourneysNav {margin-bottom: 70px;}
-.tourneysNav ul{
+.tourneysNav, .filtersNav {margin-bottom: 70px;}
+.tourneysNav ul, .filtersNav ul{
     margin: 0;
     padding: 0;
     list-style-type: none;
@@ -902,23 +902,23 @@ a:active.btnStyle #goog-wm-sb:active {
     content:'\21B5';
     font-weight: normal;
 }*/
-.tourneysNav ul li{
+.tourneysNav ul li, .filtersNav ul li{
     margin: 0;
     padding: 10px 0 10px 5px;
-    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
 }
-.tourneysNav ul li:last-child{
+.tourneysNav ul li:first-child, .filtersNav ul li:first-child{
     border: none;
 }
 
-.tourneysNav a{
+.tourneysNav a, .filtersNav a{
     color: #777;
     border:none;
 }
-.tourneysNav a:hover{
+.tourneysNav a:hover, .filtersNav a:hover{
     font-style: italic;
 }
-.tourneysNav .icons, .two-column .colB .icons, #practiceSideNav .icons{
+.tourneysNav .icons, .two-column .colB .icons, #practiceSideNav .icons, .filtersNav .icons{
     float: right;
     width: 30px;
     height: 30px;
@@ -928,12 +928,12 @@ a:active.btnStyle #goog-wm-sb:active {
 .two-column .colB .icons, #practiceSideNav .icons{
     float:none;
 }
-.tourneysNav .icon-arrow-right{
+.tourneysNav .icon-arrow-right, .filtersNav .icon-arrow-right{
     font-size: 14px;
     vertical-align: text-top;
     line-height: 1.8;
 }
-.tourneysNav .icon-arrow-right:before{
+.tourneysNav .icon-arrow-right:before, .filtersNav .icon-arrow-right:before{
     line-height: 1.9;
     font-size: 14px;
 }

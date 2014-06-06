@@ -11,7 +11,7 @@ $tourns = multi_array_subval_sort($tournaments,'tdate');
 
 ?>
 
-<section class="tourneysNav">
+<section class="filtersNav">
     <div class="blankMainHeader"><h2>Filter</h2></div>
 <?php
 if (!empty($tourns)){
