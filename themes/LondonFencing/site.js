@@ -38,9 +38,9 @@ jQuery(document).ready(function($) {
     }
     var jpm = $.jPanelMenu({
         menu: 'nav',
-        trigger: '#momenu',
-        beforeClose: function(){$("#ul-h1").addClass("jpm");},
-        afterClose: function(){ $("#ul-h1").removeClass("jpm");}
+        trigger: '#momenu'
+        //beforeClose: function(){$("#ul-h1").addClass("jpm");},
+        //afterClose: function(){ $("#ul-h1").removeClass("jpm");}
     });
     var mobileMenu = function(){
         ($("#momenu").is(":visible")) ? jpm.on() : jpm.off();
