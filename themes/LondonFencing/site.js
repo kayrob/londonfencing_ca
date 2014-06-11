@@ -3,8 +3,8 @@
  * @todo Place this in its own file
  */
 jQuery(document).ready(function($) {
-    function dropdownMouseover() { $(this).children('ul').slideDown(); }
-    function dropdownMouseout() { $(this).children('ul').slideUp(); }
+    function dropdownMouseover() {$(this).children('ul').slideDown();}
+    function dropdownMouseout() {$(this).children('ul').slideUp();}
     var config = {
         over: dropdownMouseover,
         timeout: 500,
@@ -36,20 +36,15 @@ jQuery(document).ready(function($) {
             $(".main").css({height: diff + "px"});
         }
     }
-    var jpm = $.jPanelMenu({
-        menu: 'nav',
-        trigger: '#momenu'
-        //beforeClose: function(){$("#ul-h1").addClass("jpm");},
-        //afterClose: function(){ $("#ul-h1").removeClass("jpm");}
-    });
-    var mobileMenu = function(){
-        ($("#momenu").is(":visible")) ? jpm.on() : jpm.off();
-    }
-    mobileMenu();
+
     documentSetHeight();
+    $("#monav").mmenu().on("opening.mm", function(){
+        $("#monav").show();
+    }).on("closed.mm", function(){
+        $("#monav").hide();
+    });
     
     $(window).on("resize", function(){
-        mobileMenu();
         documentSetHeight();
     });
     

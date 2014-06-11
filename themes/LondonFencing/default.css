@@ -459,7 +459,7 @@ header {
 #ul-h1 li#li-menu{
     text-align:right;
 }
-nav {
+nav, #monav {
     width: 100%;
     max-width: 960px;
     background: #222;
@@ -471,7 +471,7 @@ nav {
     -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
     box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
 }
-nav #momenu-logo{
+#monav{
     display:none;
 }
 nav ul {
@@ -492,11 +492,11 @@ nav ul li {
     -ms-transition: all 0.5s linear;
     transition: all 0.5s linear;
 }
-nav ul li:hover { background: #333; color: #dedede; }
+nav ul li:hover, #monav ul li:hover { background: #333; color: #dedede; }
 
 nav ul li:first-child { background: none; }
 
-nav ul li a {
+nav ul li a, #monav ul li a {
     font-size: 15px;
     text-decoration: none;
     border:none;
@@ -1286,6 +1286,9 @@ footer a{color: #FFF}
     #momenu{
         display: inline;
     }
+   /* #monav{
+        display:initial;
+    }*/
     nav{
         display:none;
     }

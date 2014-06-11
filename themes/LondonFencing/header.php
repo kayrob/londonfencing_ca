@@ -10,7 +10,7 @@ $mainLogo50 = '<img src="/themes/LondonFencing/img/logo50.png" alt="London Fenci
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/plain" rel="author" href="/humans.txt" />
     <link href="http://fonts.googleapis.com/css?family=Playfair+Display%7COpen+Sans" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="/min/?f=themes/LondonFencing/default.css,js/fancybox/jquery.fancybox.css,js/jquery-ui/jquery-ui-1.8.18.custom.css">
+    <link rel="stylesheet" href="/min/?f=themes/LondonFencing/default.css,js/fancybox/jquery.fancybox.css,js/jquery-ui/jquery-ui-1.8.18.custom.css,js/mmenu/jquery.mmenu.css">
     <link rel="alternate" type="application/rss+xml" href="/feed/blog">
     <?php
     if(isset($quipp->css) && is_array($quipp->css)) {
@@ -34,14 +34,15 @@ $mainLogo50 = '<img src="/themes/LondonFencing/img/logo50.png" alt="London Fenci
     ?>
 </head>
 <body data-controller="<?php echo str_replace('-', '_', $meta['body_id']); ?>" class="<?php print Page::body_class($meta['body_classes']); ?>" id="<?php if (!empty($meta['body_id'])) print $meta['body_id']; ?>">
-<header>
+<header class="mm-fixed-top">
         <ul id="ul-h1">
             <li><a class="logo" href="/"><?php echo $mainLogo50;?></a></li>
             <li class="li-h1"><a href="/">London Fencing Club</a></li>
-            <li id="li-menu"><a id="momenu" title="Menu"><i class="icon-menu"></i></a></li>
+            <li id="li-menu"><a id="momenu" title="Menu" href="#monav"><i class="icon-menu"></i></a></li>
         </ul>
-        <nav><?php print str_replace("<ul>", "<ul><li id=\"momenu-logo\"><a class=\"logo\" href=\"/\">{$mainLogo50}</a></li>", str_replace("main","",$nav->build_nav($nav->get_nav_items_under_bucket('primary'), $slug, true, false)));  ?></nav>
+        <nav><?php print str_replace("main","",$nav->build_nav($nav->get_nav_items_under_bucket('primary'), $slug, true, false));  ?></nav>
 </header>
+<div id="monav"><?php print str_replace("<ul>", "<ul><li id=\"momenu-logo\"><a class=\"logo\" href=\"/\">{$mainLogo50}</a></li>", str_replace("main","",$nav->build_nav($nav->get_nav_items_under_bucket('primary'), $slug, true, false)));  ?></div>
 <div id="container">
     <div id="content">
 

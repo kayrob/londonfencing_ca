@@ -19,7 +19,7 @@
   <script src="/js/fancybox/jquery.fancybox.pack.js"></script>
   <script src="/js/jquery.easing-1.3.pack.js"></script>
   <script src="/js/jquery.hoverIntent.min.js"></script>
-  <script src="/js/jpanelmenu.js"></script>
+  <script src="/js/mmenu/jquery.mmenu.min.js"></script>
 <?php
     if(isset($quipp->js['footer']) && is_array($quipp->js['footer'])) {
         foreach($quipp->js['footer'] as $val) {
