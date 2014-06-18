@@ -10,7 +10,7 @@ $mainLogo50 = '<img src="/themes/LondonFencing/img/logo50.png" alt="London Fenci
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/plain" rel="author" href="/humans.txt" />
     <link href="http://fonts.googleapis.com/css?family=Playfair+Display%7COpen+Sans" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="/min/?f=themes/LondonFencing/default.css,js/fancybox/jquery.fancybox.css,js/jquery-ui/jquery-ui-1.8.18.custom.css,js/mmenu/jquery.mmenu.css">
+    <link rel="stylesheet" href="/min/?f=themes/LondonFencing/default.css,js/fancybox/jquery.fancybox.css,js/jquery-ui/custom-10-4/jquery-ui-1.10.4.custom.css,js/mmenu/jquery.mmenu.css">
     <link rel="alternate" type="application/rss+xml" href="/feed/blog">
     <?php
     if(isset($quipp->css) && is_array($quipp->css)) {

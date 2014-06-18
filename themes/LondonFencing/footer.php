@@ -15,7 +15,7 @@
 </div> <!--! end of #container --> 
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script>window.jQuery || document.write('<script src="/js/jquery-1.11.min.js"><\/script>')</script>
-  <script src="/js/jquery-ui/jquery-ui-1.8.16.custom.min.js"></script>
+  <script src="/js/jquery-ui/custom-10-4/jquery-ui-1.10.4.custom.min.js"></script>
   <script src="/js/fancybox/jquery.fancybox.pack.js"></script>
   <script src="/js/jquery.easing-1.3.pack.js"></script>
   <script src="/js/jquery.hoverIntent.min.js"></script>
