@@ -29,7 +29,7 @@ if (!empty($tourns)){
             }
         }
         if (isset($_GET['filter'])){
-            echo '<li ><a href="/'.$_GET['p'].'">Clear Filter</a><a href="/'.$_GET['p'].'" class="iconsM gray"><img src="/themes/LondonFencing/img/arrowL.png" alt="" width="15" height="15" /></a></li>';
+            echo '<li ><a href="/'.$_GET['p'].'">Clear Filter</a><a href="/'.$_GET['p'].'" class="icons gray"><i class="icon-arrow-left"></i></a></li>';
         }
         echo '</ul>';
 }
