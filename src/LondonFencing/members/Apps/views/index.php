@@ -44,7 +44,7 @@ if ($hasPermission) {
     //set the primary table name
     $primaryTableName = "tblMembersRegistration";
     $feeTypes = array("annually" => "Annual (one-time)", "quarterly" => "Quarterly (4-times)", "monthly" => "Monthly");
-    $membershipTypes = array("Excellence", "Foundation","Transition","Competitive","Recreation");
+    $membershipTypes = array("Excellence", "Foundation","Transition","Competitive","Recreation","U15 Competitive");
     //editable fields
     $fields[] = array(
         'label'   => "Member Name",
