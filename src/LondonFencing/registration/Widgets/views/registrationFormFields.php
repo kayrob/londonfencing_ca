@@ -97,7 +97,7 @@ $handedness = array("Left", "Right");
         <div>
         <label for="OPvalALPHcffNumber">CFF Number</label>
         <input type="text" name="OPvalALPHcffNumber" id="OPvalALPHcffNumber"  value = "<?php echo $post["OPvalALPHcffNumber"];?>" /><small>Competitive
-        <a href="http://fencingontario.ca/membership/" target="_blank" class="icons blue" title="Register at OFA"><i class="icon-link"></i></a></small>
+        <a href="https://www.fencing.ca/content/membership-registration" target="_blank" class="icons blue" title="Register at OFA"><i class="icon-link"></i></a></small>
         </div>
 <?php
      }
