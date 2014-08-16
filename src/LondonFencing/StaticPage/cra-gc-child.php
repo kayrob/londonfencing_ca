@@ -16,7 +16,7 @@ ob_start();
         <td width="33%"><img src="<?php echo $url;?>/src/LondonFencing/StaticPage/assets/img/logo_grn.jpg" alt="" width="176px" height="80px" /></td>
         <td width="33%">&nbsp;</td>
     </tr>
-    <tr><td align="right"><b>LONDON FENCING CLUB</b></td><td colspan="2">c/o 1037 Viscount Road, London, Ontario, N6K 1H5</td></tr>
+    <tr><td align="right"><b>LONDON FENCING CLUB</b></td><td colspan="2">c/o 140 Blanchard Cres, London, ON N6G 4E2</td></tr>
     <tr><td colspan="3"><img src="<?php echo $url;?>/src/LondonFencing/StaticPage/assets/img/spacer.jpg" alt="" width="5px" height="8px" /></td></tr>
 </table>
 <table>
@@ -45,7 +45,7 @@ ob_start();
         <td width="33%"><img src="<?php echo $url;?>/src/LondonFencing/StaticPage/assets/img/logo_grn.jpg" alt="" width="176px" height="80px" /></td>
         <td width="33%">&nbsp;</td>
     </tr>
-    <tr><td align="right"><b>LONDON FENCING CLUB</b></td><td colspan="2">c/o 1037 Viscount Road, London, Ontario, N6K 1H5</td></tr>
+    <tr><td align="right"><b>LONDON FENCING CLUB</b></td><td colspan="2">c/o 140 Blanchard Cres, London, ON N6G 4E2</td></tr>
     <tr><td colspan="3"><img src="<?php echo $url;?>/src/LondonFencing/StaticPage/assets/img/spacer.jpg" alt="" width="5px" height="8px" /></td></tr>
 </table>
 <table>
