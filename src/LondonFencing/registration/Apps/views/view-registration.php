@@ -25,9 +25,9 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
 
     //set the primary table name
     $primaryTableName = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "tblDiscoverRegistration" : "tblClassesRegistration";
-    $feeTable = (isset($_GET["app"]) && $_GET["appType"] == "discover") ? "tblDiscover" : "tblClasses";
+    $sessionTable = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "tblDiscover" : "tblClasses";
 
-    $fee = $db->return_specific_item((int) $_GET['sid'], $feeTable, 'fee', '0');
+    $fee = $db->return_specific_item((int) $_GET['sid'], $sessionTable, 'fee', '0');
     $provs = array("AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT");
     $regStatus = array("1" => "Registered", "0" => "Wait Listed");
     $gender = array("F" => "Female", "M" => "Male");
@@ -390,7 +390,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
         $_GET['view'] = 'edit';
     }
 
-    $sessionName = $db->return_specific_item((int) $_GET['sid'], "tblClasses", "sessionName");
+    $sessionName = $db->return_specific_item((int) $_GET['sid'], $sessionTable, "sessionName");
 
     include $root . "/admin/templates/header.php";
     ?>
@@ -558,11 +558,15 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
 
             $resqry = $db->query($listqry);
             if (is_object($resqry) && $resqry->num_rows > 0) {
+                $appGet = "";
+                if (isset($_GET["app"])){
+                    $appGet = ($_GET["app"] == "discover") ? "&a=d" : "&a=b";
+                }
                 //list table field titles
                 ?>
                 <p>How to send a link to the registration/waiver page for registered participants:<br /><br />
-                    Emailer (1+ recipients): <?php echo "http://" . $_SERVER["SERVER_NAME"] . "/print-reg/" . $_GET['sid'] . "/%REGKEY%"; ?><br />
-                    Gmail (or one recipient): <?php echo "http://" . $_SERVER["SERVER_NAME"] . "/print-reg/" . $_GET['sid'] . "/xx-####-##"; ?>
+                    Emailer (1+ recipients): <?php echo "http://" . $_SERVER["SERVER_NAME"] . "/print-reg/" . $_GET['sid'] . "/%REGKEY%".$appGet; ?><br />
+                    Gmail (or one recipient): <?php echo "http://" . $_SERVER["SERVER_NAME"] . "/print-reg/" . $_GET['sid'] . "/xx-####-##".$appGet; ?>
                     <br /><br />
                     %REGKEY% will automatically be replaced by the emailer with the user's registration number. Make sure to select "Individual"
                     <br />xx-####-## represents the value in the Registration Number column. You will have to replace this manually<br /><br /></p>
