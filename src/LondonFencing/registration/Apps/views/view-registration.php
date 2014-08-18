@@ -604,8 +604,8 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                     $formDate = (trim($dt["formDate"]) != '' && $dt["formDate"] > 0) ? date('Y-m-d', $dt["formDate"]) : "Due";
                     echo '<tr><td>' . $dt['name'] . '</td><td>' . $dt["registrationKey"] . '</td><td>' . $dt["email"] . '</td><td>' . date('Y-m-d', $dt["dateReg"]) . '</td><td>' . $paymentDate . '</td><td>' . $formDate . '</td><td>Registered</td>';
                     echo '<td style="width:70px;"><input type="checkbox" name="eList[]" id="eList_' . trim($dt['itemID']) . '" value="' . trim($dt['itemID']) . '" /></td>';
-                    echo '<td style="width:40px;"><input class="btnStyle red noPad" id="btnDelete_' . $dt['itemID'] . '" type="button" onclick="javascript:confirmDelete(\'?sid=' . $_GET['sid'] . '&action=delete&amp;id=' . $dt['itemID'] . '\');" value="Delete"></td>';
-                    echo '<td style="width:40px;"><input class="btnStyle blue noPad" id="btnEdit_' . $dt['itemID'] . '" type="button" onclick="javascript:window.location=\'?sid=' . $_GET['sid'] . '&view=edit&amp;id=' . $dt['itemID'] . '\';" value="Edit"></td></tr>';
+                    echo '<td style="width:40px;"><input class="btnStyle red noPad" id="btnDelete_' . $dt['itemID'] . '" type="button" onclick="javascript:confirmDelete(\'?app='.$_GET["app"].'&sid=' . $_GET['sid'] . '&action=delete&amp;id=' . $dt['itemID'] . '\');" value="Delete"></td>';
+                    echo '<td style="width:40px;"><input class="btnStyle blue noPad" id="btnEdit_' . $dt['itemID'] . '" type="button" onclick="javascript:window.location=\'?app='.$_GET["app"].'&sid=' . $_GET['sid'] . '&view=edit&amp;id=' . $dt['itemID'] . '\';" value="Edit"></td></tr>';
                 }
                 echo '<tr><td colspan="10">(Total: '.count($registered).', Left: '.$left.', Right: '.$right.')</td></tr>';
                 echo '</tbody><tbody>';
@@ -616,8 +616,8 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                     foreach ($waitlist as $dt) {
                         echo '<tr><td>' . $dt['name'] . '</td><td>' . $dt["registrationKey"] . '</td><td>' . $dt["email"] . '</td><td>' . date('Y-m-d', $dt["dateReg"]) . '</td><td>N/A</td><td>N/A</td><td>Waitlist (' . (++$w) . ')</td>';
                         echo '<td style="width:50px;"><input type="checkbox" name="eList[]" id="eList_' . trim($dt['itemID']) . '" value="' . trim($dt['itemID']) . '" /></td>';
-                        echo '<td style="width:50px;"><input class="btnStyle red noPad" id="btnDelete_' . $dt['itemID'] . '" type="button" onclick="javascript:confirmDelete(\'?sid=' . $_GET['sid'] . '&action=delete&amp;id=' . $dt['itemID'] . '\');" value="Delete"></td>';
-                        echo '<td style="width:50px;"><input class="btnStyle blue noPad" id="btnEdit_' . $dt['itemID'] . '" type="button" onclick="javascript:window.location=\'?sid=' . $_GET['sid'] . '&view=edit&amp;id=' . $dt['itemID'] . '\';" value="Edit"></td></tr>';
+                        echo '<td style="width:50px;"><input class="btnStyle red noPad" id="btnDelete_' . $dt['itemID'] . '" type="button" onclick="javascript:confirmDelete(\'?app='.$_GET["app"].'&sid=' . $_GET['sid'] . '&action=delete&amp;id=' . $dt['itemID'] . '\');" value="Delete"></td>';
+                        echo '<td style="width:50px;"><input class="btnStyle blue noPad" id="btnEdit_' . $dt['itemID'] . '" type="button" onclick="javascript:window.location=\'?app='.$_GET["app"].'&sid=' . $_GET['sid'] . '&view=edit&amp;id=' . $dt['itemID'] . '\';" value="Edit"></td></tr>';
                     }
                 }
                 echo '</tbody>
