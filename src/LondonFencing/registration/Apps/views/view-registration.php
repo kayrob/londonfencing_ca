@@ -24,7 +24,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
     $te = new Editor();
 
     //set the primary table name
-    $primaryTableName = (isset($_GET["app"]) && $_GET["appType"] == "discover") ? "tblDiscoverRegistration" : "tblClassesRegistration";
+    $primaryTableName = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "tblDiscoverRegistration" : "tblClassesRegistration";
     $feeTable = (isset($_GET["app"]) && $_GET["appType"] == "discover") ? "tblDiscover" : "tblClasses";
 
     $fee = $db->return_specific_item((int) $_GET['sid'], $feeTable, 'fee', '0');

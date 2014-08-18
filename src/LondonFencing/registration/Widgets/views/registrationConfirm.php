@@ -54,8 +54,12 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
         else{
             $body .= '<p>Thank you for your interest in the London Fencing Club. If a space becomes available, you will be notified by email. If not, we hope you try to register for the next session.</p>';
         }
+        $subjectLevel = ucwords($sessionSaved['level']). " Session";
+        if ($sessionType == "discover"){
+            $subjectLevel = "Discover Fencing";
+        }
         $emailBody = str_replace('%SERVERNAME%',$_SERVER['SERVER_NAME'],str_replace('%BODY%',$body,str_replace('%TITLE%',$title,$emailTemplate)));
-        $subject = "London Fencing ".ucwords($sessionSaved['level'])." Session Registration";
+        $subject = "London Fencing ".$subjectLevel." Registration";
         $from = Quipp()->config('mailer.from_email');
         $admEmail = $db->return_specific_item(false, 'sysStorageTable', 'value', '--', "application='".$sessionSaved['level']."-registration'");
         if ($admEmail == "--"){
