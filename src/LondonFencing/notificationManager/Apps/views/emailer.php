@@ -47,6 +47,10 @@ if ((isset($_POST['eList']) && is_array($_POST['eList'])) || (isset($_POST['aLis
                 $placeHolders["%SESSION%"] = "Session Name of this Class";
                 $placeHolders["%REGKEY%"] = "Individual Registration Confirmation Code";
                 break;
+            case "discover-reg":
+                $placeHolders["%SESSION%"] = "Session Name of this Class";
+                $placeHolders["%REGKEY%"] = "Individual Registration Confirmation Code";
+                break;
             case "int-reg":
                 $placeHolders["%REGKEY%"] = "Individual Registration Confirmation Code";
                 break;
@@ -117,6 +121,9 @@ if ((isset($_POST['eList']) && is_array($_POST['eList'])) || (isset($_POST['aLis
             switch ($_POST['etype']){
                     case 'class-reg':
                         $sent = $ntfy->emailClassParticipants($_POST['RQvalALPHSubject'], $_POST['RQvalALPHMessage'], $addresses, $_POST['RQvalALPHSend_Type'], $_POST['RQvalALPHFormat'], 'beginner');
+                        break;
+                    case 'discover-reg':
+                        $sent = $ntfy->emailClassParticipants($_POST['RQvalALPHSubject'], $_POST['RQvalALPHMessage'], $addresses, $_POST['RQvalALPHSend_Type'], $_POST['RQvalALPHFormat'], 'discover');
                         break;
                     case "int-reg":
                         $sent = $ntfy->emailClassParticipants($_POST['RQvalALPHSubject'], $_POST['RQvalALPHMessage'], $addresses, $_POST['RQvalALPHSend_Type'], $_POST['RQvalALPHFormat'], 'intermediate');

@@ -24,9 +24,10 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
     $te = new Editor();
 
     //set the primary table name
-    $primaryTableName = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "tblDiscoverRegistration" : "tblClassesRegistration";
-    $sessionTable = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "tblDiscover" : "tblClasses";
-    $qryString = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "&app=discover":"&app=beginner";
+    $appType = (isset($_GET["app"])) ? $_GET["app"] : "";
+    $primaryTableName = ($appType == "discover") ? "tblDiscoverRegistration" : "tblClassesRegistration";
+    $sessionTable = ($appType == "discover") ? "tblDiscover" : "tblClasses";
+    $qryString = ($appType == "discover") ? "&app=discover":"&app=beginner";
                  
     $fee = $db->return_specific_item((int) $_GET['sid'], $sessionTable, 'fee', '0');
     $provs = array("AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT");
@@ -618,13 +619,14 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                         echo '<td style="width:50px;"><input class="btnStyle blue noPad" id="btnEdit_' . $dt['itemID'] . '" type="button" onclick="javascript:window.location=\'?app='.$_GET["app"].'&sid=' . $_GET['sid'] . '&view=edit&amp;id=' . $dt['itemID'] . '\';" value="Edit"></td></tr>';
                     }
                 }
+                $emailType = ($appType == "discover") ? "discover-reg" : "class-reg";
                 echo '</tbody>
                 <tbody>
                 <tr><td colspan="10">
                 <input  style="float:right" class="btnStyle green noPad" id="btnPrint" type="button" onclick="javascript:window.open(\'/admin/apps/registration/print-reg-list?sid=' . $_GET['sid'] . $qryString. '\');" value="Print">
                 <input  style="float:right" class="btnStyle blue noPad" id="btnSelect" type="submit" value="Send Email">
                 <input type="hidden" name="nonce" value="' . Quipp()->config('security.nonce') . '" />
-                <input type="hidden" name="etype" value="class-reg" />
+                <input type="hidden" name="etype" value="'.$emailType.'" />
                 </td>
                     </tr>
                 </tbody>

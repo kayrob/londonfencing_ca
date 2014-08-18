@@ -60,6 +60,19 @@ class notificationManager{
         $this->mailer->ClearAddresses();
     }
     /**
+     * Get email list for discover class members. This can be used for multiple mailing options
+     * @access protected
+     * @param string $emailID
+     * @return object
+     */
+    protected function getEmailDiscoverAddresses($emailID){
+        $qry = sprintf("SELECT cr.`firstName`, cr.`lastName`, cr.`email`,cr.`parentName`, cr.`registrationKey`, c.`sessionName` 
+                FROM `tblDiscoverRegistration` AS cr INNER JOIN `tblDiscover` AS c ON cr.`sessionID` = c.`itemID` WHERE cr.`itemID` IN (%s)",
+                    $this->_db->escape($emailID,true)
+            );
+        return $this->_db->query($qry);
+    }
+    /**
      * Get email list for beginner class members. This can be used for multiple mailing options
      * @access protected
      * @param string $emailID
@@ -162,7 +175,17 @@ class notificationManager{
         $this->mailer->ClearAddresses();
         if (is_array($eList)){
             $emailID = implode(",",$eList);
-            $res = ($level == 'intermediate') ? $this->getEmailIntermediates($emailID) : $this->getEmailClassAddresses($emailID);
+            switch($level){
+                case "intermediate":
+                    $res = $this->getEmailIntermediates($emailID);
+                    break;
+                case "discover":
+                    $res = $this->getEmailDiscoverAddresses($emailID);
+                    break;
+                default:
+                    $res = $this->getEmailClassAddresses($emailID);
+            }
+            //$res = ($level == 'intermediate') ? $this->getEmailIntermediates($emailID) : $this->getEmailClassAddresses($emailID);
             
             if ($res->num_rows > 0){
                 
