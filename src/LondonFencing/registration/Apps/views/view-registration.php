@@ -26,7 +26,8 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
     //set the primary table name
     $primaryTableName = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "tblDiscoverRegistration" : "tblClassesRegistration";
     $sessionTable = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "tblDiscover" : "tblClasses";
-
+    $qryString = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "&app=discover":"&app=beginner";
+                 
     $fee = $db->return_specific_item((int) $_GET['sid'], $sessionTable, 'fee', '0');
     $provs = array("AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT");
     $regStatus = array("1" => "Registered", "0" => "Wait Listed");
@@ -250,12 +251,12 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
     if ((!empty($_POST) && validate_form($_POST)) || $_POST['dbaction'] == 'delete') {
 
         //yell($_POST);
-        $maxWaitlist = $db->fetch_assoc($db->query("SELECT (MAX(waitlist) + 1) AS wl FROM tblClassesRegistration WHERE `sessionID` = " . $db->escape($_GET['sid'])));
+        $maxWaitlist = $db->fetch_assoc($db->query("SELECT (MAX(waitlist) + 1) AS wl FROM $primaryTableName WHERE `sessionID` = " . $db->escape($_GET['sid'])));
         $newWL = (isset($maxWaitlist['wl'])) ? (int) $maxWaitlist['wl'] : 1;
         switch ($_POST['dbaction']) {
             case "insert":
 
-                $countQry = $db->fetch_assoc($db->query("SELECT (COUNT(itemID) + 1) AS rk FROM tblClassesRegistration WHERE `sessionID` = " . $db->escape($_GET['sid'])));
+                $countQry = $db->fetch_assoc($db->query("SELECT (COUNT(itemID) + 1) AS rk FROM $primaryTableName WHERE `sessionID` = " . $db->escape($_GET['sid'])));
                 $newCount = (isset($countQry['rk'])) ? $countQry['rk'] : "1";
 
                 //this insert query will work for most single table interactions, you may need to cusomize your own
@@ -304,7 +305,6 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                 $res = $db->query($qry);
 
                 if ($db->affected_rows($res) == 1) {
-                    $qryString = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "&app=discover":"&app=beginner";
                     header('Location:/admin/apps/registration/view-registration?sid=' . (int) $_GET['sid'] . $qryString. '&Insert=true');
                 } else {
                     echo "Insert did not work";
@@ -368,7 +368,6 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                 $res = $db->query($qry);
 
                 if ($db->affected_rows($res) == 1 || $db->error() === false) {
-                    $qryString = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "&app=discover":"&app=beginner";
                     header('Location:/admin/apps/registration/view-registration?sid=' . $_GET['sid'] .$qryString. '&Update=true');
                 } else {
                     echo "Update did not work";
@@ -382,7 +381,6 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
 
                 $db->query(sprintf("UPDATE %s SET `sysStatus` = 'inactive', `sysOpen` = '0' , `isRegistered`='0', `waitlist` = '0' WHERE itemID = %d", (string) $primaryTableName, (int) $db->escape($_GET['id'], true)
                         ));
-                $qryString = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "&app=discover":"&app=beginner";
                 header('Location:/admin/apps/registration/view-registration?sid=' . $_GET['sid'].$qryString);
                 break;
         }
@@ -402,7 +400,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
             <div class="boxStyleHeading">
                 <h2><?php echo $sessionName; ?> - Edit</h2>
                 <div class="boxStyleHeadingRight">
-    <?php print "<input class='btnStyle blue' type=\"button\" name=\"newItem\" id=\"newItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/view-registration?sid=" . $_GET['sid'] . "&view=edit';\" value=\"New\" />"; ?>
+    <?php print "<input class='btnStyle blue' type=\"button\" name=\"newItem\" id=\"newItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/view-registration?sid=" . $_GET['sid'] . $qryString. "&view=edit';\" value=\"New\" />"; ?>
                 </div>
             </div>
             <div class="clearfix">&nbsp;</div>
@@ -538,7 +536,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
             $formBuffer .= "</td></tr>";
             $formBuffer .= "</table>";
             $formBuffer .= "<div class=\"clearfix\" style=\"margin-top: 10px; height:10px; border-top: 1px dotted #B1B1B1;\">&nbsp;</div>";
-            $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='/admin/apps/registration/view-registration?sid=" . $_GET['sid'] . "';\" value=\"Cancel\" />
+            $formBuffer .= "<input class='btnStyle grey' type=\"button\" name=\"cancelUserForm\" id=\"cancelUserForm\" onclick=\"javascript:window.location.href='/admin/apps/registration/view-registration?sid=" . $_GET['sid'] . $qryString. "';\" value=\"Cancel\" />
 		<input class='btnStyle green' type=\"submit\" name=\"submitUserForm\" id=\"submitUserForm\" value=\"Save Changes\" />";
             $formBuffer .= "</form>";
             //print the form
@@ -623,7 +621,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                 echo '</tbody>
                 <tbody>
                 <tr><td colspan="10">
-                <input  style="float:right" class="btnStyle green noPad" id="btnPrint" type="button" onclick="javascript:window.open(\'/admin/apps/registration/print-reg-list?sid=' . $_GET['sid'] . '\');" value="Print">
+                <input  style="float:right" class="btnStyle green noPad" id="btnPrint" type="button" onclick="javascript:window.open(\'/admin/apps/registration/print-reg-list?sid=' . $_GET['sid'] . $qryString. '\');" value="Print">
                 <input  style="float:right" class="btnStyle blue noPad" id="btnSelect" type="submit" value="Send Email">
                 <input type="hidden" name="nonce" value="' . Quipp()->config('security.nonce') . '" />
                 <input type="hidden" name="etype" value="class-reg" />
@@ -636,7 +634,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                             echo 'no data present';
                         }
                         echo '<p>&nbsp;</p>';
-                        echo '<input type="button" class="btnStyle noPad" value="Cancel" onclick="javascript:window.location.href=\'/admin/apps/registration/beginner-registration\'" />';
+                        echo '<input type="button" class="btnStyle noPad" value="Cancel" onclick="javascript:window.location.href=\'/admin/apps/registration/'.$_GET["app"].'-registration\'" />';
                         //to pass more advanced controls, you'll need to create your own $fields array and pass it directly to $te->display_editor_list($fields);
                         break;
                 }

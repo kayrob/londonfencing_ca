@@ -12,10 +12,14 @@ if ($auth->has_permission("canEditReg")){
 
 if ($hasPermission && isset($_GET['sid'])) {
     if (is_numeric($_GET['sid'])){
+    $begTable = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "tblDiscover" : "tblClasses";
+    $begTableReg = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "tblDiscoverRegistration" : "tblClassesRegistration";
     $listqry = sprintf("SELECT cr.*, c.`level`, c.`sessionName` 
-                FROM `tblClassesRegistration` AS cr INNER JOIN `tblClasses` AS c ON cr.`sessionID` = c.`itemID` 
+                FROM `%s` AS cr INNER JOIN `%s` AS c ON cr.`sessionID` = c.`itemID` 
                 WHERE cr.`sessionID` = %d AND cr.`isRegistered` = 1 AND cr.`sysStatus` = 'active'
                 ORDER BY cr.`lastName` ASC, cr.`firstName` ASC", 
+            $begTableReg,
+            $begTable,
           (int)$db->escape($_GET['sid'],true)
      );
     }
