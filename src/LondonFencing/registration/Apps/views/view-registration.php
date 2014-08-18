@@ -24,9 +24,10 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
     $te = new Editor();
 
     //set the primary table name
-    $primaryTableName = "tblClassesRegistration";
+    $primaryTableName = (isset($_GET["app"]) && $_GET["appType"] == "discover") ? "tblDiscoverRegistration" : "tblClassesRegistration";
+    $feeTable = (isset($_GET["app"]) && $_GET["appType"] == "discover") ? "tblDiscover" : "tblClasses";
 
-    $fee = $db->return_specific_item((int) $_GET['sid'], 'tblClasses', 'fee', '0');
+    $fee = $db->return_specific_item((int) $_GET['sid'], $feeTable, 'fee', '0');
     $provs = array("AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT");
     $regStatus = array("1" => "Registered", "0" => "Wait Listed");
     $gender = array("F" => "Female", "M" => "Male");
@@ -303,7 +304,8 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                 $res = $db->query($qry);
 
                 if ($db->affected_rows($res) == 1) {
-                    header('Location:/admin/apps/registration/view-registration?sid=' . (int) $_GET['sid'] . '&Insert=true');
+                    $qryString = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "&app=discover":"&app=beginner";
+                    header('Location:/admin/apps/registration/view-registration?sid=' . (int) $_GET['sid'] . $qryString. '&Insert=true');
                 } else {
                     echo "Insert did not work";
                 }
@@ -366,7 +368,8 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                 $res = $db->query($qry);
 
                 if ($db->affected_rows($res) == 1 || $db->error() === false) {
-                    header('Location:/admin/apps/registration/view-registration?sid=' . $_GET['sid'] . '&Update=true');
+                    $qryString = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "&app=discover":"&app=beginner";
+                    header('Location:/admin/apps/registration/view-registration?sid=' . $_GET['sid'] .$qryString. '&Update=true');
                 } else {
                     echo "Update did not work";
                 }
@@ -379,8 +382,8 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
 
                 $db->query(sprintf("UPDATE %s SET `sysStatus` = 'inactive', `sysOpen` = '0' , `isRegistered`='0', `waitlist` = '0' WHERE itemID = %d", (string) $primaryTableName, (int) $db->escape($_GET['id'], true)
                         ));
-
-                header('Location:/admin/apps/registration/view-registration?sid=' . $_GET['sid']);
+                $qryString = (isset($_GET["app"]) && $_GET["app"] == "discover") ? "&app=discover":"&app=beginner";
+                header('Location:/admin/apps/registration/view-registration?sid=' . $_GET['sid'].$qryString);
                 break;
         }
     } else {

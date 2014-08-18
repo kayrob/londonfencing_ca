@@ -18,6 +18,15 @@
         <help>Use this tool to add Beginner Session information, view submissions and manage registrations. An email tool enables 
         administrators to send messages to individuals or the group.</help>
     </module>
+    <module name="register-discover">
+        <ns>\Apps\Register\Discover</ns>
+        <label>Registration: Discover Fencing</label>
+       <admin enabled="1">registration/Apps/views/discover-registration.php</admin>
+        <widget enabled="1" adminLink="1" name="Form: Discover Fencing Registration">Widgets/views/discoverRegistration.php</widget>
+        <icon>registration/assets/img/dashboard_icon.png</icon>
+        <help>Use this tool to add Discover Fencing Session information, view submissions and manage registrations. An email tool enables 
+        administrators to send messages to individuals or the group.</help>
+    </module>
     <module name="register-sidenav">
         <widget enabled="1" adminLink="0" name="Form: Registration Side Nav">Widgets/views/registrationSideBar.php</widget>
     </module>

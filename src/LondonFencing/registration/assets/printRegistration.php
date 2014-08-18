@@ -4,9 +4,10 @@ require_once dirname(__DIR__) . '/registration.php';
 
 use LondonFencing\registration as REG;
 
-if (isset($_GET['s']) && preg_match('%^(I|\d+)$%', $_GET['s'], $match) && isset($_GET['r'])) {
+if (isset($_GET['s']) && preg_match('%^(I|\d+)$%', $_GET['s'], $match) && isset($_GET['r']) ) {
     $reg = new REG\Registration($db);
-    $regNfo = ($match[0] == "I") ? $reg->getIntRegRecord($_GET['r']) : $reg->getSavedRegistration($_GET['s'], $_GET['r']);
+    $regNfo = ($match[0] == "I") ? $reg->getIntRegRecord($_GET['r']) : 
+        (isset($_GET["a"]) && $_GET["a"] == d) ? $reg->getSavedDiscover($_GET['s'], $_GET['r']) : $reg->getSavedRegistration($_GET['s'], $_GET['r']);
 
     if (isset($regNfo['isRegistered']) && (int) $regNfo['isRegistered'] == 1) {
 ?>

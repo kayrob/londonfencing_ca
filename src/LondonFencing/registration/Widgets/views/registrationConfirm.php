@@ -1,7 +1,7 @@
 <?php
 if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof LondonFencing\registration\registration){
     
-    $sessionSaved = $reg->getSavedRegistration($sessionNfo["itemID"], $message);
+    $sessionSaved = (isset($sessionType) && $sessionType == "discover") ? $reg->getSavedDiscover($sessionNfo["itemID"], $message) : $reg->getSavedRegistration($sessionNfo["itemID"], $message);
     if ($sessionSaved !== false){
         $address = $sessionSaved['address'].", ".$sessionSaved["city"]." ".$sessionSaved["province"].", ".$sessionSaved["postalCode"];
         if (trim($sessionSaved['address2']) != ""){
@@ -31,7 +31,7 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
         $body .= '<label>Date Registered: </label>&nbsp;'.$sessionSaved['sysDateCreated'].'</p>';
         if ((int)$sessionSaved['isRegistered'] == 1){
         $body .= '<p>Print out your form to sign by clicking the link or copying it and pasting it into your browser: 
-            <a href="http://'.$_SERVER["SERVER_NAME"].'/print-reg/'.$sessionNfo['itemID'].'/'.$sessionSaved['registrationKey'].'">http://'.$_SERVER["SERVER_NAME"].'/print-reg/'.$sessionNfo['itemID'].'/'.$sessionSaved['registrationKey'].'</a>';
+            <a href="http://'.$_SERVER["SERVER_NAME"].'/print-reg/'.$sessionNfo['itemID'].'/'.$sessionSaved['registrationKey'].'&a='.substr($sessionType, 0, 1).'">http://'.$_SERVER["SERVER_NAME"].'/print-reg/'.$sessionNfo['itemID'].'/'.$sessionSaved['registrationKey'].'</a>';
         $body .= '<p>&nbsp;</p><p>Next Steps:</p>';
         $body .= '<ol>
         <li>Read the Terms and Conditions listed on the printable registration sheet</li>
@@ -111,7 +111,7 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
     <p>All other fencing equipment will be provided by the Club</p>
     <p>&nbsp;</p>
     <p>You will receive an email at the address you provided along with the information you submitted and a link to the printable version of this form</p>
-    <p><a href="/print-reg/<?php echo $sessionNfo["itemID"];?>/<?php echo $message;?>" class="btnStyle" target="_blank">Print Form</a></p>
+    <p><a href="/print-reg/<?php echo $sessionNfo["itemID"];?>/<?php echo $message;?>&a=<?php echo substr($sessionType, 0, 1);?>" class="btnStyle" target="_blank">Print Form</a></p>
 <?php
     }
 ?>

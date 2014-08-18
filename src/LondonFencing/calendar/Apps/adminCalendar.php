@@ -522,6 +522,7 @@ class adminCalendar extends Cal\calendar{
 			else{ $validData = 'data missing or incomplete'.mysql_error($this->db->dblink);}
 		}
 		else{ $validData = 'no event or calendar selected'.mysql_error($this->db->dblink);}
+                
 		return $validData;
 	}
 	/**

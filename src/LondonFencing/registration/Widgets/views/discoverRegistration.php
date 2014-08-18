@@ -4,7 +4,7 @@ use LondonFencing\registration as Reg;
 
 $reg = new Reg\registration($db);
 
-$sessionNfo = $reg->getRegistrationSession("beginner");
+$sessionNfo = $reg->getDiscoverySession();
 
 if (isset($sessionNfo['isOpen'])){
     
@@ -26,11 +26,11 @@ if ($sessionNfo['isOpen'] === true){
                 $valid = 0;
             }
             if ($valid == 1){
-                list($sent, $message) = $reg->saveRegistration($_POST, "beginner");
+                list($sent, $message) = $reg->saveRegistration($_POST, "discover");
             }
     }
     if ($sent == 1){
-        $sessionType = "beginner";
+        $sessionType = "discover";
         include_once __DIR__ ."/registrationConfirm.php";
     }
     else{
@@ -58,13 +58,11 @@ if ($sessionNfo['isOpen'] === true){
         );        
         
         $sessionDate = date("F j, Y", $sessionNfo['eventStart']);
+        
         include_once __DIR__ ."/registrationFormFields.php";
         global $quipp;
         $quipp->js['footer'][] = "/src/LondonFencing/registration/assets/js/registration.js";
     }
   
-    }
-    else{
-        print alert_box("The next beginner session starts on ".date('F j, Y',$sessionNfo['eventStart'])."<br />Registration will be open on  ".date('F j, Y',$sessionNfo['regOpen']), 3);
     }
 }

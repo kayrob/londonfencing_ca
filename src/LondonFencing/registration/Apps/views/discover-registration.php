@@ -9,7 +9,7 @@ $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
 require $root . '/inc/init.php';
 require $root . '/admin/classes/Editor.php';
 
-$meta['title'] = 'Beginner Registration Manager';
+$meta['title'] = 'Discover Fencing Registration Manager';
 $meta['title_append'] = ' &bull; Quipp CMS';
 
 $hasPermission = false;
@@ -30,7 +30,7 @@ if ($hasPermission) {
     $te = new Editor();
     
     //set the primary table name
-    $primaryTableName = "tblClasses";
+    $primaryTableName = "tblDiscover";
 
     //editable fields
     $fields[] = array(
@@ -244,7 +244,7 @@ if ($hasPermission) {
             $fieldColValues = rtrim($fieldColValues,",");
             
             if ($eventStart != "" && $eventEnd != "" && isset($_POST["calendarID"])){
-                $eventID = $aReg->create_new_session_event($calendarID, $eventStart, $eventEnd, $eventStartTime, $eventEndTime, $_POST['RQvalALPHSession_Name'],$_POST['OPvalALPHLocation'], "beginner");
+                $eventID = $aReg->create_new_session_event($calendarID, $eventStart, $eventEnd, $eventStartTime, $eventEndTime, $_POST['RQvalALPHSession_Name'],$_POST['OPvalALPHLocation'], "discover");
             }
             
             if ($eventID !== false){
@@ -258,7 +258,7 @@ if ($hasPermission) {
                 $res = $db->query($qry);
             
                 if ($db->affected_rows($res) == 1){
-                    header('Location:/admin/apps/registration/beginner-registration?Insert=true'); 
+                    header('Location:/admin/apps/registration/discover-registration?Insert=true'); 
                 }
                 else{
                     echo "Insert did not work";
@@ -321,7 +321,7 @@ if ($hasPermission) {
                 }
             }
             
-            if ($aReg->update_session_event($calendarID, $eventStart, $eventEnd, $eventStartTime, $eventEndTime, $_POST['RQvalALPHSession_Name'],$_POST['OPvalALPHLocation'],$eventID, "beginner") == 'true'){
+            if ($aReg->update_session_event($calendarID, $eventStart, $eventEnd, $eventStartTime, $eventEndTime, $_POST['RQvalALPHSession_Name'],$_POST['OPvalALPHLocation'],$eventID, "discover") == 'true'){
             //trim the extra comma off the end of the above var
             $fieldColNames = substr($fieldColNames, 0, strlen($fieldColNames) - 1);
 
@@ -332,7 +332,7 @@ if ($hasPermission) {
                 
                 $res = $db->query($qry);
                 if ($db->affected_rows($res) == 1 || $db->errno == 0){
-                    header('Location:/admin/apps/registration/beginner-registration?Update=true'); 
+                    header('Location:/admin/apps/registration/discover-registration?Update=true'); 
                 }
                 else{
                     echo "Update did not work";
@@ -349,7 +349,7 @@ if ($hasPermission) {
 
             $aReg->delete_session((int)$_GET['id']);
             
-            header('Location:/admin/apps/registration/beginner-registration');
+            header('Location:/admin/apps/registration/discover-registration');
             break;
         }
     } else {
@@ -359,15 +359,15 @@ if ($hasPermission) {
 include $root. "/admin/templates/header.php";
 
 ?>
-<h1>Beginner Registration Manager</h1>
-<p>This allows the ability to setup beginner sessions, review submissions and contact registrants.</p>
+<h1>Discover Fencing Registration Manager</h1>
+<p>This allows the ability to setup discover fencing sessions, review submissions and contact registrants.</p>
 
 <div class="boxStyle">
 	<div class="boxStyleContent">
 		<div class="boxStyleHeading">
 			<h2>Edit</h2>
 			<div class="boxStyleHeadingRight">
-				<?php print "<input class='btnStyle blue' type=\"button\" name=\"newItem\" id=\"newItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/beginner-registration?view=edit';\" value=\"New\" />"; ?>
+				<?php print "<input class='btnStyle blue' type=\"button\" name=\"newItem\" id=\"newItem\" onclick=\"javascript:window.location.href='/admin/apps/registration/discover-registration?view=edit';\" value=\"New\" />"; ?>
 			</div>
 		</div>
 		<div class="clearfix">&nbsp;</div>
@@ -392,7 +392,7 @@ include $root. "/admin/templates/header.php";
         if (is_numeric($_GET['id'])) { //if an ID is provided, we assume this is an edit and try to fetch that row from the single table
 
 
-            $qry = sprintf("SELECT tp.*, UNIX_TIMESTAMP(ce.`eventStartDate`) as startDate, UNIX_TIMESTAMP(ce.`recurrenceEnd`) as endDate, 
+            $qry = sprintf("SELECT tp.*, UNIX_TIMESTAMP(ce.`eventStartDate`) as startDate, UNIX_TIMESTAMP(ce.`eventEndDate`) as endDate, 
                     UNIX_TIMESTAMP(ce.`eventStartDate`) as startTime, UNIX_TIMESTAMP(ce.`eventEndDate`) as endTime
                     FROM $primaryTableName AS tp INNER JOIN `tblCalendarEvents` AS ce ON tp.`eventID` = ce.`itemID`
                     WHERE tp.`itemID` = '%d' AND tp.`sysOpen` = '1'",
@@ -422,7 +422,7 @@ include $root. "/admin/templates/header.php";
             print $message;
         }
 
-        $formBuffer = "<form enctype=\"multipart/form-data\" name=\"tableEditorForm\" id=\"tableEditorForm\" method=\"post\" action=\"/admin/apps/registration/beginner-registration?" . $_SERVER['QUERY_STRING'] .  "\">
+        $formBuffer = "<form enctype=\"multipart/form-data\" name=\"tableEditorForm\" id=\"tableEditorForm\" method=\"post\" action=\"/admin/apps/registration/discover-registration?" . $_SERVER['QUERY_STRING'] .  "\">
             <table>";
 
         //print the base fields
@@ -485,7 +485,7 @@ include $root. "/admin/templates/header.php";
         $formBuffer .= "<tr><td colspan='2'>
             <input type=\"hidden\" name=\"nonce\" value=\"".Quipp()->config('security.nonce')."\" />
                 <input type=\"hidden\" name=\"dbaction\" id=\"dbaction\" value=\"$dbaction\" />";
-        $formBuffer .= "<input type=\"hidden\" name=\"calendarID\" id=\"calendarID\" value=\"2\" />";
+        $formBuffer .= "<input type=\"hidden\" name=\"calendarID\" id=\"calendarID\" value=\"8\" />";
 
         if ($dbaction == "update") { //add in the id to pass back for queries if this is an edit/update form
             $formBuffer .= "<input type=\"hidden\" name=\"id\" id=\"id\" value=\"".$_GET['id']."\" />";
@@ -505,7 +505,7 @@ include $root. "/admin/templates/header.php";
        
         //list table query:
         
-        $listqry = sprintf("SELECT cl.`itemID`, cl.`sessionName`, cl.`regOpen`, cl.`regClose` , (SELECT count(cr.`itemID`) FROM `tblClassesRegistration` AS cr WHERE cr.`sessionID` = cl.`itemID` AND cr.`sysOpen` = '1') AS `submissions` 
+        $listqry = sprintf("SELECT cl.`itemID`, cl.`sessionName`, cl.`regOpen`, cl.`regClose` , (SELECT count(cr.`itemID`) FROM `tblDiscoverRegistration` AS cr WHERE cr.`sessionID` = cl.`itemID` AND cr.`sysOpen` = '1') AS `submissions` 
                 FROM $primaryTableName AS cl WHERE cast(sysOpen as UNSIGNED) > 0 AND `level` = 'beginner'");
         
         $resqry = $db->query($listqry);
@@ -521,7 +521,7 @@ include $root. "/admin/templates/header.php";
             while ($rs = $db->fetch_assoc($resqry)){
                 $subs = 'No Registrations';
                 if ((int)$rs['submissions'] > 0){
-                    $subs = '<input class="btnStyle green noPad" id="btnReg_'.$rs['itemID'].'" type="button" onclick="javascript:window.location=\'/admin/apps/registration/view-registration?app=beginner&sid='.$rs['itemID'].'\';" value="Registrations">';
+                    $subs = '<input class="btnStyle green noPad" id="btnReg_'.$rs['itemID'].'" type="button" onclick="javascript:window.location=\'/admin/apps/registration/view-registration?app=discover&sid='.$rs['itemID'].'\';" value="Registrations">';
                 }
                 echo '<tr><td>'.$rs['sessionName'].'</td><td>'.date('Y-m-d',$rs['regOpen']).'</td><td>'.date('Y-m-d',$rs['regClose']).'</td>';
                 echo '<td style="width:125px;">'.$subs.'</td>';

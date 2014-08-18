@@ -18,6 +18,22 @@ class registration{
     protected function notifyAdmin($application, $regID, $regName){
         
     }
+    public function getSavedDiscover($session, $regKey){
+        if (is_numeric($session) && (int)$session > 0 && preg_match("%^[A-Z]{2}\-\d{4}\-\d+$%",$regKey,$matchKey)){
+            $qry = sprintf("SELECT cr.*, c.`level`, c.`fee`, c.`sessionName` ,UNIX_TIMESTAMP(ce.`eventStartDate`) as eventStart
+                FROM `tblDiscoverRegistration` AS cr INNER JOIN `tblDiscover` AS c ON cr.`sessionID` = c.`itemID`
+                INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
+                WHERE cr.`sessionID` = %d AND cr.`registrationKey` = '%s'",
+                  (int)$session,
+                   $this->_db->escape($regKey,true)
+            );
+            $res = $this->_db->fetch_assoc($this->_db->query($qry));
+            if (is_array($res)){
+                return $res;
+            }
+        }
+        return false;
+    }
     public function getSavedRegistration($session, $regKey){
         if (is_numeric($session) && (int)$session > 0 && preg_match("%^[A-Z]{2}\-\d{4}\-\d+$%",$regKey,$matchKey)){
             $qry = sprintf("SELECT cr.*, c.`level`, c.`fee`, c.`sessionName` ,UNIX_TIMESTAMP(ce.`eventStartDate`) as eventStart
@@ -52,6 +68,24 @@ class registration{
             }
         }
         return false;
+    }
+    public function getDiscoverySession(){
+        $session = array();
+        $qry = sprintf("SELECT c.*, (SELECT count(cr.`itemID`) AS count FROM `tblDiscoverRegistration` AS cr WHERE cr.`sessionID` = c.`itemID` AND cr.`sysStatus` = 'active' AND cr.`sysOpen` = '1') as count, UNIX_TIMESTAMP(ce.`eventStartDate`) as eventStart, 
+            UNIX_TIMESTAMP(ce.`eventEndDate`) as eventEnd, UNIX_TIMESTAMP(ce.`eventEndDate`) as endDate 
+            FROM `tblDiscover` AS c INNER JOIN `tblCalendarEvents` AS ce ON c.`eventID` = ce.`itemID`
+            WHERE c.`sysStatus` = 'active' AND c.`sysOpen` = '1' AND c.`regOpen` <= UNIX_TIMESTAMP() AND c.`regClose` 
+            >= UNIX_TIMESTAMP() ORDER BY c.`regOpen` LIMIT 1"
+        );
+
+        $res = $this->_db->query($qry);
+        if (is_object($res) && $res->num_rows == 1){
+            $session = $this->_db->fetch_assoc($res);
+            $session['isOpen'] = true;
+            return $session;
+        }
+            
+        return $session;
     }
     public function getRegistrationSession($level){
         if ($level == "beginner" || $level == "intermediate"){
@@ -97,7 +131,10 @@ class registration{
     public function saveRegistration($post, $application){
         unset($post["sub-reg"]); 
         unset($post["nonce"]);
-        $sessionNfo = $this->getRegistrationSession($application);
+        
+        $regTable = ($application == "discover") ? "tblDiscoverRegistration" : "tblClassesRegistration";
+        $sessionNfo = ($application == "discover") ? $this->getDiscoverySession() : $this->getRegistrationSession($application);
+        
         if (isset($post["RQvalNUMBsessionID"]) && isset($sessionNfo["itemID"]) && (int)$post["RQvalNUMBsessionID"] == $sessionNfo["itemID"]){
             foreach($post as $key => $value){
                 $fields[] = preg_replace("%(OP|RQ)val([A-Z]{4})%","",$key);
@@ -119,10 +156,12 @@ class registration{
                 $values[] = '1';
                 $fields[] = "waitlist";
                 $values[] = '0';
-                $qry = sprintf("INSERT INTO `tblClassesRegistration` (%s, `sysDateCreated`, `sysStatus`, `sysOpen`,`membershipType`) VALUES (%s, NOW(), 'active','1','foundation')",
+                $qry = sprintf("INSERT INTO `%s` (%s, `sysDateCreated`, `sysStatus`, `sysOpen`,`membershipType`) VALUES (%s, NOW(), 'active','1','foundation')",
+                    $regTable,
                     implode(",",$fields),
                     implode(",",$values)
                 );
+
                 $res = $this->_db->query($qry);
                 $saved = $this->_db->affected_rows();
             }

@@ -32,7 +32,7 @@ class AdminRegister {
         return false;
     }
 
-    protected function set_cal_event_fields($calendarID, $sessionStart, $sessionEnd, $startTime, $endTime, $sessionName, $location) {
+    protected function set_cal_event_fields($calendarID, $sessionStart, $sessionEnd, $startTime, $endTime, $sessionName, $location, $app) {
         list($start, $startTOD) = explode(" ", $startTime);
         list($end, $endTOD) = explode(" ", $endTime);
         list($startHour, $startMin) = explode(":", $start);
@@ -52,15 +52,15 @@ class AdminRegister {
             "endMM" => $endMin,
             "location" => $this->_db->escape($location, true),
             "description" => '',
-            "recurrence" => 'Weekly',
-            "recurrenceInterval" => '1',
-            "recurrenceEnd" => $sessionEnd
+            "recurrence" => ($app == "beginner") ? 'Weekly' : 'None',
+            "recurrenceInterval" => ($app == "beginner") ? '1' : NULL,
+            "recurrenceEnd" => ($app == "beginner") ? $sessionEnd : NULL
         );
         return $post;
     }
 
-    public function create_new_session_event($calendarID, $sessionStart, $sessionEnd, $startTime, $endTime, $sessionName, $location) {
-        $post = $this->set_cal_event_fields($calendarID, $sessionStart, $sessionEnd, $startTime, $endTime, $sessionName, $location);
+    public function create_new_session_event($calendarID, $sessionStart, $sessionEnd, $startTime, $endTime, $sessionName, $location, $app) {
+        $post = $this->set_cal_event_fields($calendarID, $sessionStart, $sessionEnd, $startTime, $endTime, $sessionName, $location, $app);
         if ($this->cal->add_new_event($post) == 'true') {
             return $this->get_session_cal_event_id($calendarID, $sessionName, $sessionStart);
         } else {
@@ -69,8 +69,8 @@ class AdminRegister {
         return false;
     }
 
-    public function update_session_event($calendarID, $sessionStart, $sessionEnd, $startTime, $endTime, $sessionName, $location, $eventID) {
-        $post = $this->set_cal_event_fields($calendarID, $sessionStart, $sessionEnd, $startTime, $endTime, $sessionName, $location);
+    public function update_session_event($calendarID, $sessionStart, $sessionEnd, $startTime, $endTime, $sessionName, $location, $eventID, $app) {
+        $post = $this->set_cal_event_fields($calendarID, $sessionStart, $sessionEnd, $startTime, $endTime, $sessionName, $location, $app);
         $post['eventID'] = (int) $eventID;
         if ($this->cal->update_event($post) == 'true') {
             return true;
