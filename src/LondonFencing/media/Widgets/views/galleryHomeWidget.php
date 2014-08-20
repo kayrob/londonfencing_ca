@@ -5,10 +5,31 @@ use LondonFencing\media as MED;
 
 if ($this instanceof Page && isset($props[0])) {
 
-
     $med = new MED\media($db);
 
-    list($photos, $videos) = $med->get_tag_arrays($props[0]);
+    $photos = array();
+    $videos = array();
+    
+    //list($photos, $videos) = $med->get_tag_arrays($props[0]);
+    foreach ($props as $prop){
+        list($pPhotos, $pVideos) = $med->get_tag_arrays($prop);
+        if (!empty($pPhotos)){
+            if (empty($photos)){
+                $photos = $pPhotos;
+            }
+            else{
+                $photos = array_merge($photos, $pPhotos);
+            }
+        }
+        if (!empty($pVideos)){
+            if (empty($videos)){
+                $videos = $pVideos;
+            }
+            else{
+                $videos = array_merge($videos, $pVideos);
+            }
+        }
+    }
     
     if (is_array($photos) && count($photos) > 0) {
         $images = array();
