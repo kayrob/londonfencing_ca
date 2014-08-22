@@ -436,9 +436,9 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                 if ($db->valid($res)) {
                     $fieldValue = $db->fetch_assoc($res);
                     foreach ($fields as &$itemField) {
-                        //if (is_string($itemField['dbColName'])) {
+                        if (is_string($itemField['dbColName'])) {
                         $itemField['dbValue'] = (empty($fieldValue[$itemField['dbColName']]) && !empty($itemField['dbValue']))? $itemField['dbValue'] :$fieldValue[$itemField['dbColName']] ;
-                        //}
+                        }
                     }
                     $birthDateString = $fieldValue["birthDate_str"];
                     $dbaction = "update";
@@ -511,7 +511,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                             $field['dbValue'] = $_POST[$newFieldID];
                         }
                         $field['dbValue'] = ($field['dbValue'] != "" && $field['dbValue'] != 0) ? date('Y-m-d', $field['dbValue']) : '';
-                        if (stristr($field["dbColName"], "birth") === true && (date("Y", $field["dbValue"]) < 1970)){
+                        if (stristr($field["dbColName"], "birth") !== false && ((int)substr($field['dbValue'], 0, 4) < 1970)){
                             $field['dbValue'] = $birthDateString;
                         }
                         $field['widgetHTML'] = str_replace("FIELD_VALUE", $field['dbValue'], $field['widgetHTML']);
