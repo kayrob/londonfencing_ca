@@ -155,7 +155,7 @@ class AdminRegister {
     protected function getBeginnerRecord($registrationID) {
         $regNfo = array();
         $res = $this->_db->query(sprintf("SELECT `lastName`, `firstName`, `birthDate`, `gender`, `address`, `address2`, `city`,`province`, `postalCode`, `phoneNumber`, `parentName`, 
-            `email`, `emergencyContact`, `emergencyPhone` ,`notes`, `handedness`
+            `email`, `emergencyContact`, `emergencyPhone` ,`notes`, `handedness`, `birthDate_str`
             FROM `tblClassesRegistration` WHERE itemID = %d", (int) $registrationID
                 ));
         if ($res->num_rows == 1) {

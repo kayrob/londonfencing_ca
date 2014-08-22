@@ -299,6 +299,10 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                 //trim the extra comma off the end of both of the above vars
                 $fieldColNames = rtrim($fieldColNames, ",");
                 $fieldColValues = rtrim($fieldColValues, ",");
+                $fieldColNames .= ",`birthDate_str`";
+                $fieldColValues .= ",'". $db->escape($_POST["RQvalDATEBirth_Date"], true) . "'";
+                //add birthDate string for submissions less than year 1970
+                
 
                 $regKey = strtoupper(substr(str_replace("'", "", $_POST["RQvalALPHLast_Name"]), 0, 2)) . "-" . str_pad($db->escape($_GET['sid'], true), 4, '0', STR_PAD_LEFT) . "-" . $newCount;
                 $qry = sprintf("INSERT INTO %s (%s, sysDateCreated, sysOpen, sysStatus, membershipType, registrationKey, sessionID) VALUES (%s, NOW(),  '1', 'active','foundation','%s', '%d')", (string) $primaryTableName, (string) $fieldColNames, (string) $fieldColValues, $regKey, $db->escape($_GET['sid'], true)
@@ -363,9 +367,9 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
 
                 //trim the extra comma off the end of the above var
                 $fieldColNames = substr($fieldColNames, 0, strlen($fieldColNames) - 1);
+                $fieldColNames .= ",`birthDate_str` = '". $db->escape($_POST["RQvalDATEBirth_Date"], true) . "'";
 
                 $qry = sprintf("UPDATE %s SET %s WHERE itemID = '%s'", (string) $primaryTableName, (string) $fieldColNames, (int) $_POST['id']);
-
                 $res = $db->query($qry);
 
                 if ($db->affected_rows($res) == 1 || $db->error() === false) {
@@ -436,7 +440,7 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                         $itemField['dbValue'] = (empty($fieldValue[$itemField['dbColName']]) && !empty($itemField['dbValue']))? $itemField['dbValue'] :$fieldValue[$itemField['dbColName']] ;
                         //}
                     }
-
+                    $birthDateString = $fieldValue["birthDate_str"];
                     $dbaction = "update";
                     $isWaitlisted = ((int) $fieldValue['isRegistered'] === 0) ? true : false;
                 }
@@ -507,6 +511,9 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                             $field['dbValue'] = $_POST[$newFieldID];
                         }
                         $field['dbValue'] = ($field['dbValue'] != "" && $field['dbValue'] != 0) ? date('Y-m-d', $field['dbValue']) : '';
+                        if (stristr($field["dbColName"], "birth") === true && (date("Y", $field["dbValue"]) < 1970)){
+                            $field['dbValue'] = $birthDateString;
+                        }
                         $field['widgetHTML'] = str_replace("FIELD_VALUE", $field['dbValue'], $field['widgetHTML']);
                     } else {
                         if (isset($_POST[$newFieldID]) && $message != '') {

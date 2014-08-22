@@ -143,6 +143,9 @@ class registration{
             $regKey = strtoupper(substr(str_replace("'","",$post["RQvalALPHlastName"]),0,2))."-".str_pad($sessionNfo["itemID"],4,'0',STR_PAD_LEFT)."-".((int)$sessionNfo["count"]+1);
             $fields[] = "registrationKey";
             $values[] = "'".$regKey."'";
+            //added for users who were born prior to the time stamp (Jan 1, 1970)
+            $fields[] = "birthDate_str";
+            $values[] = "'" . $this->_db->escape($post["RQvalDATEbirthDate"], true)."'";
             if ((int)$sessionNfo['count'] >= (int)$sessionNfo['regMax']){
                 $waitList = ((int)$sessionNfo['count'] - (int)$sessionNfo['regMax']) +1;
                 $fields[] = "IsRegistered";
@@ -161,7 +164,7 @@ class registration{
                     implode(",",$fields),
                     implode(",",$values)
                 );
-
+                
                 $res = $this->_db->query($qry);
                 $saved = $this->_db->affected_rows();
             }
@@ -202,6 +205,8 @@ class registration{
                 $val = (strstr($key,'birthDate') === false) ?"'".$this->_db->escape($value,true)."'":strtotime($value);
                 $fieldCols[] = "`".preg_replace("%(OP|RQ)val([A-Z]{4})%","",$key)."` = ".$val;
             }
+            //added for users who were born prior to the time stamp (Jan 1, 1970)
+            $fieldCols[] = "`birthDate_str` = '" .$this->_db->escape($post["RQvalDATEbirthDate"], true) ."'";
             $regKey = $matches[0];
             
             $qry = sprintf("UPDATE `tblIntermediateRegistration` SET %s WHERE `registrationKey` = '%s'",

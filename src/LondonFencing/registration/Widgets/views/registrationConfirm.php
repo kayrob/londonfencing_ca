@@ -10,6 +10,8 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
         
         $emailTemplate = file_get_contents(dirname(dirname(dirname(__DIR__))).'/StaticPage/emailTemplate.html');
         
+        $birthDate = ((bool) $sessionSaved['birthDate'] === true) ? date('Y-m-d',$sessionSaved['birthDate']) :$sessionSaved["birthDate_str"];
+        
         $phone = str_format("(###) ###-####", str_replace("-","",$sessionSaved["phoneNumber"]));
         $ePhone = str_format("(###) ###-####", str_replace("-","",$sessionSaved["emergencyPhone"]));
         $title = "Registration to London Fencing Club";
@@ -17,7 +19,7 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
         $body .= '<label>Level: </label>&nbsp;'.ucwords($sessionSaved['level']).'</p><p>';
         $body .= '<label>First Name: </label>&nbsp;'.$sessionSaved['firstName'].'<br />';
         $body .= '<label>Last Name: </label>&nbsp;'.$sessionSaved['lastName'].' <br />';
-        $body .= '<label>Date of Birth: </label>&nbsp;'.date('Y-m-d',$sessionSaved['birthDate']).'<br />';
+        $body .= '<label>Date of Birth: </label>&nbsp;'.$birthDate.'<br />';
         $body .= '<label>Gender: </label>&nbsp;'.$sessionSaved['gender'].' <br />';
         $body .= '<label>Address: </label>&nbsp;'.$address.'<br />';
         $body .= '<label>Phone Number: </label>&nbsp;'.$phone.'<br />';

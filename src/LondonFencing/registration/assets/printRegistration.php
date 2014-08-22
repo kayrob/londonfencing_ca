@@ -5,11 +5,14 @@ require_once dirname(__DIR__) . '/registration.php';
 use LondonFencing\registration as REG;
 
 if (isset($_GET['s']) && preg_match('%^(I|\d+)$%', $_GET['s'], $match) && isset($_GET['r']) ) {
+
     $reg = new REG\Registration($db);
     $regNfo = ($match[0] == "I") ? $reg->getIntRegRecord($_GET['r']) : 
-        (isset($_GET["a"]) && $_GET["a"] == d) ? $reg->getSavedDiscover($_GET['s'], $_GET['r']) : $reg->getSavedRegistration($_GET['s'], $_GET['r']);
+        ((isset($_GET["a"]) && $_GET["a"] == d) ? $reg->getSavedDiscover($_GET['s'], $_GET['r']) : $reg->getSavedRegistration($_GET['s'], $_GET['r']));
 
     if (isset($regNfo['isRegistered']) && (int) $regNfo['isRegistered'] == 1) {
+        $birthDate = ((bool) $regNfo['birthDate'] === true) ? date('Y-m-d',$regNfo['birthDate']) :$regNfo["birthDate_str"];
+
 ?>
 <!doctype html>
 <html>
@@ -77,7 +80,7 @@ if (isset($_GET['s']) && preg_match('%^(I|\d+)$%', $_GET['s'], $match) && isset(
             <label>Last Name: </label><?php echo $regNfo["lastName"]; ?>
         </div>
         <div>
-            <label>Birth Date: </label><?php echo date('Y-m-d', $regNfo["birthDate"]); ?>
+            <label>Birth Date: </label><?php echo $birthDate; ?>
         </div>
         <div>
             <label>Gender: </label><?php echo $regNfo["gender"]; ?>
@@ -145,8 +148,8 @@ if (isset($_GET['s']) && preg_match('%^(I|\d+)$%', $_GET['s'], $match) && isset(
 </html>
 <?php
     } else {
-        header('location:http://' . $_SERVER["SERVER_NAME"]);
+       // header('location:http://' . $_SERVER["SERVER_NAME"]);
     }
 } else {
-    header('location:http://' . $_SERVER["SERVER_NAME"]);
+   // header('location:http://' . $_SERVER["SERVER_NAME"]);
 }
