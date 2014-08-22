@@ -436,9 +436,9 @@ if ($hasPermission && isset($_GET['sid']) && is_numeric($_GET['sid'])) {
                 if ($db->valid($res)) {
                     $fieldValue = $db->fetch_assoc($res);
                     foreach ($fields as &$itemField) {
-                        if (is_string($itemField['dbColName'])) {
+                      //  if (is_string($itemField['dbColName'])) {
                         $itemField['dbValue'] = (empty($fieldValue[$itemField['dbColName']]) && !empty($itemField['dbValue']))? $itemField['dbValue'] :$fieldValue[$itemField['dbColName']] ;
-                        }
+                       // }
                     }
                     $birthDateString = $fieldValue["birthDate_str"];
                     $dbaction = "update";

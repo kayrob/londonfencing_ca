@@ -336,6 +336,8 @@ if ($hasPermission) {
                 //trim the extra comma off the end of both of the above vars
                 $fieldColNames = rtrim($fieldColNames, ",");
                 $fieldColValues = rtrim($fieldColValues, ",");
+                $fieldColNames .= ",`birthDate_str`";
+                $fieldColValues .= ",'". $db->escape($_POST["OPvalDATEBirth_Date"], true) . "'";
 
                 //$regKey = strtoupper(substr(str_replace("'", "", $_POST["RQvalALPHLast_Name"]), 0, 2)) . "-000I-" . $newCount;
                 $regKey = $aReg->createIntermediateRegKey($_POST["RQvalALPHLast_Name"]);
@@ -397,9 +399,9 @@ if ($hasPermission) {
 
                 //trim the extra comma off the end of the above var
                 $fieldColNames = substr($fieldColNames, 0, strlen($fieldColNames) - 1);
+                $fieldColNames .= ",`birthDate_str` = '". $db->escape($_POST["OPvalDATEBirth_Date"], true) . "'";
 
                 $qry = sprintf("UPDATE %s SET %s WHERE itemID = '%s'", (string) $primaryTableName, (string) $fieldColNames, (int)$_POST['id']);
-
                 $res = $db->query($qry);
 
                 if ($db->affected_rows($res) == 1 || $db->error() === false) {
@@ -487,7 +489,7 @@ if ($hasPermission) {
                         $itemField['dbValue'] = $fieldValue[$itemField['dbColName']];
                         //}
                     }
-
+                    $birthDateString = $fieldValue["birthDate_str"];
                     $dbaction = "update";
                     
                     $qryP = sprintf("SELECT `paymentAmount`, `paymentDate`, `paymentType`, `itemID` FROM `tblIntermediatePayments` 
@@ -569,6 +571,9 @@ if ($hasPermission) {
                             $field['dbValue'] = $_POST[$newFieldID];
                         }
                         $field['dbValue'] = ($field['dbValue'] != "" && $field['dbValue'] != 0) ? date('Y-m-d', $field['dbValue']) : '';
+                        if (stristr($field["dbColName"], "birth") !== false && ((int)substr($field['dbValue'], 0, 4) < 1970)){
+                            $field['dbValue'] = $birthDateString;
+                        }
                         $field['widgetHTML'] = str_replace("FIELD_VALUE", $field['dbValue'], $field['widgetHTML']);
                     } else {
                         if (isset($_POST[$newFieldID]) && $message != '') {
