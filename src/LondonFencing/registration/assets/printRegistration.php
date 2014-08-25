@@ -62,7 +62,7 @@ if (isset($_GET['s']) && preg_match('%^(I|\d+)$%', $_GET['s'], $match) && isset(
         <div id="head">London Fencing Club Registration: <?php echo $regNfo['sessionName']; ?></div>
         <div id="termsRefs">
             <?php
-            if (($regNfo["birthDate"] > 0 && (date('U') - $regNfo["birthDate"]) / (60 * 60 * 24 * 365) < 18) && empty($regNfo["parentName"])) {
+            if (($regNfo["birthDate"] > 0 && (date('U') - $regNfo["birthDate"]) / (60 * 60 * 24 * 365) < 18)) {
                 $terms = str_replace('%DATE%', date('F j, Y', $regNfo['eventStart']), file_get_contents(__DIR__ . '/minorTerms.php'));
                 $terms = str_replace('%MINORNAME%', $regNfo['firstName'] . ' ' . $regNfo['lastName'], $terms);
                 echo str_replace('%PARENTNAME%', $regNfo['parentName'], $terms);
