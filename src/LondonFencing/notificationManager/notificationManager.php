@@ -145,10 +145,13 @@ class notificationManager{
         $content = preg_replace('%http://([^\s]+)%','<a href="http://$1">http://$1</a>',$content);
 
         if (strtolower($format) == "html"){
+            $doctype = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
             $body = file_get_contents(dirname(__DIR__)."/StaticPage/emailTemplate.html");
             $body = str_replace('<h5>%TITLE%</h5>','',$body);
             $body = str_replace('%SERVERNAME%',$_SERVER['SERVER_NAME'],$body);
             $body = str_replace('%BODY%',$content,$body);
+            $body = $doctype.$body;
+
         }
         else{
             $body = $content;
