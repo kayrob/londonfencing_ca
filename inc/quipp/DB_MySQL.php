@@ -61,9 +61,9 @@ class DB_MySQL extends DB {
 	
 	function escape($str, $clean = false)
 	{		
-		if (get_magic_quotes_gpc()) { 
+            if (get_magic_quotes_gpc()) { 
     		$str = stripslashes($str);
-    	}    	
+            }    	
     	if (!is_numeric($str)) {
     		$str = mysql_real_escape_string($str, $this->dblink);    	
     	}
