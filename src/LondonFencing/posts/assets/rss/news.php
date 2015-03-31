@@ -16,8 +16,8 @@ if (isset($quipp) && $quipp INSTANCEOF Quipp){
     
     header('Content-Type: text/xml');
     
-    $title = "Royal York Orthodontics";
-    $description = "News from Royal York Orthodontics";
+    $title = "London Fencing Club";
+    $description = "News from London Fencing Club";
     $rs->create_rss_feed($title,$description,$newsItems);
     
 }
