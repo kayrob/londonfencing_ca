@@ -1,7 +1,7 @@
 <?php
 $root = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
 require_once(dirname(dirname(dirname(__DIR__)))."/StaticPage/rss.php");
-require_once($root."/src/RoyalYork/posts/newsFeed.php");
+require_once($root."/src/LondonFencing/posts/newsFeed.php");
 
 use RoyalYork\Apps\RSS as RSS;
 use RoyalYork\Apps\news\Feeds as News;
