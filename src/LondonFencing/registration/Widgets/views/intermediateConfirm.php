@@ -36,7 +36,8 @@ if (isset($regKey) && isset($message) && isset($reg) && $reg instanceof LondonFe
         <li>Read the Terms and Conditions listed on the printable registration sheet</li>
         <li>Print this form out, sign it, and bring it with payment to the first class.<br />This form MUST be signed by the participant (if over the age of 18) 
             OR by the Parent/Guardian listed on the form (if the participant is under the age of 18)</li>
-        <li>Make cheques payable to <strong>The London Fencing Club</strong></li>
+        <li>Make cheques payable to <strong>The London Fencing Club</strong> OR</li>
+        <li>Send Email Money Transfer to: info@londonfencing.ca</li>
     </ol>';
         $body .= '<p>&nbsp;</p><p>Come dressed to move! All fencers are required to wear:</p>';
         $body .= '<ol><li>Athletic shoes with non-marking soles</li><li>Track pants (no shorts, jeans, khakis)</li></ol>';
@@ -81,7 +82,8 @@ if (isset($regKey) && isset($message) && isset($reg) && $reg instanceof LondonFe
         <li>Read the Terms and Conditions listed on the printable registration sheet</li>
         <li>Print this form out, sign it, and bring it with payment to the first class.<br />This form MUST be signed by the participant (if over the age of 18) 
             OR by the Parent/Guardian listed on the form (if the participant is under the age of 18)</li>
-        <li>Make cheques payable to <strong>The London Fencing Club</strong></li>
+        <li>Make cheques payable to <strong>The London Fencing Club</strong> OR</li>
+        <li>Send Email Money Transfer to: info@londonfencing.ca</li>
     </ol>
     <h3>Come dressed to move! All fencers are required to wear:</h3>
     <ol><li>Athletic shoes with non-marking soles</li><li>Track pants (no shorts, jeans, khakis)</li></ol>

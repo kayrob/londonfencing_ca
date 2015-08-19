@@ -45,6 +45,7 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
             <li>Mail to: 140 Blanchard Cres, London, ON N6G 4E2</li>
             <li>Deliver to: 140 Blanchard Cres, London, ON <strong>drop in mailbox only please</strong></li>
             <li>Drop off at practice: Thursdays 7:00pm - 9:00pm, Sundays 9:00am - 12:00pm</li>
+            <li>Send Email Money Transfer to: info@londonfencing.ca</li>
             </ol>
         </li>
     </ol>';
@@ -108,6 +109,7 @@ if (isset($sessionNfo) && isset($message) && isset($reg) && $reg instanceof Lond
             <li>Mail to: 140 Blanchard Cres, London, ON N6G 4E2</li>
             <li>Deliver to: 140 Blanchard Cres, London, ON <strong>Drop in mailbox only please</strong></li>
             <li>Drop off at practice: Thursdays 7:00pm - 9:00pm, Sundays 9:00am - 12:00pm</li>
+            <li>Send Email Money Transfer to: info@londonfencing.ca</li>
             </ol>
         </li>
     </ol>
